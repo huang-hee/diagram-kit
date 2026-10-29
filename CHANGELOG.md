@@ -1,5 +1,11 @@
 # diagram-kit
 
+## 1.0.2
+
+### Patch Changes
+
+- 5c877fc: echarts / playwright 改为全局安装，`sankey_echarts.js` 会到全局 node_modules 找包，skill 目录不再放运行时依赖
+
 ## 1.0.1
 
 ### Patch Changes
