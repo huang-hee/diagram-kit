@@ -60,7 +60,20 @@
 ## diagram-design
 
 - 何时用：发布级排版、要 HTML / SVG 输出、不超过 12 个节点。
-- 结构和版式按 diagram-design 自己的规则；颜色用 `palette.py css [方案]` 输出的 CSS 变量替换它的默认色（`--bg`、`--text`、`--line`、`--primary`、`--accent`、`--slot0-fill` … `--series-1` …、`--state-ok` …）。
+- 结构和版式按 diagram-design 自己的规则。它的颜色模型是"纸 + 墨 + 一个强调色"的语义角色（`paper` / `ink` / `muted` / `soft` / `rule` / `accent` / `accent-tint` / `link` / `series-1…5`），不是四槽角色色，所以只能做到底色、正文、主色、系列色和 Mermaid 同源，节点填充风格仍是它自己的。
+- 接法：`palette.py css [方案]` 输出的第二组变量（`--dd-paper`、`--dd-ink` …）就是按它的角色名算好的，映射关系：
+
+  | diagram-design 角色       | 取自方案                                   |
+  | ------------------------- | ------------------------------------------ |
+  | `paper` / `paper-2`       | `bg` / `bg` 略加深                         |
+  | `ink` / `ink-strong`      | `text` / `#111111`                         |
+  | `muted` / `soft`          | `text` 向 `bg` 混 45% / 25%，压到对底 4.5:1 |
+  | `rule` / `rule-solid`     | `ink` 12% 透明 / `border`                  |
+  | `accent` / `accent-tint`  | `primary`（压到 4.5:1）/ 它的 8% 透明      |
+  | `link`                    | `line`（压到 4.5:1）                       |
+  | `series-1…5`              | `series` 前 5 个                           |
+
+- 一个项目只做一次：用这组值跑它的 onboarding 或保存成 profile（`diagram-design:profile`），之后它出的图自动用这套皮；单张图临时换色就把这些值填进它 style-guide 的对应角色。
 - `.html` 源文件和导出的 PNG 一起交付。
 
 ## 代码绘图（matplotlib / ECharts）

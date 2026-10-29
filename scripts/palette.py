@@ -15,7 +15,7 @@
                                                 --md: 包进 ```mermaid 围栏；桑基图节点写成 英文|中文 时
                                                       在围栏下面附中英对照表
   palette.py drawio <type> [方案]               每个角色的 draw.io style 字符串
-  palette.py css [方案|type]                    CSS 变量（HTML / SVG 输出用）
+  palette.py css [方案|type]                    CSS 变量（HTML / SVG 输出用），附 diagram-design 角色一组
   palette.py chart [方案|type]                  图表代码用的 JSON 色表（matplotlib / ECharts / Vega）；
                                                 `nodes` = 分类色加深到和页面拉开的版本
   palette.py check [方案 ...]                   结构校验 + 每个角色字对填充的对比度
@@ -1062,8 +1062,45 @@ def emitDrawio(tid, sid):
     return '\n'.join(out)
 
 
+def _rgba(color, alpha):
+    """hex 转 rgba() 字符串。"""
+    r, g, b = toRgb(color)
+    return f'rgba({r},{g},{b},{alpha})'
+
+
+def diagramDesignTokens(s):
+    """把方案映射成 diagram-design 的语义角色（paper / ink / accent …）。
+
+    diagram-design 的 muted / soft / link / accent 都会当文字用，所以这里统一压到对底 4.5:1。
+
+    参数:
+        s: resolveScheme 的结果
+    返回:
+        {角色名: 颜色}
+    """
+    bg, text = s['bg'], s['text']
+    accent = standOut(s['primary'], bg, 4.5)
+    tokens = {
+        'paper': bg,
+        'paper-2': mix(bg, text, 0.04),
+        'ink': text,
+        'ink-strong': '#111111',
+        'muted': standOut(mix(text, bg, 0.45), bg, 4.5),
+        'soft': standOut(mix(text, bg, 0.25), bg, 4.5),
+        'rule': _rgba(text, 0.12),
+        'rule-solid': s['border'],
+        'accent': accent,
+        'accent-tint': _rgba(accent, 0.08),
+        'link': standOut(s['line'], bg, 4.5),
+    }
+    # 系列色只取前 5 个，非焦点系列用
+    for i, c in enumerate(s['series'][:5]):
+        tokens[f'series-{i + 1}'] = c
+    return tokens
+
+
 def emitCss(sid):
-    """方案的 CSS 变量。"""
+    """方案的 CSS 变量：第一组是本方案的 token，第二组按 diagram-design 的角色命名。"""
     s = resolveScheme(sid)
     lines = [':root {']
     for k in ('bg', 'surface', 'soft', 'accent', 'text', 'muted', 'line', 'border', 'primary', 'onPrimary'):
@@ -1074,6 +1111,12 @@ def emitCss(sid):
         lines.append(f'  --series-{i + 1}: {c};')
     for k, c in s['state'].items():
         lines.append(f'  --state-{k}: {c};')
+    lines.append('}')
+    # diagram-design 角色
+    lines.append('/* diagram-design 角色：paper / ink / muted / soft / rule / accent / link / series，按名字填进它的 style-guide 或 profile */')
+    lines.append(':root {')
+    for k, c in diagramDesignTokens(s).items():
+        lines.append(f'  --dd-{k}: {c};')
     lines.append('}')
     return '\n'.join(lines)
 

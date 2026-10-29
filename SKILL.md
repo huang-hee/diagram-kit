@@ -58,7 +58,7 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 | 工具                        | 取色命令                          | 用法                                                                                                                                                      |
 | --------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | drawio                      | `palette.py drawio <type> [方案]` | 每个角色、连线、容器、泳道、文字的 style 字符串，建图时直接用；第一行是页面背景色                                                                         |
-| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量，替换 diagram-design 的默认颜色                                                                                                                  |
+| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量；第二组按 diagram-design 的角色命名（paper / ink / accent …），填进它的 profile 或 style-guide                                                    |
 | 代码绘图                    | `palette.py chart [方案]`         | JSON：background / text / axis / grid / categorical / sequential / nodes / state；中文节点的桑基图直接用 `node $SKILL/scripts/sankey_echarts.js 数据.csv` |
 | 文生图工具（如有）          | `palette.py show [方案]`          | 把主色和 3–5 个系列色的 hex 写进提示词                                                                                                                    |
 | Figma                       | `palette.py css [方案]`           | 建成 Figma 颜色变量                                                                                                                                       |
