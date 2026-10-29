@@ -178,7 +178,7 @@ python $SKILL/scripts/palette.py mermaid sankey [方案] --body 正文.csv --md
 **写法 B：ECharts（图里直接显示中文）**
 
 ```bash
-# 依赖 echarts（装在 $SKILL/scripts 下）；导 PNG 还要 playwright 和 Chromium。缺了脚本会退出并提示安装
+# 依赖全局安装的 echarts（npm install -g echarts）；导 PNG 还要 playwright 和 Chromium。缺了脚本会退出并提示安装
 node $SKILL/scripts/sankey_echarts.js 正文.csv [方案] --out 转化漏斗 --png
 ```
 

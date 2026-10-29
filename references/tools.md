@@ -100,11 +100,11 @@
 
 现成脚本：桑基图用 `scripts/sankey_echarts.js`（用法见 types-data.md 的桑基图一节）。其他图照它的写法改 `series` 即可。要点：
 
-- 依赖 echarts，装在 skill 的 `scripts/` 目录；脚本先在 `scripts/` 找，找不到再到当前目录找，都没有就退出并提示安装。
+- 依赖全局安装的 echarts（`npm install -g echarts`）；脚本按 当前目录 → skill 的 `scripts/` → 全局 node_modules 的顺序找，都没有就退出并提示安装。
 - 渲染：`echarts.init(null, null, { renderer: 'svg', ssr: true, width, height })`，然后 `chart.renderToSVGString()` 得到 SVG。
 - 必须设 `animation: false`，否则导出的是动画中间帧，图只画了一半。
 - 写完文件后调用 `chart.dispose()` 和 `process.exit(0)`，否则 Node 进程不会退出。
-- 要 PNG@2x：用 Playwright 打开 SVG，设 `deviceScaleFactor: 2` 截图，依赖 playwright 和 Chromium；或者交给 Playwright MCP 截图。缺了提示安装。
+- 要 PNG@2x：用 Playwright 打开 SVG，设 `deviceScaleFactor: 2` 截图，依赖全局安装的 playwright 和 Chromium（`npm install -g playwright && npx playwright install chromium`）；或者交给 Playwright MCP 截图。缺了提示安装。
 - 数据文件（CSV / JSON）和 SVG / PNG 一起交付，作为可编辑源文件。
 
 ## Figma

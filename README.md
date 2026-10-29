@@ -43,8 +43,8 @@ skill 运行时不会自动安装任何东西：缺什么，agent 会停下来�
 | Python 3.8+                         | `palette.py`（取色）、`sync_refs.py`、`render_check.py`，无第三方依赖 | python.org 或系统包管理器。命令名是 `python`，只有 `python3` 的机器把文档里的命令换成 `python3`           |
 | Mermaid 渲染                        | 校验和预览 Mermaid 代码                                              | 二选一：Mermaid 的 MCP server（按平台的 MCP 配置方式接入）；或本地 `npm i -g @mermaid-js/mermaid-cli`（提供 `mmdc`） |
 | Node.js 18+                         | `scripts/sankey_echarts.js`（中文节点的桑基图）                        | nodejs.org                                                                                                |
-| echarts                             | 同上                                                                 | `cd <skill 目录>/scripts && npm i echarts`                                                                 |
-| playwright + Chromium               | 桑基图脚本的 `--png`                                                 | `cd <skill 目录>/scripts && npm i playwright && npx playwright install chromium`                          |
+| echarts                             | 同上                                                                 | `npm install -g echarts`（脚本会去全局 node_modules 找）                                                   |
+| playwright + Chromium               | 桑基图脚本的 `--png`                                                 | `npm install -g playwright && npx playwright install chromium`                                            |
 | matplotlib                          | 散点、直方、箱线等代码绘图                                           | `pip install matplotlib`；装完中文字体后清掉 `~/.cache/matplotlib`                                        |
 | draw.io 桌面版                      | 超过 12 个节点、真实产品图标、要交给别人编辑的图；命令行导出 PNG      | https://www.drawio.com/ ；有 draw.io 的插件或 MCP 时 agent 会优先用它们建图                               |
 | 中文字体                            | 所有本地渲染（mmdc、matplotlib、ECharts、draw.io）                   | macOS 自带苹方；Windows 自带微软雅黑；Linux 装 Noto Sans CJK（Debian / Ubuntu：`fonts-noto-cjk`）         |

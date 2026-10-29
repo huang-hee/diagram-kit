@@ -12,21 +12,33 @@
  *   --out      输出路径，不带扩展名（默认：和 CSV 同目录同名）
  *   --png      同时用 Playwright 输出 <out>.png（2 倍）
  *
- * 依赖：echarts；--png 还要 playwright 和 Chromium。缺了不执行，提示安装。
+ * 依赖：全局安装的 echarts（npm install -g echarts）；--png 还要 playwright 和 Chromium。缺了不执行，提示安装。
  */
 const fs = require('node:fs')
 const path = require('node:path')
 const { execFileSync } = require('node:child_process')
 
 /**
- * 从 scripts 目录或当前目录加载依赖，找不到就退出并提示安装
+ * 取 npm 全局 node_modules 目录，取不到返回空串
+ * @returns {string} 目录
+ */
+function globalRoot() {
+  try {
+    return execFileSync('npm', ['root', '-g'], { encoding: 'utf8' }).trim()
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * 按 当前目录 → 脚本目录 → 全局 node_modules 的顺序加载依赖，找不到就退出并提示安装
  * @param {string} name 包名
  * @param {string} hint 安装提示
  * @returns {any} 模块
  */
 function loadDependency(name, hint) {
-  // 先在脚本目录找，再在当前目录找
-  for (const base of [__dirname, process.cwd()]) {
+  // Node 默认不找全局包，所以把全局目录也加进查找起点
+  for (const base of [process.cwd(), __dirname, globalRoot()].filter(Boolean)) {
     try {
       return require(require.resolve(name, { paths: [base] }))
     } catch (e) {
@@ -173,7 +185,7 @@ function renderSvg(echarts, colors, nodes, links, width, height) {
  * @param {string} png_path 输出路径
  */
 async function writePng(svg, png_path) {
-  const { chromium } = loadDependency('playwright', '请先安装：npm i playwright && npx playwright install chromium')
+  const { chromium } = loadDependency('playwright', '请先安装：npm install -g playwright && npx playwright install chromium')
   const browser = await chromium.launch()
   const page = await browser.newPage({ deviceScaleFactor: 2 })
   await page.setContent(`<html><body style="margin:0">${svg}</body></html>`)
@@ -199,7 +211,7 @@ async function main() {
   const width = Number(option('--width', 720))
   const height = Number(option('--height', 360))
   // 依赖缺失时先停下来
-  const echarts = loadDependency('echarts', `请先安装：cd "${__dirname}" && npm i echarts`)
+  const echarts = loadDependency('echarts', '请先安装：npm install -g echarts')
   // 取色、读数据、渲染
   const colors = loadPalette(scheme)
   const { nodes, links } = readLinks(csv_path)
