@@ -1,5 +1,11 @@
 # diagram-kit
 
+## 1.0.4
+
+### Patch Changes
+
+- ae52d1f: 预检规则里写明唯一例外（桑基图中文节点缺 echarts 时退回对照表、不问），和出图步骤的固定做法对应
+
 ## 1.0.3
 
 ### Patch Changes

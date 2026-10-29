@@ -1,6 +1,6 @@
 {
   "name": "diagram-kit",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "description": "给 AI agent 用的画图与配图 skill",
   "scripts": {
