@@ -23,6 +23,7 @@
     "!package.json",
     "!package-lock.json",
     "!.changeset/**",
+    "!docs/**",
     "!.scripts/**",
     "!.gitignore",
     "!.prettierignore",
