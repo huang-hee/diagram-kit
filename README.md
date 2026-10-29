@@ -10,17 +10,29 @@
 
 ### 1. 放进 skill 目录
 
-把整个 `diagram-kit/` 目录复制（或软链）到 agent 平台的 skill 目录，目录名保持 `diagram-kit`：
+**用 skills CLI 装（推荐）**，一条命令装到一个或多个 agent（需要 Node.js 22.20+）：
+
+```bash
+# 装到个人目录，Claude Code 和 Codex 都能用
+npx skills add huang-hee/diagram-kit -g -a claude-code codex -y
+
+# 只装到当前项目（去掉 -g），或者换别的 agent（cursor、gemini-cli、github-copilot …）
+npx skills add huang-hee/diagram-kit -a cursor -y
+```
+
+它会把 skill 放到各 agent 的目录（Claude Code `~/.claude/skills/`，Codex `~/.agents/skills/`），默认用软链指向同一份；以后 `npx skills update` 更新，`npx skills remove diagram-kit` 删除。
+
+**手动装**：把整个 `diagram-kit/` 目录复制（或软链）到 agent 平台的 skill 目录，目录名保持 `diagram-kit`：
 
 | 平台                 | 个人级目录                       | 项目级目录                                |
 | -------------------- | -------------------------------- | ----------------------------------------- |
 | Claude Code          | `~/.claude/skills/`              | `.claude/skills/`                         |
-| Codex                | `~/.agents/skills/`              | `.agents/skills/`、`.codex/skills/`       |
+| Codex                | `~/.agents/skills/`              | `.agents/skills/`（从当前目录逐层向上找） |
 | Cursor               | —                                | `.agents/skills/`、`.cursor/skills/`、`.claude/skills/` |
 | GitHub Copilot CLI   | —                                | `.github/skills/`、`.agents/skills/`、`.claude/skills/` |
 | 其他                 | 以该平台文档为准                 | 多数平台认 `.agents/skills/`              |
 
-`SKILL.md` 的 frontmatter 只用了 `name` 和 `description`，各平台都能加载。
+`SKILL.md` 的 frontmatter 只用了 `name` 和 `description`，各平台都能加载；`agents/openai.yaml` 是给 Codex / ChatGPT 桌面端用的展示名和调用策略，其他平台会忽略它。Codex 里也可以直接让内置的 `$skill-installer` 从这个仓库装。
 
 ### 2. 按要用的工具装依赖
 
@@ -99,6 +111,7 @@ node scripts/sankey_echarts.js data.csv --png          # 中文节点的桑基�
 ```text
 diagram-kit/
 ├── SKILL.md                  # agent 读的入口：五步流程、图型表、命令
+├── agents/openai.yaml        # Codex / ChatGPT 桌面端的展示名与调用策略
 ├── references/
 │   ├── tools.md              # 各工具怎么接配色、导出
 │   ├── design-rules.md       # 配色与版式规则、检查清单
