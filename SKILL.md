@@ -11,7 +11,7 @@ metadata:
 
 - `$SKILL` 指本 skill 所在目录，执行命令前换成加载时给出的绝对路径。
 - 命令里的 `python` 在只有 `python3` 的机器上换成 `python3`。
-- 某一步需要的工具或依赖不可用（渲染器、draw.io、echarts、playwright、matplotlib、中文字体等）：不执行，不拿别的工具顶替，告诉调用者缺什么、怎么装，等指令。
+- 某一步需要的工具或依赖不可用（渲染器、draw.io、echarts、playwright、matplotlib、中文字体等）：不执行，不拿别的工具顶替，告诉调用者缺什么、怎么装，等指令。唯一例外是桑基图中文节点缺 echarts，按第 4 步开头的固定做法退回对照表，不问。
 
 ## 1. 判型
 
