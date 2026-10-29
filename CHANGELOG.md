@@ -1,5 +1,11 @@
 # diagram-kit
 
+## 1.0.5
+
+### Patch Changes
+
+- 790604b: 代码绘图的 matplotlib 和 ECharts 明确为等价选项：装了哪个用哪个，两个都没有才提示安装
+
 ## 1.0.4
 
 ### Patch Changes
