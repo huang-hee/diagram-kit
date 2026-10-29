@@ -25,6 +25,7 @@
     "!.changeset/**",
     "!.scripts/**",
     "!.gitignore",
-    "!.prettierignore"
+    "!.prettierignore",
+    "!tests/**"
   ]
 }
