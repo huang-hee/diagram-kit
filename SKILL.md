@@ -11,7 +11,7 @@ metadata:
 
 - `$SKILL` 指本 skill 所在目录，执行命令前换成加载时给出的绝对路径。
 - 命令里的 `python` 在只有 `python3` 的机器上换成 `python3`。
-- 某一步需要的工具或依赖不可用（渲染器、draw.io、echarts、playwright、matplotlib、中文字体等）：不执行，不拿别的工具顶替，告诉调用者缺什么、怎么装，等指令。两个例外：代码绘图的 matplotlib 和 ECharts 是同一步的两个等价选项，装了哪个用哪个，都没有才停；桑基图中文节点缺 echarts，按第 4 步开头的固定做法退回对照表，不问。
+- 某一步需要的工具或依赖不可用：先看该步在参考文件里列出的备选（代码绘图的 matplotlib / ECharts、桑基图中文节点的 ECharts / 对照表），有备选就用备选，并在回复里说明换了；备选也没有才停下来，不拿参考文件没列的工具顶替，告诉调用者缺什么、怎么装，等指令。
 
 ## 1. 判型
 
@@ -47,7 +47,7 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 
 ## 4. 出图
 
-**桑基图且节点名含中文**：不问调用者，先 `node $SKILL/scripts/sankey_echarts.js 正文.csv` 出图上显示中文的 SVG；脚本提示缺 echarts 再改用 Mermaid `sankey-beta` + `英文|中文` 对照表（`--md` 自动生成），不停下来等安装。这是"缺依赖不执行"的唯一例外。
+**桑基图且节点名含中文**：不问调用者，先 `node $SKILL/scripts/sankey_echarts.js 正文.csv` 出图上显示中文的 SVG；脚本提示缺 echarts 再改用 Mermaid `sankey-beta` + `英文|中文` 对照表（`--md` 自动生成），不停下来等安装。
 
 **Mermaid**
 

@@ -36,6 +36,36 @@ npx skills add huang-hee/diagram-kit -a cursor -y
 
 ### 2. 按要用的工具装依赖
 
+**一键装**（按系统整段复制执行；只用 Mermaid 的话装到 mermaid-cli 那行就够）：
+
+```bash
+# macOS
+brew install node python-matplotlib
+brew install --cask drawio                                     # 要 draw.io 桌面版时
+npm install -g --allow-scripts=puppeteer @mermaid-js/mermaid-cli echarts
+# 渲染报 Could not find chrome-headless-shell 时，补下浏览器：
+cd "$(npm root -g)/@mermaid-js/mermaid-cli" && npx puppeteer browsers install chrome-headless-shell
+```
+
+```powershell
+# Windows（先装 Node.js 和 Python，包名以 winget search 为准）
+winget install OpenJS.NodeJS.LTS Python.Python.3 JGraph.Draw
+pip install matplotlib
+npm install -g --allow-scripts=puppeteer @mermaid-js/mermaid-cli echarts
+```
+
+```bash
+# Linux（Debian / Ubuntu）
+sudo apt install -y nodejs npm python3-matplotlib fonts-noto-cjk
+npm install -g --allow-scripts=puppeteer @mermaid-js/mermaid-cli echarts
+```
+
+装完验证：
+
+```bash
+mmdc --version && node -e "require('$(npm root -g)/echarts')" && python -c "import matplotlib" && echo OK
+```
+
 skill 运行时不会自动安装任何东西：缺什么，agent 会停下来提示装什么（唯一例外：中文节点的桑基图缺 echarts 时直接退回 Mermaid + 对照表）。按下表装需要的部分。
 
 | 组件                                | 用途                                                                 | 安装                                                                                                      |
