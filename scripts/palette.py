@@ -666,9 +666,9 @@ C4_ROLES = [('Person', 'person'), ('ComponentDb', 'db'), ('ContainerDb', 'db'), 
             ('Component', 'component'), ('Container', 'system'), ('System', 'system')]
 
 SANKEY_HINT = (
-    '两种改法：\n'
-    '  1. 写成 英文|中文（如 Visits|访问）：图里显示英文，加 --md 会在图下面附中英对照表\n'
-    '  2. 图里直接显示中文：node $SKILL/scripts/sankey_echarts.js 数据.csv（ECharts 出 SVG / PNG）')
+    '节点名含中文时的固定做法（按顺序，不停下来等安装）：\n'
+    '  1. 先用 ECharts 出图上直接显示中文的 SVG：node $SKILL/scripts/sankey_echarts.js 数据.csv\n'
+    '  2. 脚本提示缺 echarts 时再改用 Mermaid：节点写成 英文|中文（如 Visits|访问），加 --md 在图下面附中英对照表')
 
 
 def _frontmatter(theme_vars, extra=None, title=None):

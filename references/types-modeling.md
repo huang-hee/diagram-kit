@@ -123,7 +123,7 @@ erDiagram
 
 - **用来**：谁用系统做什么：功能范围、需求边界。
 - **别用**：要讲交互步骤（→ 页面流程图或时序图）。
-- **工具**：Mermaid `usecase-beta`（beta，目标平台要能渲染）；平台不支持时用 `flowchart LR` 近似（参与者 `(( ))`、用例 `([ ])`、subgraph 当边界）；要标准 UML 符号和精细排版 → drawio。
+- **工具**：Mermaid `usecase-beta`（beta，默认直接用，回复里注明需要较新的 Mermaid）；调用者说平台不支持时用 `flowchart LR` 近似（参与者 `(( ))`、用例 `([ ])`、subgraph 当边界）；要标准 UML 符号和精细排版 → drawio。
 - **写法**：
   - `actor 别名("显示名")` 放在边界外；`systemBoundary "系统名" … end` 里写用例 `别名("显示名")`。
   - 关联 `Customer --> Browse`；包含 `A ..> : include B`；扩展 `B ..> : extend A`。

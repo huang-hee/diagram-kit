@@ -224,7 +224,7 @@ block-beta
 
 - **用来**：服务部署在哪些地域 / 可用区 / VPC / 集群，实例数和流量入口。
 - **别用**：讲逻辑分层（→ 应用架构图）。
-- **工具**：drawio 优先（真实云厂商 / K8s 图标、嵌套边界）；Mermaid 两种写法：`flowchart TB` + 嵌套 subgraph（走角色配色），或 `architecture-beta`（内置 cloud / database / disk / internet / server 图标，可接 iconify 图标；颜色走主题默认，不走角色 class；beta，目标平台要能渲染）。
+- **工具**：drawio 优先（真实云厂商 / K8s 图标、嵌套边界）；Mermaid 两种写法：`flowchart TB` + 嵌套 subgraph（走角色配色），或 `architecture-beta`（内置 cloud / database / disk / internet / server 图标，可接 iconify 图标；颜色走主题默认，不走角色 class；beta，默认直接用）。
 - **写法**：
   - 边界嵌套：地域 → 可用区 / VPC（`zone`，虚线）→ 子网 / 集群（`subnet`）→ 节点；节点名后写实例数，如 `x3`。
   - `architecture-beta`：`group vpc(cloud)[华东可用区 VPC]`、`service db(database)[MySQL 一主一从] in vpc`、`lb:R --> L:gw`（冒号后是连线接在节点的哪一侧，L / R / T / B）。

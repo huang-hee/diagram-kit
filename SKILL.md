@@ -1,6 +1,6 @@
 ---
 name: diagram-kit
-description: 画图与配图：判断图型、按角色取统一配色、出图并校验。覆盖流程、时序、状态、架构、UML、ER、思维导图、甘特、看板、象限、桑基等 48 种图和文档配图。画图、出图、配图、改图的样式或配色时使用。
+description: 画图与配图：判断图型、按角色取统一配色、出图并校验。覆盖流程、泳道、BPMN、决策树、时序、状态、架构、部署、网络、UML、ER、用例、思维导图、组织结构、鱼骨、甘特、路线图、看板、用户旅程、页面流程、象限、饼图、桑基、散点、直方、箱线、雷达、韦恩等 48 种图和文档配图。画图、出图、配图、画个图说明、给方案配图、改图的样式或配色时使用。
 metadata:
   version: '1.0.2'
 ---
@@ -33,8 +33,6 @@ metadata:
 
 用哪个工具按调用者的指令或项目规则定；没有规则时默认 Mermaid 代码块。各工具怎么接配色、怎么导出见 references/tools.md。
 
-一条固定规则：桑基图且节点名含中文时，不问调用者，直接用 `scripts/sankey_echarts.js` 出图上显示中文的 SVG；脚本提示缺 echarts 就改用 Mermaid `sankey-beta` + `英文|中文` 对照表（`--md` 自动生成），不停下来等安装。这是"缺依赖不执行"的唯一例外。
-
 ## 3. 取配色
 
 ```bash
@@ -48,6 +46,8 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 - 节点按"角色"上色：每种图有哪些角色（class 名）、对应哪个 token，见参考文件里该图的配色表。颜色表达类型，分组用容器（subgraph / 泳道 / 边界）表达。
 
 ## 4. 出图
+
+**桑基图且节点名含中文**：不问调用者，先 `node $SKILL/scripts/sankey_echarts.js 正文.csv` 出图上显示中文的 SVG；脚本提示缺 echarts 再改用 Mermaid `sankey-beta` + `英文|中文` 对照表（`--md` 自动生成），不停下来等安装。这是"缺依赖不执行"的唯一例外。
 
 **Mermaid**
 
@@ -69,11 +69,11 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 
 - Mermaid：用 Mermaid 渲染工具（MCP 或本地 mmdc）渲染一遍，看图检查：文字有没有截断、连线有没有交叉、颜色是否按角色生效。
 - 已知限制：
-  - `sankey-beta` 的节点名只能用 ASCII 字符，中文加引号也不行；中文节点按第 2 步的固定规则处理，详见 types-data.md 的桑基图一节。
+  - `sankey-beta` 的节点名只能用 ASCII 字符，中文加引号也不行；中文节点按第 4 步开头的固定做法处理，详见 types-data.md 的桑基图一节。
   - 韦恩图没有颜色主题变量，集合颜色靠 `style` 语句（`--body` 时自动生成）。
   - `requirementDiagram` 的标识用英文，中文写在 `text` 里。
   - C4 的边界（`Container_Boundary` 等）没有样式宏，只能是 Mermaid 默认的虚线框。
-  - 带 `-beta` 的图型（swimlane / usecase / architecture / ishikawa / venn / treemap / radar / xychart / block / sankey）以及 frontmatter 配置，在较旧的渲染器（部分 IDE 插件、文档平台、代码托管平台）上可能不显示。先确认目标平台能渲染；不能就按该图"工具"一栏换写法或换工具。
+  - 带 `-beta` 的图型（swimlane / usecase / architecture / ishikawa / venn / treemap / radar / xychart / block / sankey）以及 frontmatter 配置，在较旧的渲染器（部分 IDE 插件、文档平台、代码托管平台）上可能不显示。可以按该图"工具"一栏换更兼容的写法或工具。
 - 对照 references/design-rules.md 末尾的检查清单过一遍。
 - 导出图片和源文件的存放位置按调用者或项目的规则；文档和图里不写工具版本、验证日期这类过程信息。
 
