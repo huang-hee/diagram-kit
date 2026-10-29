@@ -248,7 +248,7 @@ radar-beta
 
 - **用来**：两个数值变量的相关性、聚类、异常点。
 - **别用**：类别对比（→ 柱状图）。
-- **工具**：代码绘图（Mermaid 没有散点图）：Python matplotlib 出 PNG，或 ECharts 出 HTML。
+- **工具**：代码绘图（Mermaid 没有散点图）：matplotlib 出 PNG，或 ECharts 出 SVG / PNG（照 `scripts/sankey_echarts.js` 的写法改 `series`），装了哪个用哪个。
 - **写法**：
   - 颜色：`python $SKILL/scripts/palette.py chart [方案]` 输出 JSON，`categorical` 依次给分组，`axis` / `grid` 给坐标轴和网格。
 - **要点**：
@@ -295,7 +295,7 @@ fig.savefig('scatter.png', bbox_inches='tight')
 
 - **用来**：数值的分布：接口耗时、订单金额、评分。
 - **别用**：看趋势（→ 折线图）。
-- **工具**：代码绘图（Mermaid 没有直方图 / 箱线图）。
+- **工具**：代码绘图（Mermaid 没有直方图 / 箱线图）；matplotlib 或 ECharts 装了哪个用哪个。
 - **写法**：
   - 颜色：`python $SKILL/scripts/palette.py chart [方案]`，主体用 `primary`，中位数 / 均值线用正文色虚线，离群点用 `state.bad`。
 - **要点**：

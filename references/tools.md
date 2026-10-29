@@ -80,7 +80,7 @@
 ## 代码绘图（matplotlib / ECharts）
 
 - 何时用：Mermaid 没有的数据图（散点、直方、箱线、热力、旭日、漏斗），节点要显示中文的桑基图，或需要精确坐标轴、多系列堆叠、双轴、交互。
-- 依赖：matplotlib，或 echarts（见下）；缺了不执行，提示安装。
+- 依赖：matplotlib 或 echarts，二选一，装了哪个用哪个（ECharts 照 `scripts/sankey_echarts.js` 的写法改 `series` 出 SVG，要 PNG 用 Playwright）；两个都没有才停下来提示安装。
 - 取色：`palette.py chart [方案]` 输出 JSON：
 
   | 字段                    | 用途                                                           |
