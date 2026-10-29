@@ -1,0 +1,7 @@
+sankey-beta
+Visits|访问,Product|商品页,1000
+Visits,Bounce|跳出,600
+Product,Cart|加购,400
+Product,Leave|离开,600
+Cart,Paid|支付,250
+Cart,Abandon|放弃,150

@@ -1,0 +1,41 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    xyChart:
+      backgroundColor: "#FFFFFF"
+      titleColor: "#33384A"
+      xAxisLabelColor: "#33384A"
+      xAxisTitleColor: "#33384A"
+      xAxisTickColor: "#8F929B"
+      xAxisLineColor: "#8F929B"
+      yAxisLabelColor: "#33384A"
+      yAxisTitleColor: "#33384A"
+      yAxisTickColor: "#8F929B"
+      yAxisLineColor: "#8F929B"
+      plotColorPalette: "#D2D6F1, #FBDBD1, #D8F0ED, #F6DEB6, #DEE7CD, #A4A7BC"
+---
+xychart-beta
+  title "月度 GMV（万元）"
+  x-axis ["1月", "2月", "3月", "4月", "5月", "6月"]
+  y-axis "GMV" 0 --> 500
+  bar [120, 150, 210, 260, 300, 420]
+  line [100, 140, 180, 240, 280, 380]
+%% 第 n 个 bar/line 用 plotColorPalette 的第 n 个颜色；只想突出一根柱子时改用单色 + 灰

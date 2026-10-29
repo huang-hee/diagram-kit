@@ -1,0 +1,43 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    fillType0: "#EDEFF9"
+    fillType1: "#FDF1ED"
+    fillType2: "#E1EAE9"
+    fillType3: "#FBF2E2"
+    fillType4: "#F2F5EB"
+    fillType5: "#DBDCE4"
+    fillType6: "#EDEFF9"
+    fillType7: "#FDF1ED"
+    faceColor: "#FFF6CE"
+---
+journey
+  title 首次下单
+  section 发现
+    搜索商品: 4: 用户
+    浏览详情: 3: 用户
+  section 下单
+    填写地址: 2: 用户
+    选择优惠: 3: 用户
+  section 支付
+    跳转收银台: 2: 用户
+    支付成功: 5: 用户
+%% 第 n 个 section 用 fillType<n-1>

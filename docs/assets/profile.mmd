@@ -1,0 +1,43 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    classText: "#1F2865"
+---
+classDiagram
+  class Entity {
+    <<stereotype>>
+    table : String
+  }
+  class Class {
+    <<metaclass>>
+  }
+  class Tagged {
+    table = "t_order"
+  }
+  Class <|-- Entity : extension
+  Entity .. Tagged
+  class Entity:::stereo
+  class Class:::meta
+  class Tagged:::tagged
+classDef stereo fill:#FBDBD1,stroke:#B09992,color:#712A14
+classDef meta fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef tagged fill:#D8F0ED,stroke:#97A8A6,color:#256058
+%% 用法：class OrderService:::focus，或 cssClass "PayGateway" iface

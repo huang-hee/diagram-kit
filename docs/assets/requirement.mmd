@@ -1,0 +1,43 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    requirementBackground: "#D2D6F1"
+    requirementBorderColor: "#9396A9"
+    requirementTextColor: "#1F2865"
+    relationColor: "#3B6FC2"
+    relationLabelBackground: "#FFFFFF"
+    relationLabelColor: "#33384A"
+---
+requirementDiagram
+  requirement order_req {
+    id: R1
+    text: "用户可提交订单"
+    risk: high
+    verifymethod: test
+  }
+  element order_api {
+    type: code
+  }
+  order_api - satisfies -> order_req
+  class order_api element
+classDef req fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef element fill:#D8F0ED,stroke:#97A8A6,color:#256058
+%% element 的配色：classDef 后 class 元素名 element

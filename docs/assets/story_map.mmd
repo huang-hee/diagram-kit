@@ -1,0 +1,33 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  A1[浏览]:::activity --> A2[下单]:::activity --> A3[支付]:::activity
+  A1 --> T1[搜索商品]:::task --> S1[按类目筛选]:::mvp
+  A2 --> T2[填写地址]:::task --> S2[地址簿]:::story
+  A3 --> T3[选择支付方式]:::task --> S3[分期付款]:::later
+classDef activity fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef task fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef story fill:#FFF6CE,stroke:#A6A086,color:#33384A
+classDef mvp fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
+classDef later fill:#EEEFF0,stroke:#8F929B,color:#33384A
+%% 用法：节点 A:::activity 或 class A,B activity

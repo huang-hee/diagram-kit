@@ -1,0 +1,39 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart TB
+  subgraph APP[com.shop]
+    subgraph ORDER[order]
+      O1[controller]:::pkg2
+      O2[service]:::focus
+    end
+    subgraph USER[user]
+      U1[service]:::pkg2
+    end
+  end
+  O2 -.-> U1
+  class APP pkg1
+  class ORDER,USER pkg2
+classDef pkg1 fill:#BACDEA,stroke:#3B6FC2,color:#33384A
+classDef pkg2 fill:#E2E9F6,stroke:#3B6FC2,color:#33384A
+classDef focus fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+%% 用法：节点 A:::pkg1 或 class A,B pkg1

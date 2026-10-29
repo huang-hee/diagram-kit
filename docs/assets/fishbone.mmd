@@ -1,0 +1,35 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#AC9B7F"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    mainBkg: "#F6DEB6"
+---
+ishikawa-beta
+  接口 P99 超过 2s
+    代码
+      N+1 查询
+      缺少缓存
+    依赖
+      下游超时
+    基础设施
+      扩容不及时
+    流程
+      上线前未压测
+%% 鱼骨图只认 mainBkg（鱼头和大类框）、lineColor、textColor；要给大类分色请用 drawio

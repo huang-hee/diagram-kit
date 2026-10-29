@@ -1,0 +1,32 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  A[空闲]:::s1 --> B[处理中]:::s2 --> C[等待回调]:::s3 --> D[空闲]:::s1
+  T[时间 0s → 5s]:::axis
+%% 该图 Mermaid 没有原生类型，优先用 drawio；下面是 flowchart 近似画法的配色
+classDef lifeline fill:#EBF1F9,stroke:#3B6FC2,color:#33384A
+classDef s1 fill:#EDEFF9,stroke:#D2D6F1,color:#33384A
+classDef s2 fill:#FDF1ED,stroke:#FBDBD1,color:#33384A
+classDef s3 fill:#E1EAE9,stroke:#D8F0ED,color:#33384A
+classDef axis fill:#EEEFF0,stroke:#8F929B,color:#33384A
+%% 用法：节点 A:::lifeline 或 class A,B lifeline

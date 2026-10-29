@@ -1,0 +1,33 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  IOC((IoC 容器)):::core -- 创建并管理 --> Bean[Bean]:::concept
+  ANN[注解]:::concept -- 声明 --> Bean
+  Bean -- 依赖注入 --> DEP[其他 Bean]:::sub
+  AOP[AOP]:::concept -- 代理增强 --> Bean
+  ANN -. 例如 .-> EX["@Service"]:::example
+classDef core fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef concept fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef sub fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
+classDef example fill:#D8F0ED,stroke:#97A8A6,color:#256058
+%% 用法：节点 A:::core 或 class A,B core

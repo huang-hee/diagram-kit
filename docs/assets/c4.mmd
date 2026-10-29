@@ -1,0 +1,44 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+C4Container
+  title 电商系统容器图
+  Person(customer, "顾客")
+  System_Ext(pay, "支付平台")
+  Container_Boundary(shop, "电商系统") {
+    Container(web, "Web 前端", "React")
+    Container(order, "订单服务", "Spring Boot")
+    ContainerDb(db, "业务库", "MySQL")
+  }
+  Rel(customer, web, "使用")
+  Rel(web, order, "调用 API")
+  Rel(order, db, "读写")
+  Rel(order, pay, "发起支付")
+UpdateElementStyle(customer, $fontColor="#FFFFFF", $bgColor="#3B6FC2", $borderColor="#3B6FC2")
+UpdateElementStyle(pay, $fontColor="#33384A", $bgColor="#EEEFF0", $borderColor="#8F929B")
+UpdateElementStyle(web, $fontColor="#1F2865", $bgColor="#D2D6F1", $borderColor="#9396A9")
+UpdateElementStyle(order, $fontColor="#1F2865", $bgColor="#D2D6F1", $borderColor="#9396A9")
+UpdateElementStyle(db, $fontColor="#256058", $bgColor="#D8F0ED", $borderColor="#97A8A6")
+UpdateRelStyle(customer, web, $textColor="#33384A", $lineColor="#3B6FC2")
+UpdateRelStyle(web, order, $textColor="#33384A", $lineColor="#3B6FC2")
+UpdateRelStyle(order, db, $textColor="#33384A", $lineColor="#3B6FC2")
+UpdateRelStyle(order, pay, $textColor="#33384A", $lineColor="#3B6FC2")

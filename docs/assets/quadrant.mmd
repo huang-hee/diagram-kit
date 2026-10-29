@@ -1,0 +1,50 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    quadrant1Fill: "#93B0DD"
+    quadrant1TextFill: "#33384A"
+    quadrant2Fill: "#6C93D1"
+    quadrant2TextFill: "#111111"
+    quadrant3Fill: "#E2E9F6"
+    quadrant3TextFill: "#33384A"
+    quadrant4Fill: "#BACDEA"
+    quadrant4TextFill: "#33384A"
+    quadrantPointFill: "#3B6FC2"
+    quadrantPointTextFill: "#33384A"
+    quadrantXAxisTextFill: "#33384A"
+    quadrantYAxisTextFill: "#33384A"
+    quadrantInternalBorderStrokeFill: "#3B6FC2"
+    quadrantExternalBorderStrokeFill: "#3B6FC2"
+    quadrantTitleFill: "#33384A"
+---
+quadrantChart
+  title 需求优先级
+  x-axis 低成本 --> 高成本
+  y-axis 低价值 --> 高价值
+  quadrant-1 规划着做
+  quadrant-2 马上做
+  quadrant-3 有空再做
+  quadrant-4 先不做
+  优惠券叠加: [0.35, 0.78]
+  订单导出: [0.15, 0.62]
+  海外支付: [0.85, 0.85]
+  换肤: [0.2, 0.2]
+%% 象限深浅按优先级：左上最深（马上做）> 右上 > 右下 > 左下

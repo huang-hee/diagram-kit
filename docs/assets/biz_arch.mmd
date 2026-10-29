@@ -1,0 +1,38 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+block-beta
+  columns 4
+  ch["用户触点：App、小程序、Web"]:4
+  d1["商品域"] d2["交易域"] d3["营销域"] d4["履约域"]
+  c1["类目、库存"] c2["下单、支付"] c3["优惠券、秒杀"] c4["仓储、物流"]
+  base["共享能力：会员、支付、消息"]:4
+  class ch channel
+  class d1,d2,d3,d4 domain
+  class c1,c2,c3,c4 capability
+  class base shared
+classDef channel fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef domain fill:#FBDBD1,stroke:#B09992,color:#712A14
+classDef capability fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef shared fill:#D8F0ED,stroke:#97A8A6,color:#256058
+classDef band fill:#EBF1F9,stroke:#3B6FC2,color:#33384A
+%% 用法：class a,b capability（block-beta 里写在块定义之后）

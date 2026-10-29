@@ -1,0 +1,59 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    classText: "#1F2865"
+---
+classDiagram
+  class Order {
+    -Long id
+    -OrderStatus status
+    +pay() void
+  }
+  class OrderService {
+    +createOrder() Order
+  }
+  class PaymentGateway {
+    <<interface>>
+    +pay(Order) PayResult
+  }
+  class OrderStatus {
+    <<enumeration>>
+    PENDING
+    PAID
+  }
+  class AbstractHandler {
+    <<abstract>>
+  }
+  OrderService --> PaymentGateway
+  OrderService ..> Order
+  Order --> OrderStatus
+  AbstractHandler <|-- OrderService
+  class OrderService:::focus
+  class PaymentGateway:::iface
+  class OrderStatus:::enum
+  class AbstractHandler:::abstract
+  class Order:::cls
+classDef cls fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef iface fill:#FBDBD1,stroke:#B09992,color:#712A14
+classDef enum fill:#D8F0ED,stroke:#97A8A6,color:#256058
+classDef abstract fill:#D2D6F1,stroke:#9396A9,color:#1F2865,stroke-dasharray:5 4
+classDef focus fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+%% 用法：class OrderService:::focus，或 cssClass "PayGateway" iface

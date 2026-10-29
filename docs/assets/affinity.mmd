@@ -1,0 +1,41 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  subgraph G1[新用户找不到入口]
+    a1[按钮难找]:::g1
+    a2[首页信息太多]:::g1
+  end
+  subgraph G2[页面慢]
+    b1[首屏 3 秒]:::g2
+    b2[滚动卡顿]:::g2
+  end
+  subgraph G3[支付体验差]
+    c1[跳转次数多]:::g3
+    c2[失败无提示]:::g3
+  end
+classDef g1 fill:#EDEFF9,stroke:#D2D6F1,color:#33384A
+classDef g2 fill:#FDF1ED,stroke:#FBDBD1,color:#33384A
+classDef g3 fill:#E1EAE9,stroke:#D8F0ED,color:#33384A
+classDef g4 fill:#FBF2E2,stroke:#F6DEB6,color:#33384A
+classDef title fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+%% 用法：节点 A:::g1 或 class A,B g1

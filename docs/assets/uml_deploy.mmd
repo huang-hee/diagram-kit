@@ -1,0 +1,37 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  subgraph DC[机房网络]
+    N1[应用服务器]:::device
+    E1[JVM]:::env
+    A1[order.jar]:::artifact
+  end
+  N2[数据库服务器]:::device
+  N1 --> E1 --> A1
+  N1 -- JDBC --> N2
+  class DC zone
+classDef device fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef env fill:#FBDBD1,stroke:#B09992,color:#712A14
+classDef artifact fill:#D8F0ED,stroke:#97A8A6,color:#256058
+classDef zone fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
+%% 用法：节点 A:::device 或 class A,B device

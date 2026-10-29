@@ -1,0 +1,51 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  subgraph L1[前端层]
+    W[商城 Web]:::client
+    M[小程序]:::client
+  end
+  subgraph L2[服务层]
+    G[API 网关]:::service
+    O[订单服务]:::service
+    P[商品服务]:::service
+  end
+  subgraph L3[基础层]
+    MQ[(RocketMQ)]:::infra
+    DB[(MySQL)]:::infra
+  end
+  X[支付平台]:::external
+  W --> G
+  M --> G
+  G --> O
+  G --> P
+  O --> MQ
+  O --> DB
+  O --> X
+  class L1,L2,L3 layer
+classDef client fill:#FBDBD1,stroke:#B09992,color:#712A14
+classDef service fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef infra fill:#D8F0ED,stroke:#97A8A6,color:#256058
+classDef external fill:#EEEFF0,stroke:#8F929B,color:#33384A
+classDef layer fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
+%% 用法：节点 A:::client 或 class A,B client

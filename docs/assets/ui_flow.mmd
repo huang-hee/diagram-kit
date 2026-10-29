@@ -1,0 +1,35 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  IN([打开 App]):::entry --> P1[首页]:::page
+  P1 --> A1[/点击商品/]:::action --> P2[商品详情]:::page
+  P2 --> D{已登录?}:::decision
+  D -- 否 --> P3[登录页]:::page --> P2
+  D -- 是 --> P4[确认订单]:::page --> OUT([支付完成]):::entry
+  N[登录后回到原商品]:::annotation -.- P3
+classDef page fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef action fill:#D8F0ED,stroke:#97A8A6,color:#256058
+classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
+classDef entry fill:#FBDBD1,stroke:#B09992,color:#712A14
+classDef annotation fill:#FFF6CE,stroke:#A6A086,color:#33384A
+%% 用法：节点 A:::page 或 class A,B page

@@ -1,0 +1,52 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    stateBkg: "#D2D6F1"
+    stateLabelColor: "#1F2865"
+    compositeBackground: "#EBF1F9"
+    compositeTitleBackground: "#EBF1F9"
+    compositeBorder: "#3B6FC2"
+    transitionColor: "#3B6FC2"
+    transitionLabelColor: "#33384A"
+    specialStateColor: "#33384A"
+    innerEndBackground: "#33384A"
+---
+stateDiagram-v2
+  state "待支付" as Pending
+  state "已支付" as Paid
+  state "已完成" as Done
+  state "已取消" as Cancelled
+  [*] --> Pending
+  Pending --> Paid : 支付成功
+  Pending --> Cancelled : 超时
+  Paid --> Done : 确认收货
+  Done --> [*]
+  Cancelled --> [*]
+  class Pending normal
+  class Paid active
+  class Done ok
+  class Cancelled fail
+classDef normal fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef active fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef ok fill:#DEF2E7,stroke:#4AB777,color:#33384A
+classDef fail fill:#FAE0DD,stroke:#E35144,color:#33384A
+classDef composite fill:#EBF1F9,stroke:#3B6FC2,color:#33384A
+%% 用法：class 已支付 ok（classDef 写在状态定义之后）

@@ -1,0 +1,52 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    taskBkgColor: "#D2D6F1"
+    taskBorderColor: "#9396A9"
+    taskTextColor: "#1F2865"
+    taskTextLightColor: "#1F2865"
+    taskTextDarkColor: "#33384A"
+    taskTextOutsideColor: "#33384A"
+    activeTaskBkgColor: "#C8D7EE"
+    activeTaskBorderColor: "#3B6FC2"
+    doneTaskBkgColor: "#F3F3F3"
+    doneTaskBorderColor: "#BBBBBB"
+    critBkgColor: "#FAE0DD"
+    critBorderColor: "#E35144"
+    sectionBkgColor: "#EBF1F9"
+    altSectionBkgColor: "#FFFFFF"
+    sectionBkgColor2: "#EBF1F9"
+    todayLineColor: "#E35144"
+---
+gantt
+  title 订单 V2 排期
+  dateFormat YYYY-MM-DD
+  axisFormat %m-%d
+  section 设计
+    需求评审 :done, a1, 2026-11-02, 3d
+    技术方案 :active, a2, after a1, 4d
+  section 开发
+    订单改造 :crit, b1, after a2, 6d
+    支付对接 :b2, after a2, 5d
+  section 上线
+    联调 :c1, after b1, 4d
+    灰度发布 :milestone, c2, after c1, 0d
+%% active / done / crit / milestone 上的文字都用 taskTextDarkColor；网格竖线由渲染端决定，主题变量改不了

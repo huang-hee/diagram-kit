@@ -1,0 +1,38 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  subgraph SUB[订单子系统]
+    C1[订单组件]:::comp
+    C2[支付组件]:::comp
+  end
+  L[公共工具库]:::lib
+  I((IPayment)):::iface
+  C1 --> I
+  C2 --- I
+  C1 --> L
+  class SUB group
+classDef comp fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef lib fill:#FBDBD1,stroke:#B09992,color:#712A14
+classDef iface fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
+classDef group fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
+%% 用法：节点 A:::comp 或 class A,B comp

@@ -1,0 +1,33 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  S(( )):::bar --> R1[ref 登录]:::occurrence
+  R1 --> D{已登录?}:::decision
+  D -- 是 --> R2[sd 下单]:::frame
+  D -- 否 --> R1
+  R2 --> E(( )):::bar
+classDef frame fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
+classDef occurrence fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
+classDef bar fill:#33384A,stroke:#33384A,color:#FFFFFF
+%% 用法：节点 A:::frame 或 class A,B frame

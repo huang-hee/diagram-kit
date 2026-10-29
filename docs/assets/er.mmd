@@ -1,0 +1,45 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#FFFFFF"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    attributeBackgroundColorOdd: "#FFFFFF"
+    attributeBackgroundColorEven: "#EBF1F9"
+---
+erDiagram
+  USERS:::entity ||--o{ ORDERS:::core : "下单"
+  ORDERS ||--|{ ORDER_ITEM:::link : "包含"
+  USERS {
+    bigint id PK
+    varchar mobile UK
+  }
+  ORDERS {
+    bigint id PK
+    bigint user_id FK
+    tinyint status
+  }
+  ORDER_ITEM {
+    bigint id PK
+    bigint order_id FK
+    int quantity
+  }
+classDef entity fill:#D2D6F1,stroke:#9396A9,color:#1F2865
+classDef core fill:#C8D7EE,stroke:#3B6FC2,color:#33384A,stroke-width:2px
+classDef link fill:#D8F0ED,stroke:#97A8A6,color:#256058
+%% 用法：ORDERS:::core（实体名后加 :::类名）

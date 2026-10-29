@@ -1,0 +1,37 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+block-beta
+  columns 4
+  L1["接入"]:1 a["CDN、Nginx"]:3
+  L2["服务"]:1 b["Spring Boot"] c["Spring Cloud"] d["Dubbo"]
+  L3["数据"]:1 e["MySQL"] f["Redis"] g["Elasticsearch"]
+  L4["运维"]:1 h["日志"] i["监控告警"] j["CI/CD"]
+  class L1,L2,L3,L4 layer
+  class a,b,c,d,e,f,g item
+  class h,i,j cross
+  class f highlight
+classDef layer fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef item fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
+classDef cross fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
+classDef highlight fill:#FBDBD1,stroke:#B09992,color:#712A14
+%% 用法：class a,b capability（block-beta 里写在块定义之后）

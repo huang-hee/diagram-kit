@@ -1,0 +1,57 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    cScale0: "#D2D6F1"
+    cScaleLabel0: "#111111"
+    cScale1: "#FBDBD1"
+    cScaleLabel1: "#111111"
+    cScale2: "#D8F0ED"
+    cScaleLabel2: "#111111"
+    cScale3: "#F6DEB6"
+    cScaleLabel3: "#111111"
+    cScale4: "#DEE7CD"
+    cScaleLabel4: "#111111"
+    cScale5: "#A4A7BC"
+    cScaleLabel5: "#111111"
+    cScale6: "#D2D6F1"
+    cScaleLabel6: "#111111"
+    cScale7: "#FBDBD1"
+    cScaleLabel7: "#111111"
+    cScale8: "#D8F0ED"
+    cScaleLabel8: "#111111"
+    cScale9: "#F6DEB6"
+    cScaleLabel9: "#111111"
+    cScale10: "#DEE7CD"
+    cScaleLabel10: "#111111"
+    cScale11: "#A4A7BC"
+    cScaleLabel11: "#111111"
+    radar:
+      axisColor: "#8F929B"
+      graticuleColor: "#C7C8CD"
+      curveOpacity: 0.35
+---
+radar-beta
+  title 技术选型
+  axis perf["性能"], eco["生态"], learn["学习成本"], ops["运维"], cost["成本"]
+  curve a["方案 A"]{4, 5, 3, 4, 3}
+  curve b["方案 B"]{3, 3, 5, 3, 4}
+  max 5
+%% 第 n 条曲线用 cScale<n-1>，曲线不超过 3 条

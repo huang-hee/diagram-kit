@@ -1,0 +1,37 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+---
+flowchart LR
+  subgraph PAGE[商品详情页]
+    IMG[商品图片]:::block
+    INFO[标题 / 价格]:::component
+    BTN[立即购买]:::primaryBtn
+  end
+  M1((1)):::marker -.- BTN
+  class PAGE canvas
+%% 该图 Mermaid 没有原生类型，优先用 drawio；下面是 flowchart 近似画法的配色
+classDef canvas fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
+classDef block fill:#EEEFF0,stroke:#8F929B,color:#33384A
+classDef primaryBtn fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef component fill:#EBF1F9,stroke:#3B6FC2,color:#33384A
+classDef marker fill:#FAE0DD,stroke:#E35144,color:#33384A
+%% 用法：节点 A:::canvas 或 class A,B canvas

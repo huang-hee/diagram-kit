@@ -1,0 +1,54 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    actorBkg: "#D2D6F1"
+    actorBorder: "#9396A9"
+    actorTextColor: "#33384A"
+    actorLineColor: "#8F929B"
+    signalColor: "#3B6FC2"
+    signalTextColor: "#33384A"
+    labelBoxBkgColor: "#FFFFFF"
+    labelBoxBorderColor: "#3B6FC2"
+    labelTextColor: "#33384A"
+    loopTextColor: "#33384A"
+    activationBkgColor: "#D8F0ED"
+    activationBorderColor: "#97A8A6"
+    sequenceNumberColor: "#FFFFFF"
+---
+sequenceDiagram
+  autonumber
+  actor U as 用户
+  participant FE as 前端
+  participant O as 订单服务
+  participant P as 支付平台
+  U->>FE: 点击提交
+  FE->>+O: POST /orders
+  O-->>-FE: 订单号
+  Note over FE,O: 同步下单
+  FE->>P: 拉起收银台
+  P-)O: 异步回调
+  alt 验签通过
+    O->>O: 置为已支付
+  else 验签失败
+    O->>O: 记录异常
+  end
+%% 用 box 给一组参与者加底色：box #FAEEDA 外部系统 ... end
+%% 参与者是人时用 actor 关键字（小人图形不受 actorBkg 填充影响）

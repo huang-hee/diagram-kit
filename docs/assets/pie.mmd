@@ -1,0 +1,48 @@
+---
+config:
+  theme: base
+  fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  themeVariables:
+    background: "#FFFFFF"
+    primaryColor: "#FFFFFF"
+    primaryBorderColor: "#3B6FC2"
+    primaryTextColor: "#33384A"
+    nodeTextColor: "#33384A"
+    secondaryColor: "#FBDBD1"
+    tertiaryColor: "#EBF1F9"
+    lineColor: "#3B6FC2"
+    textColor: "#33384A"
+    clusterBkg: "#EBF1F9"
+    clusterBorder: "#3B6FC2"
+    edgeLabelBackground: "#FFFFFF"
+    titleColor: "#33384A"
+    noteBkgColor: "#FFF6CE"
+    noteBorderColor: "#A6A086"
+    noteTextColor: "#33384A"
+    pie1: "#D2D6F1"
+    pie2: "#FBDBD1"
+    pie3: "#D8F0ED"
+    pie4: "#F6DEB6"
+    pie5: "#BCBEC3"
+    pie6: "#A4A7BC"
+    pie7: "#D2D6F1"
+    pie8: "#FBDBD1"
+    pie9: "#D8F0ED"
+    pie10: "#F6DEB6"
+    pie11: "#DEE7CD"
+    pie12: "#A4A7BC"
+    pieStrokeColor: "#FFFFFF"
+    pieOuterStrokeColor: "#FFFFFF"
+    pieTitleTextColor: "#33384A"
+    pieSectionTextColor: "#111111"
+    pieLegendTextColor: "#33384A"
+    pieOpacity: "1"
+---
+pie
+  title 流量来源
+  "搜索" : 42
+  "推荐" : 28
+  "广告" : 18
+  "社交" : 8
+  "其他" : 4
+%% 超过 5 类就把小项合并成"其他"，放到最后；带 --body 且不超过 12 块时最后一块自动用灰色
