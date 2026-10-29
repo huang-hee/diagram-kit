@@ -1,6 +1,8 @@
 ---
 name: diagram-kit
 description: 画图与配图：判断图型、按角色取统一配色、出图并校验。覆盖流程、时序、状态、架构、UML、ER、思维导图、甘特、看板、象限、桑基等 48 种图和文档配图。画图、出图、配图、改图的样式或配色时使用。
+metadata:
+  version: "1.0.0"
 ---
 
 # diagram-kit

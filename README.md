@@ -134,6 +134,18 @@ python scripts/sync_refs.py          # 重新生成 references 里的色表
 python scripts/render_check.py --all # 渲染全部示例 × 全部方案（需要 mmdc）
 ```
 
+## 版本与发版
+
+版本号在 `SKILL.md` frontmatter 的 `metadata.version`，和 `package.json` 保持一致，由 changesets 管理。改动了 `SKILL.md`、`references/`、`scripts/`、`agents/` 这些运行时文件时：
+
+```bash
+npx changeset              # 写一条 changeset：配色值、角色、命令变了选 minor，文档措辞选 patch
+npm run version            # 消费 changeset：升版本、写 CHANGELOG.md、同步到 SKILL.md
+git commit -am "chore: 发布 vX.Y.Z" && npx changeset git-tag && git push --follow-tags
+```
+
+`npx skills add` 装的是仓库 HEAD；要固定某个版本，用 GitHub Release 的 zip 地址装，或者 `git clone` 后切到对应的 tag 再软链。
+
 ## 许可证
 
 MIT
