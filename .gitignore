@@ -1,0 +1,12 @@
+# 编辑器的本地历史
+.history/
+
+# Node 依赖（echarts / playwright 装在 scripts/ 下）
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+
+# render_check.py 的输出
+render-check/
