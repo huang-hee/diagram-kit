@@ -33,6 +33,16 @@ metadata:
 
 用哪个工具按调用者的指令或项目规则定；没有规则时默认 Mermaid 代码块。各工具怎么接配色、怎么导出见 references/tools.md。
 
+不管用哪个工具，版式都按 references/design-rules.md 的统一风格：
+
+- 标题区：标题加一句话副标题；
+- 两级文字的圆角卡片；
+- 横向分层带；
+- 等粗的正交连线；
+- 说明面板、图例和读图行。
+
+每个工具怎么落地这套风格，见 tools.md 各节的「统一风格」。
+
 ## 3. 取配色
 
 ```bash
@@ -57,13 +67,13 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 
 **其他工具**
 
-| 工具                        | 取色命令                          | 用法                                                                                                                                                      |
-| --------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| drawio                      | `palette.py drawio <type> [方案]` | 每个角色、连线、容器、泳道、文字的 style 字符串，建图时直接用；第一行是页面背景色                                                                         |
-| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量；第二组按 diagram-design 的角色命名（paper / ink / accent …），填进它的 profile 或 style-guide                                                   |
-| 代码绘图                    | `palette.py chart [方案]`         | JSON：background / text / axis / grid / categorical / sequential / nodes / state；中文节点的桑基图直接用 `node $SKILL/scripts/sankey_echarts.js 数据.csv` |
-| 文生图工具（如有）          | `palette.py show [方案]`          | 把主色和 3–5 个系列色的 hex 写进提示词                                                                                                                    |
-| Figma                       | `palette.py css [方案]`           | 建成 Figma 颜色变量                                                                                                                                       |
+| 工具                        | 取色命令                          | 用法                                                                                                                                                                       |
+| --------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| drawio                      | `palette.py drawio <type> [方案]` | 整图用 `scripts/drawio_kit.py` 生成，统一风格的令牌已内置，用法见 tools.md 的「精修出图」；只改个别元素时，直接用这条命令输出的角色、连线、分层带、容器、文字 style 字符串 |
+| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量；第二组按 diagram-design 的角色命名（paper / ink / accent …），连同字体、线宽、圆角的覆盖值存成 profile，见 tools.md diagram-design 一节的「统一风格」            |
+| 代码绘图                    | `palette.py chart [方案]`         | JSON：background / text / axis / grid / categorical / sequential / nodes / state；中文节点的桑基图直接用 `node $SKILL/scripts/sankey_echarts.js 数据.csv`                  |
+| 文生图工具（如有）          | `palette.py show [方案]`          | 把主色和 3–5 个系列色的 hex 写进提示词                                                                                                                                     |
+| Figma                       | `palette.py css [方案]`           | 建成 Figma 颜色变量                                                                                                                                                        |
 
 ## 5. 校验
 
@@ -74,6 +84,7 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
   - `requirementDiagram` 的标识用英文，中文写在 `text` 里。
   - C4 的边界（`Container_Boundary` 等）没有样式宏，只能是 Mermaid 默认的虚线框。
   - 带 `-beta` 的图型（swimlane / usecase / architecture / ishikawa / venn / treemap / radar / xychart / block / sankey）以及 frontmatter 配置，在较旧的渲染器（部分 IDE 插件、文档平台、代码托管平台）上可能不显示。可以按该图"工具"一栏换更兼容的写法或工具。
+- drawio：每张导出后都看 PNG，检查有没有共线、穿框、交叉，标签有没有压框，面板有没有大片空白。
 - 对照 references/design-rules.md 末尾的检查清单过一遍。
 - 导出图片和源文件的存放位置按调用者或项目的规则；文档和图里不写工具版本、验证日期这类过程信息。
 
@@ -89,7 +100,8 @@ python $SKILL/scripts/render_check.py      # 用 mmdc 渲染参考文件里的�
 
 ## 参考文件
 
-- references/tools.md：各工具的配色接法、布局技巧、导出命令和限制
-- references/design-rules.md：配色与版式规则、drawio 尺寸、出图检查清单
+- references/tools.md：各工具的配色接法、统一风格的落地、布局技巧、导出命令和限制
+- references/design-rules.md：跨工具统一的配色与版式规则、各图型的版式做法、出图检查清单
+- scripts/drawio_kit.py：按统一风格生成 draw.io 图的组件库
 - references/schemes.md：全部配色方案总表（气质、色值、派生规则）
 - references/types-\*.md：每种图的用途、写法、示例和角色色表

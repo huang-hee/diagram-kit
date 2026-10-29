@@ -1,8 +1,25 @@
 # 工具
 
-选哪个工具见 SKILL.md 第 2 步；工具或依赖缺失时不执行，提示调用者安装。这里讲每个工具怎么接配色、怎么布局、怎么导出。
+选哪个工具见 SKILL.md 第 2 步；工具或依赖缺失时不执行，提示调用者安装。这里讲每个工具怎么接配色、怎么布局、怎么导出，以及怎么落地 design-rules.md 的统一风格。三种工具出的图要像一套：同样的标题写法、圆角卡片、等粗正交连线、说明与图例的位置。
 
 ## Mermaid
+
+### 统一风格
+
+`palette.py mermaid` 的输出已经带上这几项，不要删：
+
+- 配置：`flowchart.curve: step`（正交折线、转角自带小圆角），`nodeSpacing: 50`，`rankSpacing: 60`，`padding: 12`。
+  - Mermaid 12.2 上实测，这一组对流程、状态、类、ER 图都生效；更早版本的渲染端未验证。
+  - swimlane-beta 不加这一组：它默认就是正交线，加了 `step` 后箭头会和节点错开。
+- 流程图类的 classDef 带 `rx:8,ry:8`，矩形节点圆角 8。
+- 正文以 `flowchart` / `graph` 开头时，末尾追加 `linkStyle default stroke-width:1.5px`，全图连线统一 1.5px。swimlane-beta 里 `linkStyle` 不生效。
+- 关键路径要单独加粗时，在后面写 `linkStyle 序号 stroke-width:2.5px`。
+
+正文自己要做的：
+
+- 用 frontmatter 的 `title` 写标题，不带图号。副标题（这张图回答的问题）、说明和图例写在 md 里图的下面。
+- 节点用两级文字 `A["主名<br><small>说明</small>"]`，主名不超过 12 个汉字。
+- 用节点顺序和 `~~~` 不可见连线减少交叉；线上标签 6–8 个字以内。
 
 ### 配色机制
 
@@ -50,14 +67,53 @@
 - 导出：插件 / MCP 自带导出就用它；否则用 draw.io 桌面版命令行：
 
   ```bash
-  drawio -x -f png -s 2 -b 10 -o 图.png 图.drawio
+  drawio -x -f png -s 2 -b 24 -e -o 图.png 图.drawio
   # 可执行文件：macOS /Applications/draw.io.app/Contents/MacOS/draw.io
   #            Windows "%ProgramFiles%\draw.io\draw.io.exe"
   #            Linux   drawio
-  # 加 -e 会把图的 XML 嵌进 PNG，这张 PNG 也能直接用 draw.io 打开编辑
+  # -e 把图的 XML 嵌进 PNG，这张 PNG 也能直接用 draw.io 打开编辑
   ```
 
 - `.drawio` 源文件和导出的 PNG 一起交付，存放位置按调用者或项目的规则。
+
+### 精修出图：scripts/drawio_kit.py
+
+用 Python 写坐标、由 drawio_kit 生成 `.drawio`，统一风格的令牌（颜色、圆角、线宽、字号、端口、标题区、说明区）都在组件里，不手写样式串。适合正式文档里的整套图；只改一两处颜色时用上面的 `palette.py drawio` 样式串就够。
+
+```python
+import sys; sys.path.insert(0, '$SKILL/scripts')
+from drawio_kit import Diagram
+d = Diagram('应用架构', '五个包各自负责什么、运行时谁调用谁', scheme='macaron')
+d.band(40, 120, 1000, 120, '服务进程', '按需启动')
+a = d.box(220, 146, 220, 68, 'server', 'HTTP · WebSocket', role='lav')
+b = d.box(520, 146, 220, 68, 'core', '入库 · 派生 · 查询', role='key')
+d.edge(a, b, '调度', src='R', dst='L')
+y = d.panel(40, 270, 640, '依据', ['A16 包结构', 'A21 服务与页面的边界'])
+d.legend(40, y + 24, [('lav', '服务进程里的包'), ('key', '焦点'), ('edge', '运行时调用')])
+d.footer(40, y + 56, '读图：横带是运行位置，实线是运行时调用。')
+d.save('app-arch.drawio'); d.export('app-arch.drawio', 'app-arch.png')
+```
+
+| 组件                                                           | 用途                                                                                                                                                  |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Diagram(标题, 副标题, scheme)`                                | 自动画标题区；副标题写这张图回答的问题                                                                                                                |
+| `box`                                                          | 节点：两级文字。`shape` 可选 rect、pill、diamond、cyl、para、circle、doc、hex、note。`role` 取角色色，待定用 `role='pending'`。深色底时传 `sub_color` |
+| `band` / `vband` / `group` / `frame`                           | 分层带、右侧贯穿条、分组容器（`dashed=True` 为边界），以及交互概览的 ref / sd 框                                                                      |
+| `edge`                                                         | 正交连线。`src` / `dst` 指定端口（R、L、T、B 及 1/4 点）；`points` 是显式拐点；`dashed` 画虚线，`key` 画加粗；`label_offset` 把标签挪离拐角           |
+| `line`                                                         | 按坐标画线：坐标轴、生命线、鱼骨，`arrow='block'` 时带箭头                                                                                            |
+| `panel` / `legend` / `footer`                                  | 说明面板（高度自动算）、图例一行、读图行                                                                                                              |
+| `mindmap`                                                      | 脑图，也当横向树用（`sides='right'`）；`top=120` 贴在标题区下方；节点写成 `(标签, [], {'pending': True})` 为待定                                      |
+| `tree_down`                                                    | 自上而下的树 / 组织结构                                                                                                                               |
+| `fishbone`                                                     | 鱼骨图                                                                                                                                                |
+| `table`                                                        | ER 实体或类卡片：`'pk'` 主键、`'fk'` 外键、`'sep'` 分隔线                                                                                             |
+| `dot` / `bar`                                                  | 状态图的起止点；活动图的分叉 / 汇合粗横条                                                                                                             |
+| `seq(...)`                                                     | 时序图，返回的对象依次调 `msg` / `note` / `frag` / `els` / `end`，最后调 `finish`                                                                     |
+| `chevron` / `badge` / `sticky`                                 | 阶段箭头条、编号徽标、便签                                                                                                                            |
+| `path` / `polygon` / `ribbon` / `sector` / `rect` / `squarify` | 数据图的图元：任意路径、多边形、桑基丝带、饼或环扇区、柱、矩形树布局                                                                                  |
+
+- 坐标取 10 的倍数，主体从 y≈120 开始。每画完一张就看一眼导出的 PNG，按 design-rules.md 的检查清单改到没有共线、穿框、交叉，标签不压框。
+- 共用的布局规律（三列卡片、交替上下的标签）写成自己脚本里的循环，不要逐个硬写坐标。
+- 依赖：Python 3.9+、draw.io 桌面版命令行（导出用）。
 
 ## diagram-design
 
@@ -77,6 +133,22 @@
 
 - 一个项目只做一次：用这组值跑它的 onboarding 或保存成 profile（`diagram-design:profile`），之后它出的图自动用这套皮；单张图临时换色就把这些值填进它 style-guide 的对应角色。
 - `.html` 源文件和导出的 PNG 一起交付。
+
+### 统一风格
+
+要让 diagram-design 的图和 drawio、Mermaid 的图像一套，就用一个以方案命名的 profile（如 `diagram-kit-macaron`）。内容是 diagram-design 当前的 style-guide 正文，按下表改几处后用 `diagram-design:profile` 保存。项目里用 `.diagram-design` 指向它。
+
+| style-guide 的位置 | 改成                                                                                                                                                                                                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Semantic roles 表  | 填 `palette.py css [方案]` 的 `--dd-*` 值，映射见上表                                                                                                                                                                                                                     |
+| Font source        | `system`：不请求 Google Fonts，中文走本机字体                                                                                                                                                                                                                             |
+| Typography 表      | 一律用无衬线字体链（design-rules.md 的字体链），等宽字体只留给字段、端口、路径这类代码值。`title` 22px 加粗；用 `eyebrow` 放副标题，13px 常规、次要色、不全大写；`node-name` 13px 600；`sublabel` 11px；`arrow-label` 12px；`callout` 改为说明面板正文 12px，不用斜体衬线 |
+| Stroke, radius 表  | 节点描边 1；连线 1.5，关键路径 2.5；`radius-md` 8，`radius-lg` 10                                                                                                                                                                                                         |
+
+- 这样改会有意偏离 diagram-design 自带的「衬线 + 无衬线 + 等宽」约束；调用者要它原生的社论风时，用它的 `default` profile，不套这一节。
+- 版式按 design-rules.md：标题区、横向分层带、两级文字卡片、说明面板、图例、读图行。
+- 连线只用正交路径：SVG `path` 只写 `H` / `V` 段，拐角用小圆角，不用贝塞尔曲线；箭头统一用实心小三角。
+- 坐标网格仍按它自己的 4px 硬规则，间距取 40、60 这类同时满足两边的值。
 
 ## 代码绘图（matplotlib / ECharts）
 

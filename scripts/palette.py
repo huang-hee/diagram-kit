@@ -727,15 +727,22 @@ def _baseVars(s):
     }
 
 
-def _classDefs(rows):
-    """角色表转 classDef 行：主色角色描边 2px，虚线角色加 dasharray。"""
+def _classDefs(rows, rounded=False):
+    """角色表转 classDef 行：主色角色描边 2px，虚线角色加 dasharray；rounded 时矩形节点圆角 8px（流程图类）。"""
     out = []
     for cls, _, p, dashed, (f, st, t) in rows:
         extra = ',stroke-dasharray:5 4' if dashed else ''
         if p in ('primary', 'accent'):
             extra += ',stroke-width:2px'
+        if rounded:
+            extra += ',rx:8,ry:8'
         out.append(f'classDef {cls} fill:{f},stroke:{st},color:{t}{extra}')
     return out
+
+
+# 统一风格的 Mermaid 布局配置：正交折线（flowchart.curve 在 Mermaid 12.2 上对流程、状态、类、ER 图都生效）与统一间距
+LAYOUT_CONFIG = {'flowchart': {'curve': 'step', 'nodeSpacing': 50, 'rankSpacing': 60, 'padding': 12}}
+EDGE_WIDTH = '1.5px'
 
 
 def _splitBody(body):
@@ -869,7 +876,7 @@ def emitMermaid(tid, sid, body=None):
         return readableOnSolid(c, s['text'])
 
     if kind in ('flow', 'drawio'):
-        tail = _classDefs(rows)
+        tail = _classDefs(rows, rounded=True)
         tail.append('%% 用法：节点 A:::' + rows[0][0] + ' 或 class A,B ' + rows[0][0])
         if kind == 'drawio':
             tail.insert(0, '%% 该图 Mermaid 没有原生类型，优先用 drawio；下面是 flowchart 近似画法的配色')
@@ -1057,7 +1064,12 @@ def emitMermaid(tid, sid, body=None):
         return '%% 该图用代码绘制（matplotlib / ECharts），配色用：\n' + emitChart(sid)
     header = own_header or HEADER_OVERRIDE.get(tid, HEADERS[kind])
     main_part = body if body is not None else '    %% 在这里写图的正文'
-    return '\n'.join([_frontmatter(v, title=title), header, main_part] + tail)
+    # 流程图语法的连线统一 1.5px（linkStyle 只在 flowchart / graph 里有效）
+    if re.match(r'(flowchart|graph)\b', header):
+        tail.append(f'linkStyle default stroke-width:{EDGE_WIDTH}')
+    # swimlane-beta 默认就是正交线，加 curve: step 反而让箭头和节点错开，所以不加布局配置
+    layout = None if header.startswith('swimlane') else LAYOUT_CONFIG
+    return '\n'.join([_frontmatter(v, layout, title=title), header, main_part] + tail)
 
 
 # ---------------------------------------------------------------------------
@@ -1068,27 +1080,36 @@ def emitMermaid(tid, sid, body=None):
 def emitDrawio(tid, sid):
     """每个角色的 draw.io style 字符串，第一行是页面背景。"""
     s, rows = roleTable(tid, sid)
-    base = 'rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=13;'
-    out = [f'# {TYPES[tid]["name"]} · {s["name"]}　页面背景 {s["bg"]}（Format → Background）']
+    font = f'fontFamily={FONT};'
+    base = f'rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fontSize=13;{font}'
+    muted = mix(s['text'], s['bg'], 0.2)
+    edge = (f'edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor={s["line"]};strokeWidth=1.5;'
+            f'fontColor={s["text"]};fontSize=12;labelBackgroundColor={s["bg"]};endArrow=block;endFill=1;endSize=7;jumpStyle=arc;{font}')
+    out = [f'# {TYPES[tid]["name"]} · {s["name"]}　页面背景 {s["bg"]}（Format → Background）；版式与连线规则见 design-rules.md，整图生成用 scripts/drawio_kit.py']
     # 角色
     for _, lbl, p, dashed, (f, st, tx) in rows:
         dash = 'dashed=1;dashPattern=6 4;' if dashed else ''
         width = 'strokeWidth=2;' if p in ('primary', 'accent') else ''
         out.append(f'{lbl:<16} {base}fillColor={f};strokeColor={st};fontColor={tx};{width}{dash}')
-    # 连线、容器、泳道、边界、文字
+    # 连线、分层带、容器、泳道、边界、文字
     out += [
-        f'{"连线":<16} edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor={s["line"]};fontColor={s["text"]};'
-        f'fontSize=11;endArrow=block;endFill=1;endSize=6;jumpStyle=arc;',
-        f'{"虚线（异步/依赖）":<12} edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor={s["line"]};'
-        f'fontColor={s["text"]};fontSize=11;endArrow=open;endSize=6;',
-        f'{"分组容器":<16} rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor={s["soft"]};strokeColor={s["border"]};'
-        f'fontColor={s["text"]};verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontSize=14;',
+        f'{"连线":<16} {edge}',
+        f'{"虚线（异步/依赖）":<12} {edge}dashed=1;dashPattern=6 4;',
+        f'{"分层带标签栏":<14} rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor={s["ramp"][0]};strokeColor=none;'
+        f'fontColor={s["text"]};fontStyle=1;fontSize=14;{font}',
+        f'{"分层带内容区":<14} rounded=1;arcSize=8;absoluteArcSize=1;html=1;fillColor={s["soft"]};strokeColor=none;',
+        f'{"分组容器":<16} rounded=1;arcSize=10;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor={s["soft"]};strokeColor=none;'
+        f'fontColor={s["text"]};verticalAlign=top;align=left;spacingLeft=14;spacingTop=8;fontStyle=1;fontSize=13;{font}',
         f'{"泳道":<16} swimlane;horizontal=0;startSize=32;html=1;fillColor={s["soft"]};swimlaneFillColor={s["bg"]};'
-        f'strokeColor={s["border"]};fontColor={s["text"]};fontStyle=1;fontSize=14;',
-        f'{"边界（虚线）":<14} rounded=1;arcSize=3;html=1;fillColor=none;dashed=1;dashPattern=6 4;strokeColor={s["border"]};'
-        f'fontColor={s["text"]};verticalAlign=top;align=left;spacingLeft=10;',
-        f'{"标题文字":<16} text;html=1;align=left;verticalAlign=middle;fontColor={s["text"]};fontSize=18;fontStyle=1;',
-        f'{"说明文字":<16} text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor={mix(s["text"], s["bg"], 0.2)};fontSize=12;',
+        f'strokeColor={s["border"]};fontColor={s["text"]};fontStyle=1;fontSize=14;{font}',
+        f'{"边界（虚线）":<14} rounded=1;arcSize=10;absoluteArcSize=1;html=1;fillColor=none;dashed=1;dashPattern=6 4;strokeColor={s["border"]};'
+        f'fontColor={s["text"]};verticalAlign=top;align=left;spacingLeft=14;{font}',
+        f'{"说明面板":<16} rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor={s["note"][0]};strokeColor={s["note"][1]};'
+        f'fontColor={s["note"][2]};align=left;verticalAlign=top;spacing=14;fontSize=12;{font}',
+        f'{"标题竖条":<16} rounded=1;arcSize=50;fillColor={s["primary"]};strokeColor=none;（6×50，放在标题左侧）',
+        f'{"标题文字":<16} text;html=1;align=left;verticalAlign=middle;fontColor={s["text"]};fontSize=22;fontStyle=1;{font}',
+        f'{"副标题":<16} text;html=1;align=left;verticalAlign=middle;fontColor={muted};fontSize=13;{font}',
+        f'{"说明文字":<16} text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontColor={muted};fontSize=12;{font}',
     ]
     return '\n'.join(out)
 
