@@ -2,7 +2,7 @@
 name: diagram-kit
 description: 画图与配图：判断图型、按角色取统一配色、出图并校验。覆盖流程、时序、状态、架构、UML、ER、思维导图、甘特、看板、象限、桑基等 48 种图和文档配图。画图、出图、配图、改图的样式或配色时使用。
 metadata:
-  version: "1.0.2"
+  version: '1.0.2'
 ---
 
 # diagram-kit
@@ -11,14 +11,14 @@ metadata:
 
 - `$SKILL` 指本 skill 所在目录，执行命令前换成加载时给出的绝对路径。
 - 命令里的 `python` 在只有 `python3` 的机器上换成 `python3`。
-- 某一步需要的工具或依赖不可用（渲染器、draw.io、echarts、playwright、matplotlib、中文字体等）：不执行，不拿别的工具顶替，告诉调用者缺什么、怎么装（安装清单见 README.md），等指令。
+- 某一步需要的工具或依赖不可用（渲染器、draw.io、echarts、playwright、matplotlib、中文字体等）：不执行，不拿别的工具顶替，告诉调用者缺什么、怎么装，等指令。
 
 ## 1. 判型
 
 按"要讲清什么"选 type id。拿不准时读对应参考文件开头的选型表，以及每种图的"用来 / 别用"。
 
 | 类别     | type id                                                                                                                                                                     | 参考文件                      |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | 思考梳理 | `mindmap` 思维导图、`org` 树形图 / 组织结构图、`fishbone` 鱼骨图、`concept` 概念图、`affinity` 亲和图                                                                       | references/types-thinking.md  |
 | 流程行为 | `flowchart` 流程图、`swimlane` 泳道图、`sequence` 时序图、`state` 状态图、`activity` 活动图、`communication` 通信图、`interaction` 交互概览图、`timing` 时间图              | references/types-flow.md      |
 | 系统结构 | `c4` C4 模型、`biz_arch` 业务架构、`app_arch` 应用架构、`data_arch` 数据架构、`tech_arch` 技术架构、`deploy_arch` 部署架构、`network` 网络拓扑                              | references/types-structure.md |
@@ -32,6 +32,8 @@ metadata:
 ## 2. 选工具
 
 用哪个工具按调用者的指令或项目规则定；没有规则时默认 Mermaid 代码块。各工具怎么接配色、怎么导出见 references/tools.md。
+
+一条固定规则：桑基图且节点名含中文时，不问调用者，直接用 `scripts/sankey_echarts.js` 出图上显示中文的 SVG；脚本提示缺 echarts 就改用 Mermaid `sankey-beta` + `英文|中文` 对照表（`--md` 自动生成），不停下来等安装。这是"缺依赖不执行"的唯一例外。
 
 ## 3. 取配色
 
@@ -56,9 +58,9 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 **其他工具**
 
 | 工具                        | 取色命令                          | 用法                                                                                                                                                      |
-| --------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | drawio                      | `palette.py drawio <type> [方案]` | 每个角色、连线、容器、泳道、文字的 style 字符串，建图时直接用；第一行是页面背景色                                                                         |
-| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量；第二组按 diagram-design 的角色命名（paper / ink / accent …），填进它的 profile 或 style-guide                                                    |
+| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量；第二组按 diagram-design 的角色命名（paper / ink / accent …），填进它的 profile 或 style-guide                                                   |
 | 代码绘图                    | `palette.py chart [方案]`         | JSON：background / text / axis / grid / categorical / sequential / nodes / state；中文节点的桑基图直接用 `node $SKILL/scripts/sankey_echarts.js 数据.csv` |
 | 文生图工具（如有）          | `palette.py show [方案]`          | 把主色和 3–5 个系列色的 hex 写进提示词                                                                                                                    |
 | Figma                       | `palette.py css [方案]`           | 建成 Figma 颜色变量                                                                                                                                       |
@@ -67,10 +69,8 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 
 - Mermaid：用 Mermaid 渲染工具（MCP 或本地 mmdc）渲染一遍，看图检查：文字有没有截断、连线有没有交叉、颜色是否按角色生效。
 - 已知限制：
-  - `sankey-beta` 的节点名只能用 ASCII 字符，中文加引号也不行。两种做法：
-    - 节点写成 `英文|中文`，加 `--md` 输出代码块和中英对照表。
-    - 用 `scripts/sankey_echarts.js` 让图里直接显示中文。
-    - 详见 types-data.md 的桑基图一节。
+  - `sankey-beta` 的节点名只能用 ASCII 字符，中文加引号也不行；中文节点按第 2 步的固定规则处理，详见 types-data.md 的桑基图一节。
+  - 韦恩图没有颜色主题变量，集合颜色靠 `style` 语句（`--body` 时自动生成）。
   - `requirementDiagram` 的标识用英文，中文写在 `text` 里。
   - C4 的边界（`Container_Boundary` 等）没有样式宏，只能是 Mermaid 默认的虚线框。
   - 带 `-beta` 的图型（swimlane / usecase / architecture / ishikawa / venn / treemap / radar / xychart / block / sankey）以及 frontmatter 配置，在较旧的渲染器（部分 IDE 插件、文档平台、代码托管平台）上可能不显示。先确认目标平台能渲染；不能就按该图"工具"一栏换写法或换工具。

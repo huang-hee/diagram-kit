@@ -1,6 +1,6 @@
 # 工具
 
-选哪个工具见 SKILL.md 第 2 步；工具或依赖缺失时不执行，提示调用者安装（清单见 README.md）。这里讲每个工具怎么接配色、怎么布局、怎么导出。
+选哪个工具见 SKILL.md 第 2 步；工具或依赖缺失时不执行，提示调用者安装。这里讲每个工具怎么接配色、怎么布局、怎么导出。
 
 ## Mermaid
 
@@ -8,21 +8,22 @@
 
 - 全局：frontmatter 里 `theme: base` + `themeVariables`（背景、字体、连线、便签、各图型的专用变量）。
 - 按角色：`classDef 角色 fill:…,stroke:…,color:…`，节点挂 class。未挂 class 的节点是中性的白底，颜色全由 classDef 决定。
-- `palette.py mermaid` 已经按图型处理了各自的专用变量：思维导图 / 时间线 / 看板的 `cScale*`、甘特图的 `task*` / `crit*` / `done*`、饼图 `pie1..`、旅程图 `fillType*`、Git 图 `git0..`、象限图 `quadrant*`、柱线图 `xyChart.plotColorPalette`、韦恩图 `venn*`、矩形树图 `cScale*` / `cScalePeer*`、桑基图 `config.sankey.nodeColors`、用例图 `usecase*`、C4 的 `UpdateElementStyle` / `UpdateRelStyle`。
+- `palette.py mermaid` 已经按图型处理了各自的专用变量：思维导图 / 时间线 / 看板的 `cScale*`、甘特图的 `task*` / `crit*` / `done*`、饼图 `pie1..`、旅程图 `fillType*`、Git 图 `git0..`、象限图 `quadrant*`、柱线图 `xyChart.plotColorPalette`、韦恩图的 `style` 语句（没有主题变量，`--body` 时按 `set` 顺序生成）、矩形树图 `cScale*` / `cScalePeer*`、桑基图 `config.sankey.nodeColors`、用例图 `usecase*`、C4 的 `UpdateElementStyle` / `UpdateRelStyle`。
 
 ### 各图挂 class 的写法
 
-| 图型                                                                                     | 写法                                                                                                     |
-| ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| flowchart / swimlane-beta / block-beta                                                   | `A[文字]:::角色`，或 `class A,B 角色`                                                                    |
-| stateDiagram-v2                                                                          | `class 状态Id 角色`（写在状态定义之后）                                                                  |
-| classDiagram                                                                             | `class 类名:::角色`，或 `cssClass "A,B" 角色`                                                            |
-| erDiagram                                                                                | 关系行里 `实体:::角色`                                                                                   |
+| 图型                                                                                     | 写法                                                                                               |
+| ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| flowchart / swimlane-beta / block-beta                                                   | `A[文字]:::角色`，或 `class A,B 角色`                                                              |
+| stateDiagram-v2                                                                          | `class 状态Id 角色`（写在状态定义之后）                                                            |
+| classDiagram                                                                             | `class 类名:::角色`，或 `cssClass "A,B" 角色`                                                      |
+| erDiagram                                                                                | 关系行里 `实体:::角色`                                                                             |
 | usecase-beta                                                                             | `Order("下单"):::角色`、`actor A:::角色`、`systemBoundary` 同理；class 名不能用 `actor` 这类关键字 |
-| requirementDiagram                                                                       | `class 元素名 角色`                                                                                      |
-| treemap-beta                                                                             | 叶子后加 `:::角色`                                                                                       |
-| C4                                                                                       | `UpdateElementStyle(别名, ...)`，用 `--body` 时自动生成；边界没有样式宏，保持默认虚线框                  |
-| mindmap / timeline / kanban / gitGraph / pie / journey / radar / venn / xychart / sankey | 按出现顺序自动取色，不用写 class                                                                         |
+| requirementDiagram                                                                       | `class 元素名 角色`                                                                                |
+| treemap-beta                                                                             | 叶子后加 `:::角色`                                                                                 |
+| C4                                                                                       | `UpdateElementStyle(别名, ...)`，用 `--body` 时自动生成；边界没有样式宏，保持默认虚线框            |
+| venn-beta                                                                                | `style 集合名 fill:…,stroke:…`，用 `--body` 时自动生成                                              |
+| mindmap / timeline / kanban / gitGraph / pie / journey / radar / xychart / sankey        | 按出现顺序自动取色，不用写 class                                                                   |
 
 ### 布局技巧
 
@@ -63,15 +64,15 @@
 - 结构和版式按 diagram-design 自己的规则。它的颜色模型是"纸 + 墨 + 一个强调色"的语义角色（`paper` / `ink` / `muted` / `soft` / `rule` / `accent` / `accent-tint` / `link` / `series-1…5`），不是四槽角色色，所以只能做到底色、正文、主色、系列色和 Mermaid 同源，节点填充风格仍是它自己的。
 - 接法：`palette.py css [方案]` 输出的第二组变量（`--dd-paper`、`--dd-ink` …）就是按它的角色名算好的，映射关系：
 
-  | diagram-design 角色       | 取自方案                                   |
-  | ------------------------- | ------------------------------------------ |
-  | `paper` / `paper-2`       | `bg` / `bg` 略加深                         |
-  | `ink` / `ink-strong`      | `text` / `#111111`                         |
-  | `muted` / `soft`          | `text` 向 `bg` 混 45% / 25%，压到对底 4.5:1 |
-  | `rule` / `rule-solid`     | `ink` 12% 透明 / `border`                  |
-  | `accent` / `accent-tint`  | `primary`（压到 4.5:1）/ 它的 8% 透明      |
-  | `link`                    | `line`（压到 4.5:1）                       |
-  | `series-1…5`              | `series` 前 5 个                           |
+  | diagram-design 角色      | 取自方案                                    |
+  | ------------------------ | ------------------------------------------- |
+  | `paper` / `paper-2`      | `bg` / `bg` 略加深                          |
+  | `ink` / `ink-strong`     | `text` / `#111111`                          |
+  | `muted` / `soft`         | `text` 向 `bg` 混 45% / 25%，压到对底 4.5:1 |
+  | `rule` / `rule-solid`    | `ink` 12% 透明 / `border`                   |
+  | `accent` / `accent-tint` | `primary`（压到 4.5:1）/ 它的 8% 透明       |
+  | `link`                   | `line`（压到 4.5:1）                        |
+  | `series-1…5`             | `series` 前 5 个                            |
 
 - 一个项目只做一次：用这组值跑它的 onboarding 或保存成 profile（`diagram-design:profile`），之后它出的图自动用这套皮；单张图临时换色就把这些值填进它 style-guide 的对应角色。
 - `.html` 源文件和导出的 PNG 一起交付。

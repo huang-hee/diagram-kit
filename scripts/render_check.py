@@ -55,6 +55,14 @@ def requireMmdc():
     return mmdc
 
 
+def _errorLine(text):
+    """从 mmdc 的输出里取第一行含 Error 的内容，没有就取末尾 300 字。"""
+    for ln in text.splitlines():
+        if 'Error' in ln or 'error' in ln:
+            return ln.strip()[:300]
+    return text.strip()[-300:]
+
+
 def main(argv):
     """命令入口。
 
@@ -71,6 +79,10 @@ def main(argv):
     mmdc = requireMmdc()
     os.makedirs(out_dir, exist_ok=True)
     samples = collectSamples()
+    # 指定的图型必须有示例
+    unknown = [w for w in wanted if w not in samples]
+    if unknown:
+        raise SystemExit('这些图型没有示例：' + '、'.join(unknown) + '；可用：' + '、'.join(samples))
     fails = 0
     # 每个图型 × 方案渲染一张
     for tid, body in samples.items():
@@ -84,7 +96,7 @@ def main(argv):
                                capture_output=True, text=True)
             ok = r.returncode == 0
             fails += not ok
-            print('OK  ' if ok else 'FAIL', f'{tid:<14} {sid}', '' if ok else (r.stderr or r.stdout).strip()[-300:])
+            print('OK  ' if ok else 'FAIL', f'{tid:<14} {sid}', '' if ok else _errorLine(r.stderr or r.stdout))
     print(f'{fails} 张失败' if fails else '全部渲染成功', '->', out_dir)
     return 1 if fails else 0
 

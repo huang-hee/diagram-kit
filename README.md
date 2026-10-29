@@ -4,7 +4,7 @@
 
 - 48 种图，分 7 类：思考梳理、流程行为、系统结构、建模设计、产品设计、计划进度、数据呈现。每种图定义了"角色"（开始 / 处理 / 判断、实体 / 核心实体、普通任务 / 进行中……），节点按角色上色。
 - 12 套配色方案，对所有图型通用，一篇文档一套。颜色全部由 `scripts/palette.py` 派生输出（Mermaid 主题变量和 classDef、draw.io style、CSS 变量、图表 JSON），agent 不手写 hex。
-- 文字对比度、强调色是否独立、连线是否够深这些都有脚本校验。
+- 文字对比度、强调色是否独立有脚本校验；连线、描边、容器对页面的对比度在派生时强制达标。
 
 ## 安装
 
@@ -28,20 +28,20 @@ npx skills add huang-hee/diagram-kit -a cursor -y
 | -------------------- | -------------------------------- | ----------------------------------------- |
 | Claude Code          | `~/.claude/skills/`              | `.claude/skills/`                         |
 | Codex                | `~/.agents/skills/`              | `.agents/skills/`（从当前目录逐层向上找） |
-| Cursor               | —                                | `.agents/skills/`、`.cursor/skills/`、`.claude/skills/` |
-| GitHub Copilot CLI   | —                                | `.github/skills/`、`.agents/skills/`、`.claude/skills/` |
+| Cursor               | `~/.cursor/skills/`、`~/.agents/skills/` | `.agents/skills/`、`.cursor/skills/`、`.claude/skills/` |
+| GitHub Copilot CLI   | `~/.copilot/skills/`、`~/.agents/skills/` | `.github/skills/`、`.agents/skills/`、`.claude/skills/` |
 | 其他                 | 以该平台文档为准                 | 多数平台认 `.agents/skills/`              |
 
 `SKILL.md` 的 frontmatter 只用了 `name` 和 `description`，各平台都能加载；`agents/openai.yaml` 是给 Codex / ChatGPT 桌面端用的展示名和调用策略，其他平台会忽略它。Codex 里也可以直接让内置的 `$skill-installer` 从这个仓库装。
 
 ### 2. 按要用的工具装依赖
 
-skill 运行时不会自动安装任何东西：缺什么，agent 会停下来提示装什么。按下表装需要的部分。
+skill 运行时不会自动安装任何东西：缺什么，agent 会停下来提示装什么（唯一例外：中文节点的桑基图缺 echarts 时直接退回 Mermaid + 对照表）。按下表装需要的部分。
 
 | 组件                                | 用途                                                                 | 安装                                                                                                      |
 | ----------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | Python 3.8+                         | `palette.py`（取色）、`sync_refs.py`、`render_check.py`，无第三方依赖 | python.org 或系统包管理器。命令名是 `python`，只有 `python3` 的机器把文档里的命令换成 `python3`           |
-| Mermaid 渲染                        | 校验和预览 Mermaid 代码                                              | 二选一：Mermaid 的 MCP server（按平台的 MCP 配置方式接入）；或本地 `npm i -g @mermaid-js/mermaid-cli`（提供 `mmdc`） |
+| Mermaid 渲染                        | 校验和预览 Mermaid 代码                                              | 二选一：Mermaid 的 MCP server（按平台的 MCP 配置方式接入）；或本地 `npm install -g --allow-scripts=puppeteer @mermaid-js/mermaid-cli`（提供 `mmdc`；`--allow-scripts` 让 puppeteer 把 Chrome 一起下下来，漏了就到 `$(npm root -g)/@mermaid-js/mermaid-cli` 下执行 `npx puppeteer browsers install chrome-headless-shell`，或设 `PUPPETEER_EXECUTABLE_PATH` 指向已有的 Chrome） |
 | Node.js 18+                         | `scripts/sankey_echarts.js`（中文节点的桑基图）                        | nodejs.org                                                                                                |
 | echarts                             | 同上                                                                 | `npm install -g echarts`（脚本会去全局 node_modules 找）                                                   |
 | playwright + Chromium               | 桑基图脚本的 `--png`                                                 | `npm install -g playwright && npx playwright install chromium`                                            |

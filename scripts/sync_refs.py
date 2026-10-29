@@ -37,9 +37,13 @@ def typeBlock(tid):
     s, rows = P.roleTable(tid, sid)
     head = ['角色', 'class', 'token', f'{sid}（默认）填充 / 描边 / 字色']
     lines = ['| ' + ' | '.join(head) + ' |', '|' + '---|' * len(head)]
-    # 每个角色一行
-    for cls, lbl, p, dashed, colors in rows:
+    # 每个角色一行；只在 drawio 生效 / Mermaid 里自动加深 的角色在 token 列加注
+    for r, (cls, lbl, p, dashed, colors) in zip(t['roles'], rows):
         token = f'`{p}`' + ('，虚线' if dashed else '')
+        if 'drawio' in r['flags']:
+            token += '，仅 drawio'
+        if 'darken' in r['flags']:
+            token += '，Mermaid 里自动加深'
         lines.append(f'| {lbl} | `{cls}` | {token} | {cell(*colors)} |')
     lines.append(f'| 页面 / 连线 / 正文 | — | `bg` `line` `text` | `{s["bg"]}` `{s["line"]}` `{s["text"]}` |')
     # 取色命令按图型种类给

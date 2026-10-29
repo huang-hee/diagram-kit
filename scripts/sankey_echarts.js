@@ -16,18 +16,21 @@
  */
 const fs = require('node:fs')
 const path = require('node:path')
-const { execFileSync } = require('node:child_process')
+const { execFileSync, execSync } = require('node:child_process')
 
 /**
- * 取 npm 全局 node_modules 目录，取不到返回空串
- * @returns {string} 目录
+ * 取全局包目录列表：npm root -g（走 shell，Windows 上 npm 是 npm.cmd，execFile 起不来）+ NODE_PATH
+ * @returns {string[]} 目录
  */
-function globalRoot() {
+function globalRoots() {
+  const roots = []
   try {
-    return execFileSync('npm', ['root', '-g'], { encoding: 'utf8' }).trim()
+    roots.push(execSync('npm root -g', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim())
   } catch {
-    return ''
+    // 没有 npm 就只靠 NODE_PATH
   }
+  for (const p of (process.env.NODE_PATH || '').split(path.delimiter)) if (p) roots.push(p)
+  return roots
 }
 
 /**
@@ -38,7 +41,7 @@ function globalRoot() {
  */
 function loadDependency(name, hint) {
   // Node 默认不找全局包，所以把全局目录也加进查找起点
-  for (const base of [process.cwd(), __dirname, globalRoot()].filter(Boolean)) {
+  for (const base of [process.cwd(), __dirname, ...globalRoots()]) {
     try {
       return require(require.resolve(name, { paths: [base] }))
     } catch (e) {
@@ -104,12 +107,26 @@ function loadPalette(scheme) {
  * @returns {{nodes: string[], links: {source: string, target: string, value: number}[]}}
  */
 function readLinks(csv_path) {
-  const rows = fs
-    .readFileSync(csv_path, 'utf8')
-    .split(/\r?\n/)
+  let lines = fs.readFileSync(csv_path, 'utf8').split(/\r?\n/)
+  // 开头的 --- frontmatter 块整段跳过
+  if (lines[0] && lines[0].trim() === '---') {
+    const end = lines.findIndex((l, i) => i > 0 && l.trim() === '---')
+    if (end > 0) lines = lines.slice(end + 1)
+  }
+  // 空行、注释、图头跳过；第三列不是数字的行跳过——第一行当表头不提示，其余打到 stderr 以免数据无声丢失
+  const parsed = lines
     .map((raw) => raw.trim())
     .filter((line) => line && !line.startsWith('%%') && !/^sankey(-beta)?$/i.test(line))
     .map(parseCsvLine)
+  const rows = parsed.filter((r, i) => {
+    const ok = r.length >= 3 && r[2] !== '' && Number.isFinite(Number(r[2]))
+    if (!ok && i > 0) console.error(`跳过第 ${i + 1} 行（第三列不是数字）：${r.join(',')}`)
+    return ok
+  })
+  if (!rows.length) {
+    console.error(`${csv_path} 里没有有效的流向行（每行要 源,目标,数值）`)
+    process.exit(1)
+  }
   // 英文|中文 可能只在节点第一次出现时写，后面裸英文名要映射到同一个节点
   const zh_names = {}
   for (const [a, b] of rows) {
@@ -198,8 +215,26 @@ async function writePng(svg, png_path) {
  */
 async function main() {
   const args = process.argv.slice(2)
-  const option = (flag, fallback) => (args.includes(flag) ? args[args.indexOf(flag) + 1] : fallback)
   const value_flags = ['--out', '--width', '--height']
+  // 带值的参数：缺值或值是另一个参数就报错
+  const option = (flag, fallback) => {
+    if (!args.includes(flag)) return fallback
+    const value = args[args.indexOf(flag) + 1]
+    if (value === undefined || value.startsWith('--')) {
+      console.error(`${flag} 后面要跟一个值`)
+      process.exit(1)
+    }
+    return value
+  }
+  // 数字参数要能解析
+  const number = (flag, fallback) => {
+    const n = Number(option(flag, fallback))
+    if (!Number.isFinite(n) || n <= 0) {
+      console.error(`${flag} 要是正数`)
+      process.exit(1)
+    }
+    return n
+  }
   const positional = args.filter((a, i) => !a.startsWith('--') && !value_flags.includes(args[i - 1]))
   if (!positional.length) {
     console.error('用法：node sankey_echarts.js <data.csv> [方案] [--out assets/名字] [--png]')
@@ -208,8 +243,8 @@ async function main() {
   const csv_path = positional[0]
   const scheme = positional[1] || ''
   const out_base = option('--out', csv_path.replace(/\.[^./\\]+$/, ''))
-  const width = Number(option('--width', 720))
-  const height = Number(option('--height', 360))
+  const width = number('--width', 720)
+  const height = number('--height', 360)
   // 依赖缺失时先停下来
   const echarts = loadDependency('echarts', '请先安装：npm install -g echarts')
   // 取色、读数据、渲染

@@ -313,9 +313,9 @@ flowchart LR
 | 角色 | class | token | macaron（默认）填充 / 描边 / 字色 |
 |---|---|---|---|
 | 生命线行 | `lifeline` | `soft` | `#EBF1F9` `#3B6FC2` `#33384A` |
-| 状态段 1 | `s1` | `series:0` | `#F6F7FC` `#D2D6F1` `#33384A` |
-| 状态段 2 | `s2` | `series:1` | `#FEF8F6` `#FBDBD1` `#33384A` |
-| 状态段 3 | `s3` | `series:2` | `#F7FCFB` `#D8F0ED` `#33384A` |
+| 状态段 1 | `s1` | `series:0` | `#EDEFF9` `#D2D6F1` `#33384A` |
+| 状态段 2 | `s2` | `series:1` | `#FDF1ED` `#FBDBD1` `#33384A` |
+| 状态段 3 | `s3` | `series:2` | `#E1EAE9` `#D8F0ED` `#33384A` |
 | 时间轴 / 刻度 | `axis` | `muted` | `#EEEFF0` `#8F929B` `#33384A` |
 | 页面 / 连线 / 正文 | — | `bg` `line` `text` | `#FFFFFF` `#3B6FC2` `#33384A` |
 <!-- /palette:timing -->

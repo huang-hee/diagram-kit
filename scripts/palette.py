@@ -133,6 +133,9 @@ def deepen(color, l=0.30, s_min=0.30, s_max=0.70):
         加深后的 hex
     """
     h, s, _ = toHsl(color)
+    # 无彩色和近灰保持灰，否则 HLS 的 0° 色相会把它变成红褐
+    if s < 0.05:
+        return fromHsl(h, 0, l)
     return fromHsl(h, min(max(s, s_min), s_max), l)
 
 
@@ -434,7 +437,10 @@ def paint(s, key):
         return (f, c, readable(f, s['text'], fallbacks))
     if key.startswith('series:'):
         c = s['series'][int(key[7:]) % len(s['series'])]
-        f = mix(c, s['bg'], 0.80)
+        f = mix(c, s['bg'], 0.60)
+        # 浅调要能和页面分开；系列色本身很浅时按页面反方向推
+        if contrast(f, s['bg']) < 1.10:
+            f = standOut(f, s['bg'], 1.10)
         return (f, c, readable(f, s['text'], fallbacks))
     if key.startswith('solid:'):
         c = s['series'][int(key[6:]) % len(s['series'])]
@@ -451,8 +457,11 @@ def paint(s, key):
 
 
 def defineRoles(*items):
-    """把 (class, 说明, paint[, 'dashed']) 元组列表转成角色 dict 列表。"""
-    return [dict(cls=it[0], label=it[1], paint=it[2], dashed=len(it) > 3) for it in items]
+    """把 (class, 说明, paint[, 标记...]) 元组列表转成角色 dict 列表。
+
+    标记：dashed = 虚线描边；drawio = 只在 drawio 里生效（Mermaid 没有对应变量）；darken = Mermaid 里自动加深到和页面拉开。
+    """
+    return [dict(cls=it[0], label=it[1], paint=it[2], dashed='dashed' in it[3:], flags=set(it[3:]) - {'dashed'}) for it in items]
 
 
 TYPES = {
@@ -562,7 +571,7 @@ TYPES = {
     # 计划进度 ---------------------------------------------------------------
     'gantt': dict(name='甘特图', cat='planning', kind='gantt',
         roles=defineRoles(('task', '普通任务', 'slot0'), ('active', '进行中', 'accent'), ('done', '已完成', 'done'),
-                          ('crit', '关键路径', 'bad'), ('milestone', '里程碑', 'slot3'), ('section', '分组底色', 'soft'))),
+                          ('crit', '关键路径', 'bad'), ('milestone', '里程碑', 'slot3', 'drawio'), ('section', '分组底色', 'soft'))),
     'timeline': dict(name='时间线', cat='planning', kind='timeline',
         roles=defineRoles(('p1', '时期 1', 'solid:0'), ('p2', '时期 2', 'solid:1'), ('p3', '时期 3', 'solid:2'),
                           ('p4', '时期 4', 'solid:3'), ('p5', '时期 5', 'solid:4'))),
@@ -571,7 +580,7 @@ TYPES = {
                           ('t1', '主题泳道 1', 'series:0'), ('t2', '主题泳道 2', 'series:1'))),
     'kanban': dict(name='看板', cat='planning', kind='kanban',
         roles=defineRoles(('todo', '待办列', 'solid:0'), ('doing', '进行中列', 'solid:1'), ('review', '测试列', 'solid:2'),
-                          ('done', '完成列', 'solid:3'), ('urgent', '高优先级标签', 'bad'))),
+                          ('done', '完成列', 'solid:3'), ('urgent', '高优先级标签', 'bad', 'drawio'))),
     'gitgraph': dict(name='Git 分支图', cat='planning', kind='git',
         roles=defineRoles(('main', 'main 分支', 'solid:0'), ('develop', 'develop 分支', 'solid:1'),
                           ('feature', 'feature 分支', 'solid:2'), ('hotfix', 'hotfix 分支', 'solid:3'))),
@@ -586,8 +595,8 @@ TYPES = {
         roles=defineRoles(('q1', '第一象限（右上）', 'ramp:2'), ('q2', '第二象限（左上）', 'ramp:3'),
                           ('q3', '第三象限（左下）', 'ramp:0'), ('q4', '第四象限（右下）', 'ramp:1'), ('point', '数据点', 'primary'))),
     'sankey': dict(name='桑基图', cat='data', kind='sankey',
-        roles=defineRoles(('n1', '节点 1', 'solid:0'), ('n2', '节点 2', 'solid:1'), ('n3', '节点 3', 'solid:2'),
-                          ('n4', '节点 4', 'solid:3'))),
+        roles=defineRoles(('n1', '节点 1', 'solid:0', 'darken'), ('n2', '节点 2', 'solid:1', 'darken'),
+                          ('n3', '节点 3', 'solid:2', 'darken'), ('n4', '节点 4', 'solid:3', 'darken'))),
     'radar': dict(name='雷达图', cat='data', kind='radar',
         roles=defineRoles(('c1', '对象 1', 'solid:0'), ('c2', '对象 2', 'solid:1'), ('c3', '对象 3', 'solid:2'),
                           ('grid', '网格 / 轴', 'muted'))),
@@ -600,7 +609,8 @@ TYPES = {
     'venn': dict(name='韦恩图', cat='data', kind='venn',
         roles=defineRoles(('a', '集合 A', 'solid:0'), ('b', '集合 B', 'solid:1'), ('c', '集合 C', 'solid:2'))),
     'treemap': dict(name='矩形树图', cat='data', kind='treemap',
-        roles=defineRoles(('section', '分组', 'ramp:1'), ('leaf', '叶子', 'ramp:0'), ('focus', '重点叶子', 'primary'))),
+        roles=defineRoles(('s1', '分组 1', 'solid:0'), ('s2', '分组 2', 'solid:1'), ('s3', '分组 3', 'solid:2'),
+                          ('leaf', '叶子（父色再浅，自动）', 'surface'), ('focus', '重点叶子', 'primary'))),
 }
 
 CATS = {
@@ -644,12 +654,12 @@ SANKEY_NAMES = {}  # 桑基图输出时填入：英文节点名 -> 中文
 INIT_STYLE = False  # True 时输出 %%{init}%% 指令而不是 YAML frontmatter
 
 HEADER_RE = re.compile(
-    r'^(?:(?:flowchart|graph|swimlane(?:-beta)?)(?:\s+(?:TB|TD|BT|RL|LR))?'
+    r'^(?:(?:flowchart(?:-elk)?|graph|swimlane(?:-beta)?)(?:\s+(?:TB|TD|BT|RL|LR))?'
     r'|sequenceDiagram|classDiagram(?:-v2)?|stateDiagram(?:-v2)?|erDiagram|journey|gantt|mindmap|timeline|kanban'
-    r'|pie(?:\s+showData)?(?:\s+title\s.*)?|quadrantChart|requirementDiagram|gitGraph(?:\s+(?:LR|TB|BT):?)?'
+    r'|pie(?:\s+showData)?(?:\s+title\s.*)?|quadrantChart|requirementDiagram|gitGraph:?(?:\s+(?:LR|TB|BT):?)?'
     r'|C4(?:Context|Container|Component|Dynamic|Deployment)'
-    r'|(?:sankey|block|radar|venn|treemap|ishikawa|architecture|usecase)(?:-beta)?'
-    r'|xychart(?:-beta)?(?:\s+horizontal)?)\s*$')
+    r'|(?:sankey|block|radar|venn|treemap|ishikawa|architecture|usecase|packet)(?:-beta)?|zenuml'
+    r'|xychart(?:-beta)?(?:\s+horizontal)?)\s*;?\s*(?:%%.*)?$')
 
 C4_ROLES = [('Person', 'person'), ('ComponentDb', 'db'), ('ContainerDb', 'db'), ('SystemDb', 'db'),
             ('ComponentQueue', 'component'), ('ContainerQueue', 'system'), ('SystemQueue', 'system'),
@@ -661,20 +671,23 @@ SANKEY_HINT = (
     '  2. 图里直接显示中文：node $SKILL/scripts/sankey_echarts.js 数据.csv（ECharts 出 SVG / PNG）')
 
 
-def _frontmatter(theme_vars, extra=None):
+def _frontmatter(theme_vars, extra=None, title=None):
     """把主题变量写成 YAML frontmatter 或 %%{init}%% 指令。
 
     参数:
         theme_vars: themeVariables
         extra: 其他 config 项（如 sankey）
+        title: 图标题（init 写法不支持，会丢）
     返回:
         文本
     """
-    # init 指令直接序列化成 JSON
+    # init 指令直接序列化成 JSON；fontFamily 是 config 顶层项，放 themeVariables 里不生效
     if INIT_STYLE:
-        cfg = {'theme': 'base', **(extra or {}), 'themeVariables': theme_vars}
+        if title:
+            print('--init 写法没有标题位置，正文里的 title 已忽略', file=sys.stderr)
+        cfg = {'theme': 'base', 'fontFamily': FONT, **(extra or {}), 'themeVariables': theme_vars}
         return '%%{init: ' + json.dumps(cfg, ensure_ascii=False) + '}%%'
-    lines = ['---', 'config:', '  theme: base']
+    lines = ['---'] + ([f'title: {json.dumps(title, ensure_ascii=False)}'] if title else []) + ['config:', '  theme: base', f'  fontFamily: {json.dumps(FONT)}']
     # 其他 config 项最多嵌三层
     if extra:
         for k, v in extra.items():
@@ -703,7 +716,7 @@ def _baseVars(s):
     """所有图型共用的主题变量：未挂 class 的节点是中性的，颜色一律由 classDef 决定。"""
     f1, _, _ = s['slots'][1]
     return {
-        'fontFamily': FONT, 'background': s['bg'],
+        'background': s['bg'],
         'primaryColor': s['surface'], 'primaryBorderColor': s['border'], 'primaryTextColor': s['text'],
         'nodeTextColor': s['text'],
         'secondaryColor': f1, 'tertiaryColor': s['soft'],
@@ -726,12 +739,25 @@ def _classDefs(rows):
 
 
 def _splitBody(body):
-    """去掉用户正文里的 frontmatter，返回 (自带图头或 None, 其余正文)。"""
+    """去掉用户正文里的 frontmatter，返回 (自带图头或 None, 其余正文, 标题或 None)。
+
+    frontmatter 里只保留 title；其他键（config 等）会被本脚本生成的配置覆盖，丢弃时在 stderr 提示。
+    """
     lines = body.splitlines()
-    # 去掉开头的 --- ... --- 块
+    title = None
+    # 去掉开头的 --- ... --- 块，摘出 title，其余键提示被忽略
     if lines and lines[0].strip() == '---':
         end = next((i for i in range(1, len(lines)) if lines[i].strip() == '---'), None)
         if end is not None:
+            dropped = []
+            for ln in lines[1:end]:
+                m = re.match(r'^(\w[\w-]*):\s*(.*)$', ln)
+                if m and m.group(1) == 'title':
+                    title = m.group(2).strip().strip('"\'')
+                elif m:
+                    dropped.append(m.group(1))
+            if dropped:
+                print('正文 frontmatter 里的这些键已忽略（配置由本脚本生成）：' + '、'.join(dropped), file=sys.stderr)
             lines = lines[end + 1:]
     # 第一行非空非注释的内容若是图头就摘出来
     for i, ln in enumerate(lines):
@@ -739,9 +765,9 @@ def _splitBody(body):
         if not t or t.startswith('%%'):
             continue
         if HEADER_RE.match(t):
-            return t, '\n'.join(lines[:i] + lines[i + 1:])
+            return t, '\n'.join(lines[:i] + lines[i + 1:]), title
         break
-    return None, '\n'.join(lines)
+    return None, '\n'.join(lines), title
 
 
 def _c4Styles(body, rows, s):
@@ -834,9 +860,10 @@ def emitMermaid(tid, sid, body=None):
     tail = []
     series = s['series']
     own_header = None
-    # 正文自带图头时沿用
+    title = None
+    # 正文自带图头时沿用；自带 title 时保留
     if body is not None:
-        own_header, body = _splitBody(body)
+        own_header, body, title = _splitBody(body)
 
     def label(c):
         return readableOnSolid(c, s['text'])
@@ -864,19 +891,20 @@ def emitMermaid(tid, sid, body=None):
             v[f'cScaleLabel{i + 1}' if i < 11 else 'cScaleLabel0'] = label(c)
         tail = ['%% 根节点用 git0；第 n 个一级分支用 cScale<n>']
     elif kind in ('timeline', 'kanban', 'radar'):
-        # 分段 / 列 / 曲线按出现顺序轮换系列色
+        # 分段 / 列 / 曲线按出现顺序轮换系列色；看板第 n 列读的是 cScale<n+1>，整体错开两格
+        offset = 2 if kind == 'kanban' else 0
         for i in range(12):
-            c = series[i % len(series)]
+            c = series[(i - offset) % len(series)]
             v[f'cScale{i}'] = c
             v[f'cScaleLabel{i}'] = label(c)
         if kind == 'radar':
             v['radar'] = {'axisColor': s['muted'], 'graticuleColor': mix(s['muted'], s['bg'], 0.5), 'curveOpacity': 0.35}
             tail = ['%% 第 n 条曲线用 cScale<n-1>，曲线不超过 3 条']
         if kind == 'timeline' and tid == 'roadmap':
-            for i, c in enumerate(reversed(s['ramp'])):
+            for i, c in enumerate((s['ramp'][4], s['ramp'][2], s['ramp'][0])):
                 v[f'cScale{i}'] = c
                 v[f'cScaleLabel{i}'] = readable(c, s['text'], ['#FFFFFF', '#111111'])
-            tail = ['%% section 依次为 Now / Next / Later，颜色由深到浅']
+            tail = ['%% section 依次为 Now / Next / Later，颜色由深到浅，只写三个 section']
     elif kind == 'ishikawa':
         f, st, tx = paint(s, 'slot3')
         v.update({'mainBkg': f, 'lineColor': st, 'textColor': s['text']})
@@ -960,10 +988,10 @@ def emitMermaid(tid, sid, body=None):
             v[f'pie{i + 1}'] = c
         n = _countPieRows(body) if body else 0
         if 0 < n <= 12:
-            v[f'pie{n}'] = paint(s, 'muted')[0]
+            v[f'pie{n}'] = mix(s['muted'], s['bg'], 0.4)
         v.update({'pieStrokeColor': s['bg'], 'pieOuterStrokeColor': s['bg'], 'pieTitleTextColor': s['text'],
                   'pieSectionTextColor': lab, 'pieLegendTextColor': s['text'], 'pieOpacity': '1'})
-        tail = ['%% 超过 5 类就把小项合并成"其他"，放到最后；带 --body 时最后一块自动用弱化色']
+        tail = ['%% 超过 5 类就把小项合并成"其他"，放到最后；带 --body 且不超过 12 块时最后一块自动用灰色']
     elif kind == 'quadrant':
         for i, p in {1: 'ramp:2', 2: 'ramp:3', 3: 'ramp:0', 4: 'ramp:1'}.items():
             f, _, tx = paint(s, p)
@@ -992,8 +1020,7 @@ def emitMermaid(tid, sid, body=None):
                 SANKEY_NAMES.update(names)
         else:
             nodes = {f'<节点{i + 1}>': series[i % len(series)] for i in range(len(series))}
-        front = _frontmatter({'fontFamily': FONT, 'textColor': s['text']},
-                             {'sankey': {'linkColor': 'source', 'nodeColors': nodes}})
+        front = _frontmatter({'textColor': s['text']}, {'sankey': {'linkColor': 'source', 'nodeColors': nodes}}, title)
         if body is not None:
             return front + '\n' + (own_header or HEADERS['sankey']) + '\n' + body
         note = '%% 把 <节点n> 换成 CSV 里的节点名（用 --body 传入正文时自动生成）；节点名只能用 ASCII，可写成 英文|中文'
@@ -1007,9 +1034,13 @@ def emitMermaid(tid, sid, body=None):
         v.update({'commitLabelColor': s['text'], 'commitLabelBackground': s['soft'],
                   'tagLabelColor': s['onPrimary'], 'tagLabelBackground': s['primary'], 'tagLabelBorder': s['primary']})
     elif kind == 'venn':
-        for i in range(8):
-            v[f'venn{i + 1}'] = series[i % len(series)]
-        v.update({'vennTitleTextColor': s['text'], 'vennSetTextColor': s['text']})
+        # 韦恩图没有颜色主题变量，集合颜色只能用 style 语句；有正文时按 set 出现顺序生成
+        sets = re.findall(r'^\s*set\s+(\w+)', body, re.M) if body else []
+        for i, name in enumerate(sets):
+            c = series[i % len(series)]
+            tail.append(f'style {name} fill:{c},stroke:{shade(c, 0.30)},color:{s["text"]},fill-opacity:0.7')
+        if not sets:
+            tail = [f'%% 集合颜色写在正文后面：style 集合名 fill:{series[0]},stroke:{shade(series[0], 0.30)},color:{s["text"]},fill-opacity:0.7（第 n 个集合用系列色第 n 个）']
     elif kind == 'treemap':
         # 分组按 60% 透明度画，叶子再叠 30% 父色（合计约 72%）；把颜色调浅到正文在叠色上可读
         for k in range(12):
@@ -1026,7 +1057,7 @@ def emitMermaid(tid, sid, body=None):
         return '%% 该图用代码绘制（matplotlib / ECharts），配色用：\n' + emitChart(sid)
     header = own_header or HEADER_OVERRIDE.get(tid, HEADERS[kind])
     main_part = body if body is not None else '    %% 在这里写图的正文'
-    return '\n'.join([_frontmatter(v), header, main_part] + tail)
+    return '\n'.join([_frontmatter(v, title=title), header, main_part] + tail)
 
 
 # ---------------------------------------------------------------------------
@@ -1177,6 +1208,12 @@ def check(sids):
     bad = 0
     for sid in sids:
         s = resolveScheme(sid)
+        spec = SCHEMES[sid]
+        # 派生时被自动加深的连线 / 描边只提示，不算失败
+        if s['line'].upper() != spec['line'].upper():
+            print(f'{sid:<10}提示          连线 {spec["line"]} 对底不够 3:1，已自动加深为 {s["line"]}')
+        if s['border'].upper() != spec.get('border', spec['line']).upper():
+            print(f'{sid:<10}提示          描边 {spec.get("border", spec["line"])} 对底不够 2:1，已自动加深为 {s["border"]}')
         # 结构
         for msg in _structureIssues(s):
             bad += 1
@@ -1206,7 +1243,13 @@ def _requireType(tid):
 
 
 def _typeAndScheme(args):
-    """从参数里取 (图型, 方案)，方案缺省用全局默认。"""
+    """从参数里取 (图型, 方案)，方案缺省用全局默认。
+
+    抛出:
+        SystemExit: 没给图型
+    """
+    if not args or args[0].startswith('--'):
+        raise SystemExit('要指定图型；执行 `palette.py types` 查看可用图型')
     tid = _requireType(args[0])
     sid = args[1] if len(args) > 1 and not args[1].startswith('--') else DEFAULT_SCHEME
     return tid, sid
@@ -1232,10 +1275,12 @@ def _readBody(args):
     if src == '-':
         return sys.stdin.read().rstrip('\n')
     try:
-        with open(src, encoding='utf-8') as fh:
+        with open(src, encoding='utf-8-sig') as fh:
             return fh.read().rstrip('\n')
     except OSError as e:
         raise SystemExit(f'读不了正文文件 {src}：{e.strerror}')
+    except UnicodeDecodeError:
+        raise SystemExit(f'正文文件 {src} 不是 UTF-8 编码，先转成 UTF-8')
 
 
 def main(argv):

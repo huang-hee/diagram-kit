@@ -1,0 +1,4 @@
+# 由 scripts/sync_refs.py 生成的色表，格式化会被下次生成覆盖
+references/schemes.md
+references/types-*.md
+CHANGELOG.md

@@ -14,16 +14,17 @@ const skill_path = join(repo, 'SKILL.md')
 const { version } = JSON.parse(readFileSync(join(repo, 'package.json'), 'utf8'))
 const source = readFileSync(skill_path, 'utf8')
 
-// 只在开头的 frontmatter 块里找 metadata 下的 version 行：缩进两格、值带引号
-const frontmatter = /^---\n([\s\S]*?)\n---/
-const version_line = /(\n {2}version:\s*")[^"]*"/
+// 只在开头的 frontmatter 块里找 metadata 下的 version 行：缩进两格、值带引号（单双引号都认，Prettier 会改成单引号）；LF / CRLF 都认
+const frontmatter = /^---\r?\n[\s\S]*?\r?\n---/
+const version_line = /(\r?\n {2}version:\s*)(["'])[^"'\r\n]*\2/
 const matched = source.match(frontmatter)
-if (!matched || !version_line.test(matched[1])) {
+if (!matched || !version_line.test(matched[0])) {
   console.error('✘ SKILL.md：frontmatter 里没有 metadata.version，请先手动加上再跑')
   process.exitCode = 1
 } else {
-  // 用函数做替换，避免 "$1" 和版本号开头的数字连成 "$10"
-  const next_front = matched[1].replace(version_line, (_, head) => `${head}${version}"`)
-  writeFileSync(skill_path, source.replace(frontmatter, `---\n${next_front}\n---`))
+  // 只改块内这一行，保留原引号和换行风格；用函数做替换，避免 "$1" 和版本号开头的数字连成 "$10"
+  const next_block = matched[0].replace(version_line, (_, head, quote) => `${head}${quote}${version}${quote}`)
+  // 外层替换也用函数，frontmatter 里出现 $& 这类模式串时不会被展开
+  writeFileSync(skill_path, source.replace(matched[0], () => next_block))
   console.log(`✔ SKILL.md 的 metadata.version 已同步为 ${version}`)
 }

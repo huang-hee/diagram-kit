@@ -24,6 +24,7 @@
     "!package-lock.json",
     "!.changeset/**",
     "!.scripts/**",
-    "!.gitignore"
+    "!.gitignore",
+    "!.prettierignore"
   ]
 }

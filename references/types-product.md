@@ -44,10 +44,10 @@ journey
 
 | 角色 | class | token | macaron（默认）填充 / 描边 / 字色 |
 |---|---|---|---|
-| 阶段 1 | `stage1` | `series:0` | `#F6F7FC` `#D2D6F1` `#33384A` |
-| 阶段 2 | `stage2` | `series:1` | `#FEF8F6` `#FBDBD1` `#33384A` |
-| 阶段 3 | `stage3` | `series:2` | `#F7FCFB` `#D8F0ED` `#33384A` |
-| 阶段 4 | `stage4` | `series:3` | `#FDF8F0` `#F6DEB6` `#33384A` |
+| 阶段 1 | `stage1` | `series:0` | `#EDEFF9` `#D2D6F1` `#33384A` |
+| 阶段 2 | `stage2` | `series:1` | `#FDF1ED` `#FBDBD1` `#33384A` |
+| 阶段 3 | `stage3` | `series:2` | `#E1EAE9` `#D8F0ED` `#33384A` |
+| 阶段 4 | `stage4` | `series:3` | `#FBF2E2` `#F6DEB6` `#33384A` |
 | 痛点标注 | `pain` | `bad` | `#FAE0DD` `#E35144` `#33384A` |
 | 页面 / 连线 / 正文 | — | `bg` `line` `text` | `#FFFFFF` `#3B6FC2` `#33384A` |
 <!-- /palette:journey -->

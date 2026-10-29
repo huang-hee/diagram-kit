@@ -47,7 +47,7 @@ gantt
 | 进行中 | `active` | `accent` | `#C8D7EE` `#3B6FC2` `#33384A` |
 | 已完成 | `done` | `done` | `#F3F3F3` `#BBBBBB` `#33384A` |
 | 关键路径 | `crit` | `bad` | `#FAE0DD` `#E35144` `#33384A` |
-| 里程碑 | `milestone` | `slot3` | `#F6DEB6` `#AC9B7F` `#714E14` |
+| 里程碑 | `milestone` | `slot3`，仅 drawio | `#F6DEB6` `#AC9B7F` `#714E14` |
 | 分组底色 | `section` | `soft` | `#EBF1F9` `#3B6FC2` `#33384A` |
 | 页面 / 连线 / 正文 | — | `bg` `line` `text` | `#FFFFFF` `#3B6FC2` `#33384A` |
 <!-- /palette:gantt -->
@@ -117,8 +117,8 @@ timeline
 | Now（已确定） | `now` | `ramp:4` | `#3B6FC2` `#3B6FC2` `#FFFFFF` |
 | Next（规划中） | `next` | `ramp:2` | `#93B0DD` `#3B6FC2` `#33384A` |
 | Later（方向） | `later` | `ramp:0` | `#E2E9F6` `#3B6FC2` `#33384A` |
-| 主题泳道 1 | `t1` | `series:0` | `#F6F7FC` `#D2D6F1` `#33384A` |
-| 主题泳道 2 | `t2` | `series:1` | `#FEF8F6` `#FBDBD1` `#33384A` |
+| 主题泳道 1 | `t1` | `series:0` | `#EDEFF9` `#D2D6F1` `#33384A` |
+| 主题泳道 2 | `t2` | `series:1` | `#FDF1ED` `#FBDBD1` `#33384A` |
 | 页面 / 连线 / 正文 | — | `bg` `line` `text` | `#FFFFFF` `#3B6FC2` `#33384A` |
 <!-- /palette:roadmap -->
 
@@ -155,7 +155,7 @@ kanban
 | 进行中列 | `doing` | `solid:1` | `#FBDBD1` `#FBDBD1` `#111111` |
 | 测试列 | `review` | `solid:2` | `#D8F0ED` `#D8F0ED` `#111111` |
 | 完成列 | `done` | `solid:3` | `#F6DEB6` `#F6DEB6` `#111111` |
-| 高优先级标签 | `urgent` | `bad` | `#FAE0DD` `#E35144` `#33384A` |
+| 高优先级标签 | `urgent` | `bad`，仅 drawio | `#FAE0DD` `#E35144` `#33384A` |
 | 页面 / 连线 / 正文 | — | `bg` `line` `text` | `#FFFFFF` `#3B6FC2` `#33384A` |
 <!-- /palette:kanban -->
 

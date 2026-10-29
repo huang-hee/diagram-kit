@@ -12,7 +12,7 @@
 | 集合的交集                       | 韦恩图 `venn`                  |
 | 层级结构里的占比                 | 矩形树图 `treemap`             |
 
-数据点多、需要精确坐标轴、多系列堆叠、双轴或交互时，改用代码绘图（ECharts / matplotlib），颜色用 `palette.py chart <type>` 取。
+数据点多、需要精确坐标轴、多系列堆叠、双轴或交互时，改用代码绘图（ECharts / matplotlib），颜色用 `palette.py chart [方案]` 取。
 
 ## 柱状图 / 折线图 · `bar_line`
 
@@ -130,8 +130,8 @@ quadrantChart
 - **用来**：流量、资金、转化在各环节之间的流向和损耗。
 - **别用**：只有一条链路（→ 漏斗或柱状图）。
 - **工具**：
-  - 节点名用英文、拼音也能接受 → Mermaid `sankey-beta`（beta），中文写进图下面的对照表（写法 A）。
-  - 图里必须直接显示中文 → ECharts（写法 B）。
+  - 节点名含中文 → 先用 ECharts（写法 B）出图上中文的 SVG；脚本提示缺 echarts 就改用写法 A，不停下来等安装。
+  - 节点名本来就是英文 → Mermaid `sankey-beta`（beta，写法 A）。
   - 要交给别人编辑 → drawio。
 - **写法**：
   - CSV 三列：`源,目标,值`；名字里有逗号就加双引号。
@@ -203,10 +203,10 @@ Cart,Abandon,150
 
 | 角色 | class | token | macaron（默认）填充 / 描边 / 字色 |
 |---|---|---|---|
-| 节点 1 | `n1` | `solid:0` | `#D2D6F1` `#D2D6F1` `#111111` |
-| 节点 2 | `n2` | `solid:1` | `#FBDBD1` `#FBDBD1` `#111111` |
-| 节点 3 | `n3` | `solid:2` | `#D8F0ED` `#D8F0ED` `#111111` |
-| 节点 4 | `n4` | `solid:3` | `#F6DEB6` `#F6DEB6` `#111111` |
+| 节点 1 | `n1` | `solid:0`，Mermaid 里自动加深 | `#D2D6F1` `#D2D6F1` `#111111` |
+| 节点 2 | `n2` | `solid:1`，Mermaid 里自动加深 | `#FBDBD1` `#FBDBD1` `#111111` |
+| 节点 3 | `n3` | `solid:2`，Mermaid 里自动加深 | `#D8F0ED` `#D8F0ED` `#111111` |
+| 节点 4 | `n4` | `solid:3`，Mermaid 里自动加深 | `#F6DEB6` `#F6DEB6` `#111111` |
 | 页面 / 连线 / 正文 | — | `bg` `line` `text` | `#FFFFFF` `#3B6FC2` `#33384A` |
 <!-- /palette:sankey -->
 
@@ -250,7 +250,7 @@ radar-beta
 - **别用**：类别对比（→ 柱状图）。
 - **工具**：代码绘图（Mermaid 没有散点图）：Python matplotlib 出 PNG，或 ECharts 出 HTML。
 - **写法**：
-  - 颜色：`python $SKILL/scripts/palette.py chart scatter` 输出 JSON，`categorical` 依次给分组，`axis` / `grid` 给坐标轴和网格。
+  - 颜色：`python $SKILL/scripts/palette.py chart [方案]` 输出 JSON，`categorical` 依次给分组，`axis` / `grid` 给坐标轴和网格。
 - **要点**：
   - 分组不超过 5 个；点多时调小点并加透明度。
   - 趋势线用灰色（`trend`）。
@@ -262,7 +262,8 @@ import json, subprocess
 import matplotlib.pyplot as plt
 
 PALETTE = '$SKILL/scripts/palette.py'  # 换成 skill 的实际目录
-c = json.loads(subprocess.check_output(['python', PALETTE, 'chart', 'scatter']))
+SCHEME = 'macaron'  # 和文档里其他图同一套方案
+c = json.loads(subprocess.check_output(['python', PALETTE, 'chart', SCHEME]))
 plt.rcParams['font.sans-serif'] = ['PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'sans-serif']
 fig, ax = plt.subplots(figsize=(6, 4), dpi=200)
 fig.patch.set_facecolor(c['background']); ax.set_facecolor(c['background'])
@@ -296,7 +297,7 @@ fig.savefig('scatter.png', bbox_inches='tight')
 - **别用**：看趋势（→ 折线图）。
 - **工具**：代码绘图（Mermaid 没有直方图 / 箱线图）。
 - **写法**：
-  - 颜色：`python $SKILL/scripts/palette.py chart distribution`，主体用 `primary`，中位数 / 均值线用正文色虚线，离群点用 `state.bad`。
+  - 颜色：`python $SKILL/scripts/palette.py chart [方案]`，主体用 `primary`，中位数 / 均值线用正文色虚线，离群点用 `state.bad`。
 - **要点**：
   - 直方图柱子之间不留缝；箱线图标出中位数和异常点。
 
@@ -307,7 +308,8 @@ import json, subprocess
 import matplotlib.pyplot as plt
 
 PALETTE = '$SKILL/scripts/palette.py'  # 换成 skill 的实际目录
-c = json.loads(subprocess.check_output(['python', PALETTE, 'chart', 'distribution']))
+SCHEME = 'macaron'  # 和文档里其他图同一套方案
+c = json.loads(subprocess.check_output(['python', PALETTE, 'chart', SCHEME]))
 plt.rcParams['font.sans-serif'] = ['PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'sans-serif']
 fig, ax = plt.subplots(figsize=(6, 4), dpi=200)
 fig.patch.set_facecolor(c['background']); ax.set_facecolor(c['background'])
@@ -342,6 +344,7 @@ fig.savefig('distribution.png', bbox_inches='tight')
 - **工具**：Mermaid `venn-beta`（beta）；目标平台渲染不了 → drawio 或 diagram-design（三个半透明圆）。
 - **写法**：
   - `set A["名称"]`；`union A,B["交集名称"]` 给交集起名。
+  - 集合颜色靠 `style A fill:…,stroke:…` 语句，没有主题变量；`palette.py mermaid venn --body` 按 `set` 出现顺序自动生成。
 - **要点**：
   - 集合不超过 3 个；交集名称写清楚含义。
 
@@ -393,8 +396,10 @@ treemap-beta
 
 | 角色 | class | token | macaron（默认）填充 / 描边 / 字色 |
 |---|---|---|---|
-| 分组 | `section` | `ramp:1` | `#BACDEA` `#3B6FC2` `#33384A` |
-| 叶子 | `leaf` | `ramp:0` | `#E2E9F6` `#3B6FC2` `#33384A` |
+| 分组 1 | `s1` | `solid:0` | `#D2D6F1` `#D2D6F1` `#111111` |
+| 分组 2 | `s2` | `solid:1` | `#FBDBD1` `#FBDBD1` `#111111` |
+| 分组 3 | `s3` | `solid:2` | `#D8F0ED` `#D8F0ED` `#111111` |
+| 叶子（父色再浅，自动） | `leaf` | `surface` | `#FFFFFF` `#3B6FC2` `#33384A` |
 | 重点叶子 | `focus` | `primary` | `#3B6FC2` `#3B6FC2` `#FFFFFF` |
 | 页面 / 连线 / 正文 | — | `bg` `line` `text` | `#FFFFFF` `#3B6FC2` `#33384A` |
 <!-- /palette:treemap -->

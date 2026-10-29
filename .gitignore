@@ -1,7 +1,7 @@
 # 编辑器的本地历史
 .history/
 
-# Node 依赖（echarts / playwright 装在 scripts/ 下）
+# Node 依赖（只有 changesets；echarts / playwright 是全局安装）
 node_modules/
 package-lock.json
 
