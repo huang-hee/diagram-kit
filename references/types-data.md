@@ -351,6 +351,9 @@ fig.savefig('distribution.png', bbox_inches='tight')
 <!-- sample:venn -->
 
 ```mermaid
+---
+title: 团队技能分布
+---
 venn-beta
   set A["前端"]
   set B["后端"]
@@ -382,6 +385,9 @@ venn-beta
 <!-- sample:treemap -->
 
 ```mermaid
+---
+title: 人力分布
+---
 treemap-beta
 "研发"
     "前端": 30

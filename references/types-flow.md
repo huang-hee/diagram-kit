@@ -20,18 +20,21 @@
   - 形状有语义：`([ ])` 开始 / 结束、`[ ]` 处理、`{ }` 判断、`[( )]` 数据库、`[/ /]` 输入输出、`[[ ]]` 子流程。
   - 判断的出口写在线上：`-- 是 -->`、`-- 否 -->`。
 - **要点**：
-  - 主路径保持一条直线（TB 或 LR），分支向一侧展开。
+  - 主路径竖排成一列（`flowchart TB`），判断的另一出口统一向右展开；Mermaid 里把"是"的分支先写、"否"的分支后写，右侧的结果才会靠右。
   - 关键路径（`key`）只标一条，异常分支（`error`）不超过 2 处。
 
 <!-- sample:flowchart -->
 
 ```mermaid
-flowchart LR
+---
+title: 订单提交流程
+---
+flowchart TB
   A([提交订单]):::startend --> B{库存充足?}:::decision
+  B -- 是 --> C["锁定库存<br><small>Redis 预扣 15 分钟</small>"]:::process
   B -- 否 --> X[提示缺货]:::error
-  B -- 是 --> C[锁定库存]:::process
+  C --> E["发起支付<br><small>拉起收银台</small>"]:::key
   C --> D[(订单库)]:::data
-  C --> E[发起支付]:::key
   E --> Z([结束]):::startend
   X --> Z
 ```
@@ -64,6 +67,9 @@ flowchart LR
 <!-- sample:swimlane -->
 
 ```mermaid
+---
+title: 退款流程
+---
 swimlane-beta LR
   subgraph U[用户]
     A([提交退款]):::startend
@@ -71,10 +77,10 @@ swimlane-beta LR
   end
   subgraph S[客服]
     B{是否符合规则?}:::decision
-    C[人工审核]:::task
+    C["人工审核<br><small>48 小时内</small>"]:::task
   end
   subgraph P[财务]
-    D[原路退款]:::handoff
+    D["原路退款<br><small>T+1 到账</small>"]:::handoff
   end
   A --> B
   B -- 是 --> D
@@ -111,6 +117,9 @@ swimlane-beta LR
 <!-- sample:sequence -->
 
 ```mermaid
+---
+title: 下单与支付回调
+---
 sequenceDiagram
   autonumber
   actor U as 用户
@@ -157,6 +166,9 @@ sequenceDiagram
 <!-- sample:state -->
 
 ```mermaid
+---
+title: 订单状态
+---
 stateDiagram-v2
   state "待支付" as Pending
   state "已支付" as Paid
@@ -200,8 +212,11 @@ stateDiagram-v2
 <!-- sample:activity -->
 
 ```mermaid
+---
+title: 订单处理活动
+---
 flowchart TB
-  S(( )):::bar --> A[接收订单]:::action
+  S(( )):::bar --> A["接收订单<br><small>校验参数</small>"]:::action
   A --> D{库存足够?}:::decision
   D -- 是 --> F[发货]:::action
   D -- 否 --> O[/缺货单/]:::object
@@ -236,6 +251,9 @@ flowchart TB
 <!-- sample:communication -->
 
 ```mermaid
+---
+title: 下单的对象协作
+---
 flowchart LR
   U((用户)):::actor -- "1: 下单" --> C[:OrderController]:::object
   C -- "1.1: create()" --> S[:OrderService]:::object
@@ -267,10 +285,13 @@ flowchart LR
 <!-- sample:interaction -->
 
 ```mermaid
+---
+title: 登录与下单的交互概览
+---
 flowchart LR
-  S(( )):::bar --> R1[ref 登录]:::occurrence
+  S(( )):::bar --> R1["登录<br><small>ref · 引用已有交互</small>"]:::occurrence
   R1 --> D{已登录?}:::decision
-  D -- 是 --> R2[sd 下单]:::frame
+  D -- 是 --> R2["下单<br><small>sd · 内联片段</small>"]:::frame
   D -- 否 --> R1
   R2 --> E(( )):::bar
 ```
@@ -302,9 +323,11 @@ Mermaid 近似画法（正式出图用 drawio，样式取 `palette.py drawio`）
 <!-- sample:timing -->
 
 ```mermaid
+---
+title: 支付请求的状态变化
+---
 flowchart LR
-  A[空闲]:::s1 --> B[处理中]:::s2 --> C[等待回调]:::s3 --> D[空闲]:::s1
-  T[时间 0s → 5s]:::axis
+  A["空闲<br><small>0–1s</small>"]:::s1 --> B["处理中<br><small>1–3s</small>"]:::s2 --> C["等待回调<br><small>3–5s</small>"]:::s3 --> D["空闲<br><small>5s 起</small>"]:::s1
 ```
 
 <!-- palette:timing -->

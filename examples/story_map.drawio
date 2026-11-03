@@ -1,0 +1,115 @@
+<mxfile host="diagram-kit">
+  <diagram name="首次购买的故事地图" id="diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="v1" value="" style="rounded=1;arcSize=50;fillColor=#3B6FC2;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="36" width="6" height="50" />
+        </mxCell>
+        <mxCell id="v2" value="首次购买的故事地图" style="text;html=1;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=22;fontStyle=1;fontColor=#33384A;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="58" y="32" width="400" height="32" />
+        </mxCell>
+        <mxCell id="v3" value="用户从浏览到支付做什么，哪些故事进 MVP、哪些放后面" style="text;html=1;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;fontColor=#5C606E;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="58" y="64" width="400" height="24" />
+        </mxCell>
+        <mxCell id="v4" value="&lt;b&gt;浏览&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#FFFFFF;font-weight:normal&quot;&gt;找到想买的&lt;/span&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;size=16;whiteSpace=wrap;html=1;fillColor=#1F2865;strokeColor=none;fontColor=#FFFFFF;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=14;align=center;verticalAlign=middle;spacingLeft=14;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="190" y="120" width="280" height="48" />
+        </mxCell>
+        <mxCell id="v5" value="&lt;b&gt;下单&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#FFFFFF;font-weight:normal&quot;&gt;确认信息&lt;/span&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;size=16;whiteSpace=wrap;html=1;fillColor=#712A14;strokeColor=none;fontColor=#FFFFFF;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=14;align=center;verticalAlign=middle;spacingLeft=14;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="460" y="120" width="280" height="48" />
+        </mxCell>
+        <mxCell id="v6" value="&lt;b&gt;支付&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#FFFFFF;font-weight:normal&quot;&gt;完成付款&lt;/span&gt;" style="shape=step;perimeter=stepPerimeter;fixedSize=1;size=16;whiteSpace=wrap;html=1;fillColor=#256058;strokeColor=none;fontColor=#FFFFFF;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=14;align=center;verticalAlign=middle;spacingLeft=14;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="730" y="120" width="280" height="48" />
+        </mxCell>
+        <mxCell id="v7" value="&lt;b&gt;搜索商品&lt;/b&gt;" style="rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor=#D2D6F1;strokeColor=#9396A9;fontColor=#1F2865;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="210" y="190" width="240" height="48" />
+        </mxCell>
+        <mxCell id="v8" value="&lt;b&gt;填写地址&lt;/b&gt;" style="rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor=#D2D6F1;strokeColor=#9396A9;fontColor=#1F2865;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="480" y="190" width="240" height="48" />
+        </mxCell>
+        <mxCell id="v9" value="&lt;b&gt;选择支付方式&lt;/b&gt;" style="rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor=#D2D6F1;strokeColor=#9396A9;fontColor=#1F2865;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="750" y="190" width="240" height="48" />
+        </mxCell>
+        <mxCell id="l10" value="" style="html=1;rounded=0;endArrow=none;endFill=0;endSize=7;strokeColor=#8F929B;strokeWidth=1;dashed=1;dashPattern=6 4;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="190" y="270" />
+            <mxPoint as="targetPoint" x="970" y="270" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v11" value="&lt;b&gt;MVP&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#5C606E&quot;&gt;本期&lt;/span&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;fontColor=#33384A;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="274" width="140" height="36" />
+        </mxCell>
+        <mxCell id="l12" value="" style="html=1;rounded=0;endArrow=none;endFill=0;endSize=7;strokeColor=#8F929B;strokeWidth=1;dashed=1;dashPattern=6 4;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="190" y="400" />
+            <mxPoint as="targetPoint" x="970" y="400" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v13" value="&lt;b&gt;下一版&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#5C606E&quot;&gt;V2&lt;/span&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;fontColor=#33384A;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="404" width="140" height="36" />
+        </mxCell>
+        <mxCell id="l14" value="" style="html=1;rounded=0;endArrow=none;endFill=0;endSize=7;strokeColor=#8F929B;strokeWidth=1;dashed=1;dashPattern=6 4;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="190" y="500" />
+            <mxPoint as="targetPoint" x="970" y="500" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v15" value="&lt;b&gt;以后&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#5C606E&quot;&gt;待定&lt;/span&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;fontColor=#33384A;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="504" width="140" height="36" />
+        </mxCell>
+        <mxCell id="v16" value="按类目筛选" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFF6CE;strokeColor=#A6A086;fontColor=#33384A;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=10;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="210" y="280" width="240" height="56" />
+        </mxCell>
+        <mxCell id="v17" value="搜索联想" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B6FC2;fontColor=#33384A;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=10;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="210" y="410" width="240" height="56" />
+        </mxCell>
+        <mxCell id="v18" value="手填地址" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFF6CE;strokeColor=#A6A086;fontColor=#33384A;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=10;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="480" y="280" width="240" height="56" />
+        </mxCell>
+        <mxCell id="v19" value="地址簿" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B6FC2;fontColor=#33384A;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=10;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="480" y="410" width="240" height="56" />
+        </mxCell>
+        <mxCell id="v20" value="微信 / 支付宝" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFF6CE;strokeColor=#A6A086;fontColor=#33384A;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=10;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="750" y="280" width="240" height="56" />
+        </mxCell>
+        <mxCell id="v21" value="分期付款" style="rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor=#EEEFF0;strokeColor=#8F929B;fontColor=#5C606E;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;dashed=1;dashPattern=5 3;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="750" y="510" width="240" height="56" />
+        </mxCell>
+        <mxCell id="v22" value="" style="rounded=1;arcSize=8;absoluteArcSize=1;fillColor=#FFF6CE;strokeColor=#A6A086;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="600" width="560" height="88" />
+        </mxCell>
+        <mxCell id="v23" value="&lt;b style=&quot;font-size:13px&quot;&gt;切版本的依据&lt;/b&gt;&lt;div style=&quot;margin-top:6px&quot;&gt;MVP 只保证一条能跑通的购买路径&lt;/div&gt;&lt;div style=&quot;margin-top:6px&quot;&gt;分期付款依赖外部额度服务，待定&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#33384A;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="56" y="614" width="528" height="64" />
+        </mxCell>
+        <mxCell id="v24" value="" style="rounded=1;arcSize=4;absoluteArcSize=1;fillColor=#D2D6F1;strokeColor=#9396A9;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="714" width="22" height="14" />
+        </mxCell>
+        <mxCell id="v25" value="任务" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="712" width="28" height="18" />
+        </mxCell>
+        <mxCell id="v26" value="" style="rounded=1;arcSize=4;absoluteArcSize=1;fillColor=#FFF6CE;strokeColor=#A6A086;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="126" y="714" width="22" height="14" />
+        </mxCell>
+        <mxCell id="v27" value="MVP 故事" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="156" y="712" width="56" height="18" />
+        </mxCell>
+        <mxCell id="v28" value="" style="rounded=1;arcSize=4;absoluteArcSize=1;fillColor=#FFFFFF;strokeColor=#3B6FC2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="240" y="714" width="22" height="14" />
+        </mxCell>
+        <mxCell id="v29" value="下一版" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="270" y="712" width="40" height="18" />
+        </mxCell>
+        <mxCell id="v30" value="" style="rounded=1;arcSize=4;absoluteArcSize=1;fillColor=#EEEFF0;strokeColor=#8F929B;dashed=1;dashPattern=3 2;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="338" y="714" width="22" height="14" />
+        </mxCell>
+        <mxCell id="v31" value="待定" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="368" y="712" width="28" height="18" />
+        </mxCell>
+        <mxCell id="v32" value="读图：顶部箭头条是用户活动，下面一列是该活动的任务和故事；横虚线切出版本，越往下越晚。" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="744" width="540" height="20" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

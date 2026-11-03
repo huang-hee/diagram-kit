@@ -11,7 +11,8 @@
   - 1.5px 正交连线；
   - 说明面板、图例和读图行。
 
-  draw.io 整图用 `scripts/drawio_kit.py` 生成，规则见 `references/design-rules.md`。
+  draw.io 整图用 `scripts/drawio_kit.py` 生成，规则见 `references/design-rules.md`，四十二张完整示例在 `examples/`。
+- 48 种图各有一张示例图和讲解：`docs/画图指南.md`。
 
 ## 安装
 
@@ -149,6 +150,8 @@ node scripts/sankey_echarts.js data.csv --png          # 中文节点的桑基�
 diagram-kit/
 ├── SKILL.md                  # agent 读的入口：五步流程、图型表、命令
 ├── agents/openai.yaml        # Codex / ChatGPT 桌面端的展示名与调用策略
+├── examples/                 # drawio_kit 的整图示例：脚本 + .drawio + PNG
+├── docs/画图指南.md           # 48 种图的用途、画法和示例图（assets/ 由 build_docs.py 生成）
 ├── references/
 │   ├── tools.md              # 各工具怎么接配色、导出
 │   ├── design-rules.md       # 配色与版式规则、检查清单
@@ -156,8 +159,11 @@ diagram-kit/
 │   └── types-*.md            # 每种图的用途、写法、示例、角色色表
 └── scripts/
     ├── palette.py            # 配色方案、角色表、各工具的输出
+    ├── drawio_kit.py         # 按统一风格生成 draw.io 图的组件库
     ├── sync_refs.py          # 从 palette.py 重新生成 references 里的色表
     ├── render_check.py       # 用 mmdc 渲染全部示例，抓语法和主题问题
+    ├── build_docs.py         # 重新生成 docs 示例图、回填指南源码块、重跑 examples
+    ├── build_guide_html.py   # 把画图指南生成为单页 HTML（样式、脚本在 guide_html.css / .js）
     └── sankey_echarts.js     # ECharts 服务端渲染桑基图
 ```
 
@@ -169,6 +175,7 @@ diagram-kit/
 python scripts/palette.py check      # 结构校验 + 文字对比度
 python scripts/sync_refs.py          # 重新生成 references 里的色表
 python scripts/render_check.py --all # 渲染全部示例 × 全部方案（需要 mmdc）
+python scripts/build_docs.py --examples   # 重新生成指南示例图和 examples/（需要 mmdc、drawio、matplotlib、echarts）
 ```
 
 ## 版本与发版

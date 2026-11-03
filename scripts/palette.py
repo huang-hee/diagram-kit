@@ -8,12 +8,14 @@
   palette.py schemes                            列出全部方案，标出默认
   palette.py show [方案]                        方案解析后的全部 token（JSON）
   palette.py roles <type> [方案]                角色 -> 填充 / 描边 / 字色
-  palette.py mermaid <type> [方案] [--body F] [--init] [--md]
+  palette.py mermaid <type> [方案] [--body F] [--init] [--md] [--curve C]
                                                 Mermaid 配置 + 图头 + 正文 + classDef
                                                 F = 正文文件（图头可有可无，有则沿用；'-' 读标准输入）
                                                 --init: 输出 %%{init}%% 指令而不是 YAML frontmatter
                                                 --md: 包进 ```mermaid 围栏；桑基图节点写成 英文|中文 时
                                                       在围栏下面附中英对照表
+                                                --curve: 覆盖 flowchart 线型（默认 step 正交折线；渲染端的
+                                                      Mermaid 低于 12 或点名要曲线时用 basis）
   palette.py drawio <type> [方案]               每个角色的 draw.io style 字符串
   palette.py css [方案|type]                    CSS 变量（HTML / SVG 输出用），附 diagram-design 角色一组
   palette.py chart [方案|type]                  图表代码用的 JSON 色表（matplotlib / ECharts / Vega）；
@@ -741,7 +743,8 @@ def _classDefs(rows, rounded=False):
 
 
 # 统一风格的 Mermaid 布局配置：正交折线（flowchart.curve 在 Mermaid 12.2 上对流程、状态、类、ER 图都生效）与统一间距
-LAYOUT_CONFIG = {'flowchart': {'curve': 'step', 'nodeSpacing': 50, 'rankSpacing': 60, 'padding': 12}}
+LAYOUT_CONFIG = {'flowchart': {'curve': 'step', 'nodeSpacing': 50, 'rankSpacing': 60, 'padding': 12, 'wrappingWidth': 300}}
+CURVE_OVERRIDE = None  # --curve 指定时替换 LAYOUT_CONFIG 里的 curve；step 只有 Mermaid 12 以上的渲染端画得对
 EDGE_WIDTH = '1.5px'
 
 
@@ -1069,6 +1072,8 @@ def emitMermaid(tid, sid, body=None):
         tail.append(f'linkStyle default stroke-width:{EDGE_WIDTH}')
     # swimlane-beta 默认就是正交线，加 curve: step 反而让箭头和节点错开，所以不加布局配置
     layout = None if header.startswith('swimlane') else LAYOUT_CONFIG
+    if layout and CURVE_OVERRIDE:
+        layout = {'flowchart': dict(layout['flowchart'], curve=CURVE_OVERRIDE)}
     return '\n'.join([_frontmatter(v, layout, title=title), header, main_part] + tail)
 
 
@@ -1310,11 +1315,15 @@ def main(argv):
         print(__doc__)
         return
     cmd, args = argv[1], argv[2:]
-    global INIT_STYLE
+    global INIT_STYLE, CURVE_OVERRIDE
     # --init 影响 frontmatter 写法
     if '--init' in args:
         INIT_STYLE = True
         args = [a for a in args if a != '--init']
+    if '--curve' in args:
+        i = args.index('--curve')
+        CURVE_OVERRIDE = args[i + 1]
+        del args[i:i + 2]
     if cmd == 'schemes':
         for sid, sp in SCHEMES.items():
             mark = '默认' if sid == DEFAULT_SCHEME else '    '

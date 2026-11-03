@@ -1,7 +1,14 @@
 ---
+title: "华东生产环境部署"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -22,21 +29,22 @@ config:
 ---
 flowchart TB
   subgraph AZ[华东可用区 VPC]
-    LB[负载均衡 SLB]:::gateway
+    LB["负载均衡 SLB<br><small>公网入口</small>"]:::gateway
     subgraph K8S[K8s 集群]
-      GW[网关 x2]:::node
-      OD[订单服务 x3]:::node
+      GW["网关<br><small>2 副本</small>"]:::node
+      OD["订单服务<br><small>3 副本</small>"]:::node
     end
-    DB[(MySQL 一主一从)]:::db
+    DB[("MySQL<br><small>一主一从</small>")]:::db
   end
   FW[WAF]:::security --> LB
   LB --> GW --> OD --> DB
   class AZ zone
   class K8S subnet
-classDef zone fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
-classDef subnet fill:#EBF1F9,stroke:#3B6FC2,color:#33384A
-classDef node fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef gateway fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef db fill:#D8F0ED,stroke:#97A8A6,color:#256058
-classDef security fill:#FAE0DD,stroke:#E35144,color:#33384A
+classDef zone fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4,rx:8,ry:8
+classDef subnet fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef node fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef gateway fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef db fill:#D8F0ED,stroke:#97A8A6,color:#256058,rx:8,ry:8
+classDef security fill:#FAE0DD,stroke:#E35144,color:#33384A,rx:8,ry:8
 %% 用法：节点 A:::zone 或 class A,B zone
+linkStyle default stroke-width:1.5px

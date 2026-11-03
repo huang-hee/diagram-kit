@@ -4,13 +4,14 @@
  * Mermaid 的桑基图词法只认 ASCII 节点名，要在图里显示中文时用这个脚本。
  *
  * 用法：
- *   node sankey_echarts.js <data.csv> [方案] [--out assets/名字] [--width 720] [--height 360] [--png]
+ *   node sankey_echarts.js <data.csv> [方案] [--out assets/名字] [--width 720] [--height 360] [--png] [--scale 2]
  *
  *   data.csv   每行一条流向：source,target,value。节点名可以直接写中文；写成 英文|中文 时显示中文部分。
  *              空行、%% 注释和 "sankey" 图头会跳过。
  *   方案       palette.py 的方案 id（默认用全局默认方案）
  *   --out      输出路径，不带扩展名（默认：和 CSV 同目录同名）
- *   --png      同时用 Playwright 输出 <out>.png（2 倍）
+ *   --png      同时用 Playwright 输出 <out>.png
+ *   --scale    PNG 的倍数（默认 2；要长边不低于 4000px 时按 4000 / 宽 取整）
  *
  * 依赖：全局安装的 echarts（npm install -g echarts）；--png 还要 playwright 和 Chromium。缺了不执行，提示安装。
  */
@@ -197,14 +198,15 @@ function renderSvg(echarts, colors, nodes, links, width, height) {
 }
 
 /**
- * 用 Playwright 把 SVG 截成 2 倍 PNG
+ * 用 Playwright 把 SVG 截成 PNG
  * @param {string} svg SVG 字符串
  * @param {string} png_path 输出路径
+ * @param {number} scale 倍数
  */
-async function writePng(svg, png_path) {
+async function writePng(svg, png_path, scale) {
   const { chromium } = loadDependency('playwright', '请先安装：npm install -g playwright && npx playwright install chromium')
   const browser = await chromium.launch()
-  const page = await browser.newPage({ deviceScaleFactor: 2 })
+  const page = await browser.newPage({ deviceScaleFactor: scale })
   await page.setContent(`<html><body style="margin:0">${svg}</body></html>`)
   await page.locator('svg').first().screenshot({ path: png_path })
   await browser.close()
@@ -215,7 +217,7 @@ async function writePng(svg, png_path) {
  */
 async function main() {
   const args = process.argv.slice(2)
-  const value_flags = ['--out', '--width', '--height']
+  const value_flags = ['--out', '--width', '--height', '--scale']
   // 带值的参数：缺值或值是另一个参数就报错
   const option = (flag, fallback) => {
     if (!args.includes(flag)) return fallback
@@ -237,7 +239,7 @@ async function main() {
   }
   const positional = args.filter((a, i) => !a.startsWith('--') && !value_flags.includes(args[i - 1]))
   if (!positional.length) {
-    console.error('用法：node sankey_echarts.js <data.csv> [方案] [--out assets/名字] [--png]')
+    console.error('用法：node sankey_echarts.js <data.csv> [方案] [--out assets/名字] [--png] [--scale 2]')
     process.exit(1)
   }
   const csv_path = positional[0]
@@ -245,6 +247,7 @@ async function main() {
   const out_base = option('--out', csv_path.replace(/\.[^./\\]+$/, ''))
   const width = number('--width', 720)
   const height = number('--height', 360)
+  const scale = number('--scale', 2)
   // 依赖缺失时先停下来
   const echarts = loadDependency('echarts', '请先安装：npm install -g echarts')
   // 取色、读数据、渲染
@@ -257,7 +260,7 @@ async function main() {
   console.log(`${out_base}.svg`)
   // 可选写 PNG
   if (args.includes('--png')) {
-    await writePng(svg, `${out_base}.png`)
+    await writePng(svg, `${out_base}.png`, scale)
     console.log(`${out_base}.png`)
   }
   process.exit(0) // ECharts 会留着定时器，要显式退出

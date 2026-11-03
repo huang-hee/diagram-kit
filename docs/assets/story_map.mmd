@@ -1,7 +1,14 @@
 ---
+title: "首次购买的故事地图"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -22,12 +29,13 @@ config:
 ---
 flowchart LR
   A1[浏览]:::activity --> A2[下单]:::activity --> A3[支付]:::activity
-  A1 --> T1[搜索商品]:::task --> S1[按类目筛选]:::mvp
-  A2 --> T2[填写地址]:::task --> S2[地址簿]:::story
-  A3 --> T3[选择支付方式]:::task --> S3[分期付款]:::later
-classDef activity fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
-classDef task fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef story fill:#FFF6CE,stroke:#A6A086,color:#33384A
-classDef mvp fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef later fill:#EEEFF0,stroke:#8F929B,color:#33384A
+  A1 --> T1[搜索商品]:::task --> S1["按类目筛选<br><small>MVP</small>"]:::mvp
+  A2 --> T2[填写地址]:::task --> S2["地址簿<br><small>下一版</small>"]:::story
+  A3 --> T3[选择支付方式]:::task --> S3["分期付款<br><small>以后</small>"]:::later
+classDef activity fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
+classDef task fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef story fill:#FFF6CE,stroke:#A6A086,color:#33384A,rx:8,ry:8
+classDef mvp fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef later fill:#EEEFF0,stroke:#8F929B,color:#33384A,rx:8,ry:8
 %% 用法：节点 A:::activity 或 class A,B activity
+linkStyle default stroke-width:1.5px

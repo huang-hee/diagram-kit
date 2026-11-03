@@ -1,7 +1,14 @@
 ---
+title: "订单子系统组件"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -22,8 +29,8 @@ config:
 ---
 flowchart LR
   subgraph SUB[订单子系统]
-    C1[订单组件]:::comp
-    C2[支付组件]:::comp
+    C1["订单组件<br><small>下单 · 查询</small>"]:::comp
+    C2["支付组件<br><small>收银台 · 回调</small>"]:::comp
   end
   L[公共工具库]:::lib
   I((IPayment)):::iface
@@ -31,8 +38,9 @@ flowchart LR
   C2 --- I
   C1 --> L
   class SUB group
-classDef comp fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef lib fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef iface fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef group fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
+classDef comp fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef lib fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef iface fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef group fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4,rx:8,ry:8
 %% 用法：节点 A:::comp 或 class A,B comp
+linkStyle default stroke-width:1.5px

@@ -1,7 +1,14 @@
 ---
+title: "下单的对象协作"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -25,7 +32,8 @@ flowchart LR
   C -- "1.1: create()" --> S[:OrderService]:::object
   S -- "1.1.1: lock()" --> K[:StockService]:::object
   S -- "1.1.2: pay()" --> P[:PayClient]:::msg
-classDef object fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef actor fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef msg fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef object fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef actor fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef msg fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
 %% 用法：节点 A:::object 或 class A,B object
+linkStyle default stroke-width:1.5px

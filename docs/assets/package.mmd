@@ -1,7 +1,14 @@
 ---
+title: "包依赖"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -33,7 +40,8 @@ flowchart TB
   O2 -.-> U1
   class APP pkg1
   class ORDER,USER pkg2
-classDef pkg1 fill:#BACDEA,stroke:#3B6FC2,color:#33384A
-classDef pkg2 fill:#E2E9F6,stroke:#3B6FC2,color:#33384A
-classDef focus fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef pkg1 fill:#BACDEA,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef pkg2 fill:#E2E9F6,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef focus fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
 %% 用法：节点 A:::pkg1 或 class A,B pkg1
+linkStyle default stroke-width:1.5px

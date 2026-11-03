@@ -2,6 +2,12 @@
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -22,10 +28,10 @@ config:
 ---
 block-beta
   columns 4
-  ch["用户触点：App、小程序、Web"]:4
+  ch["用户触点<br><small>App、小程序、Web</small>"]:4
   d1["商品域"] d2["交易域"] d3["营销域"] d4["履约域"]
   c1["类目、库存"] c2["下单、支付"] c3["优惠券、秒杀"] c4["仓储、物流"]
-  base["共享能力：会员、支付、消息"]:4
+  base["共享能力<br><small>会员、支付、消息</small>"]:4
   class ch channel
   class d1,d2,d3,d4 domain
   class c1,c2,c3,c4 capability

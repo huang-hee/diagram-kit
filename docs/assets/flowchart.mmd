@@ -1,7 +1,14 @@
 ---
+title: "订单提交流程"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -20,18 +27,19 @@ config:
     noteBorderColor: "#A6A086"
     noteTextColor: "#33384A"
 ---
-flowchart LR
+flowchart TB
   A([提交订单]):::startend --> B{库存充足?}:::decision
+  B -- 是 --> C["锁定库存<br><small>Redis 预扣 15 分钟</small>"]:::process
   B -- 否 --> X[提示缺货]:::error
-  B -- 是 --> C[锁定库存]:::process
+  C --> E["发起支付<br><small>拉起收银台</small>"]:::key
   C --> D[(订单库)]:::data
-  C --> E[发起支付]:::key
   E --> Z([结束]):::startend
   X --> Z
-classDef startend fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef process fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef data fill:#D8F0ED,stroke:#97A8A6,color:#256058
-classDef key fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
-classDef error fill:#FAE0DD,stroke:#E35144,color:#33384A
+classDef startend fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef process fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef data fill:#D8F0ED,stroke:#97A8A6,color:#256058,rx:8,ry:8
+classDef key fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
+classDef error fill:#FAE0DD,stroke:#E35144,color:#33384A,rx:8,ry:8
 %% 用法：节点 A:::startend 或 class A,B startend
+linkStyle default stroke-width:1.5px

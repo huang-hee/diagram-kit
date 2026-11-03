@@ -1,7 +1,14 @@
 ---
+title: "公司组织结构"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -21,14 +28,15 @@ config:
     noteTextColor: "#33384A"
 ---
 flowchart TB
-  CEO[总经理]:::top --> CTO[技术中心]:::l2
-  CEO --> COO[运营中心]:::l2
+  CEO[总经理]:::top --> CTO["技术中心<br><small>研发 · 测试 · 运维</small>"]:::l2
+  CEO --> COO["运营中心<br><small>内容 · 活动</small>"]:::l2
   CEO -.-> AS[总经理助理]:::aux
   CTO --> FE[前端组]:::l3
   CTO --> BE[后端组]:::l3
   COO --> OP[内容运营]:::l3
-classDef top fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
-classDef l2 fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef l3 fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
-classDef aux fill:#EEEFF0,stroke:#8F929B,color:#33384A,stroke-dasharray:5 4
+classDef top fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
+classDef l2 fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef l3 fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef aux fill:#EEEFF0,stroke:#8F929B,color:#33384A,stroke-dasharray:5 4,rx:8,ry:8
 %% 用法：节点 A:::top 或 class A,B top
+linkStyle default stroke-width:1.5px

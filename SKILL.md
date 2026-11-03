@@ -31,7 +31,7 @@ metadata:
 
 ## 2. 选工具
 
-用哪个工具按调用者的指令或项目规则定；没有规则时默认 Mermaid 代码块。各工具怎么接配色、怎么导出见 references/tools.md。
+用哪个工具按调用者的指令或项目规则定；没有规则时默认 drawio；用 `scripts/drawio_kit.py` 出图；各工具怎么接配色、怎么导出见 references/tools.md。
 
 不管用哪个工具，版式都按 references/design-rules.md 的统一风格：
 
@@ -64,16 +64,17 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 1. 先写正文：拿参考文件里该图的示例当骨架，节点挂上角色 class（`A[锁定库存]:::process`），存成文件。
 2. 套配色：`python $SKILL/scripts/palette.py mermaid <type> [方案] --body 正文.mmd`，输出带配色的完整代码（配置 + 图头 + 正文 + classDef）。正文里自己写了图头（如 `flowchart TB`）会保留。
 3. 结果放进 md 的 ` ```mermaid ` 代码块（加 `--md` 直接输出带围栏的代码块）。目标平台不认 YAML frontmatter 时加 `--init`，改输出 `%%{init: ...}%%` 写法。
+4. 线型不指定时默认是正交折线（`curve: step`）；渲染端的 Mermaid 低于 12 或调用者点名要曲线时加 `--curve basis`。
 
 **其他工具**
 
-| 工具                        | 取色命令                          | 用法                                                                                                                                                                       |
-| --------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| drawio                      | `palette.py drawio <type> [方案]` | 整图用 `scripts/drawio_kit.py` 生成，统一风格的令牌已内置，用法见 tools.md 的「精修出图」；只改个别元素时，直接用这条命令输出的角色、连线、分层带、容器、文字 style 字符串 |
-| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量；第二组按 diagram-design 的角色命名（paper / ink / accent …），连同字体、线宽、圆角的覆盖值存成 profile，见 tools.md diagram-design 一节的「统一风格」            |
-| 代码绘图                    | `palette.py chart [方案]`         | JSON：background / text / axis / grid / categorical / sequential / nodes / state；中文节点的桑基图直接用 `node $SKILL/scripts/sankey_echarts.js 数据.csv`                  |
-| 文生图工具（如有）          | `palette.py show [方案]`          | 把主色和 3–5 个系列色的 hex 写进提示词                                                                                                                                     |
-| Figma                       | `palette.py css [方案]`           | 建成 Figma 颜色变量                                                                                                                                                        |
+| 工具                        | 取色命令                          | 用法                                                                                                                                                                                                                       |
+| --------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| drawio                      | `palette.py drawio <type> [方案]` | 整图用 `scripts/drawio_kit.py` 生成，统一风格的令牌已内置，用法见 tools.md 的「精修出图」，完整示例见 `examples/`（挑结构最接近的脚本改）；只改个别元素时，直接用这条命令输出的角色、连线、分层带、容器、文字 style 字符串 |
+| diagram-design / HTML / SVG | `palette.py css [方案]`           | CSS 变量；第二组按 diagram-design 的角色命名（paper / ink / accent …），连同字体、线宽、圆角的覆盖值存成 profile，见 tools.md diagram-design 一节的「统一风格」                                                            |
+| 代码绘图                    | `palette.py chart [方案]`         | JSON：background / text / axis / grid / categorical / sequential / nodes / state；中文节点的桑基图直接用 `node $SKILL/scripts/sankey_echarts.js 数据.csv`                                                                  |
+| 文生图工具（如有）          | `palette.py show [方案]`          | 把主色和 3–5 个系列色的 hex 写进提示词                                                                                                                                                                                     |
+| Figma                       | `palette.py css [方案]`           | 建成 Figma 颜色变量                                                                                                                                                                                                        |
 
 ## 5. 校验
 
@@ -84,6 +85,7 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
   - `requirementDiagram` 的标识用英文，中文写在 `text` 里。
   - C4 的边界（`Container_Boundary` 等）没有样式宏，只能是 Mermaid 默认的虚线框。
   - 带 `-beta` 的图型（swimlane / usecase / architecture / ishikawa / venn / treemap / radar / xychart / block / sankey）以及 frontmatter 配置，在较旧的渲染器（部分 IDE 插件、文档平台、代码托管平台）上可能不显示。可以按该图"工具"一栏换更兼容的写法或工具。
+  - `curve: step` 在 Mermaid 版本低于 12 的渲染端上会画成穿过节点框、从侧面进框的折线，12 起正常；渲染端版本不明时先问。
 - drawio：每张导出后都看 PNG，检查有没有共线、穿框、交叉，标签有没有压框，面板有没有大片空白。
 - 对照 references/design-rules.md 末尾的检查清单过一遍。
 - 导出图片和源文件的存放位置按调用者或项目的规则；文档和图里不写工具版本、验证日期这类过程信息。
@@ -96,6 +98,8 @@ python $SKILL/scripts/palette.py roles <type> [方案]   # 这种图每个角色
 python $SKILL/scripts/palette.py check     # 结构校验 + 所有角色字对填充的对比度
 python $SKILL/scripts/sync_refs.py         # 刷新 references 里的色表和 schemes.md
 python $SKILL/scripts/render_check.py      # 用 mmdc 渲染参考文件里的全部示例（--all 渲染每套方案）
+python $SKILL/scripts/build_docs.py        # 重新生成 docs/画图指南.md 的示例图并回填源码块（--examples 连 examples/ 一起）
+python $SKILL/scripts/build_guide_html.py  # 把画图指南生成为单页 HTML（--out 目录）
 ```
 
 ## 参考文件
@@ -103,5 +107,6 @@ python $SKILL/scripts/render_check.py      # 用 mmdc 渲染参考文件里的�
 - references/tools.md：各工具的配色接法、统一风格的落地、布局技巧、导出命令和限制
 - references/design-rules.md：跨工具统一的配色与版式规则、各图型的版式做法、出图检查清单
 - scripts/drawio_kit.py：按统一风格生成 draw.io 图的组件库
+- examples/：用 drawio_kit 画的四十二张整图示例（脚本 + .drawio + PNG），README 列出每张用到的组件
 - references/schemes.md：全部配色方案总表（气质、色值、派生规则）
 - references/types-\*.md：每种图的用途、写法、示例和角色色表

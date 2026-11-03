@@ -74,10 +74,10 @@ C4Container
 ```mermaid
 block-beta
   columns 4
-  ch["用户触点：App、小程序、Web"]:4
+  ch["用户触点<br><small>App、小程序、Web</small>"]:4
   d1["商品域"] d2["交易域"] d3["营销域"] d4["履约域"]
   c1["类目、库存"] c2["下单、支付"] c3["优惠券、秒杀"] c4["仓储、物流"]
-  base["共享能力：会员、支付、消息"]:4
+  base["共享能力<br><small>会员、支付、消息</small>"]:4
   class ch channel
   class d1,d2,d3,d4 domain
   class c1,c2,c3,c4 capability
@@ -111,15 +111,18 @@ block-beta
 <!-- sample:app_arch -->
 
 ```mermaid
-flowchart LR
+---
+title: 商城应用架构
+---
+flowchart TB
   subgraph L1[前端层]
-    W[商城 Web]:::client
-    M[小程序]:::client
+    W["商城 Web<br><small>React</small>"]:::client
+    M["小程序<br><small>微信</small>"]:::client
   end
   subgraph L2[服务层]
-    G[API 网关]:::service
-    O[订单服务]:::service
-    P[商品服务]:::service
+    G["API 网关<br><small>鉴权 · 限流</small>"]:::service
+    O["订单服务<br><small>下单 · 支付回调</small>"]:::service
+    P["商品服务<br><small>类目 · 库存</small>"]:::service
   end
   subgraph L3[基础层]
     MQ[(RocketMQ)]:::infra
@@ -162,11 +165,14 @@ flowchart LR
 <!-- sample:data_arch -->
 
 ```mermaid
+---
+title: 实时数据链路
+---
 flowchart LR
-  A[业务库 binlog]:::source --> B[Flink 实时计算]:::compute
+  A["业务库 binlog<br><small>Canal 采集</small>"]:::source --> B["Flink 实时计算<br><small>清洗 · 聚合</small>"]:::compute
   L[埋点日志]:::source --> B
-  B --> C[(数仓 ODS/DWD)]:::store
-  C --> D[(ADS 指标)]:::store
+  B --> C[("数仓<br><small>ODS / DWD</small>")]:::store
+  C --> D[("ADS 指标")]:::store
   D --> E[BI 报表]:::consume
 ```
 
@@ -200,7 +206,7 @@ block-beta
   columns 4
   L1["接入"]:1 a["CDN、Nginx"]:3
   L2["服务"]:1 b["Spring Boot"] c["Spring Cloud"] d["Dubbo"]
-  L3["数据"]:1 e["MySQL"] f["Redis"] g["Elasticsearch"]
+  L3["数据"]:1 e["MySQL"] f["Redis<br><small>本次引入</small>"] g["Elasticsearch"]
   L4["运维"]:1 h["日志"] i["监控告警"] j["CI/CD"]
   class L1,L2,L3,L4 layer
   class a,b,c,d,e,f,g item
@@ -235,14 +241,17 @@ block-beta
 <!-- sample:deploy_arch -->
 
 ```mermaid
+---
+title: 华东生产环境部署
+---
 flowchart TB
   subgraph AZ[华东可用区 VPC]
-    LB[负载均衡 SLB]:::gateway
+    LB["负载均衡 SLB<br><small>公网入口</small>"]:::gateway
     subgraph K8S[K8s 集群]
-      GW[网关 x2]:::node
-      OD[订单服务 x3]:::node
+      GW["网关<br><small>2 副本</small>"]:::node
+      OD["订单服务<br><small>3 副本</small>"]:::node
     end
-    DB[(MySQL 一主一从)]:::db
+    DB[("MySQL<br><small>一主一从</small>")]:::db
   end
   FW[WAF]:::security --> LB
   LB --> GW --> OD --> DB
@@ -278,11 +287,14 @@ flowchart TB
 <!-- sample:network -->
 
 ```mermaid
+---
+title: 网络分区与链路
+---
 flowchart TB
-  NET((互联网)):::internet --> FW[防火墙]:::security
+  NET((互联网)):::internet --> FW["防火墙<br><small>边界 ACL</small>"]:::security
   subgraph DMZ[DMZ 区]
     WAF[WAF]:::security
-    NG[Nginx]:::server
+    NG["Nginx<br><small>反向代理</small>"]:::server
   end
   subgraph IN[内网区]
     SW[核心交换机]:::device

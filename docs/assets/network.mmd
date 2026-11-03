@@ -1,7 +1,14 @@
 ---
+title: "网络分区与链路"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -21,10 +28,10 @@ config:
     noteTextColor: "#33384A"
 ---
 flowchart TB
-  NET((互联网)):::internet --> FW[防火墙]:::security
+  NET((互联网)):::internet --> FW["防火墙<br><small>边界 ACL</small>"]:::security
   subgraph DMZ[DMZ 区]
     WAF[WAF]:::security
-    NG[Nginx]:::server
+    NG["Nginx<br><small>反向代理</small>"]:::server
   end
   subgraph IN[内网区]
     SW[核心交换机]:::device
@@ -33,10 +40,11 @@ flowchart TB
   FW --> WAF --> NG --> SW --> APP
   class DMZ dmz
   class IN intranet
-classDef internet fill:#EEEFF0,stroke:#8F929B,color:#33384A
-classDef dmz fill:#FBEEE2,stroke:#E8A35D,color:#33384A
-classDef intranet fill:#EBF1F9,stroke:#3B6FC2,color:#33384A
-classDef device fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef server fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
-classDef security fill:#FAE0DD,stroke:#E35144,color:#33384A
+classDef internet fill:#EEEFF0,stroke:#8F929B,color:#33384A,rx:8,ry:8
+classDef dmz fill:#FBEEE2,stroke:#E8A35D,color:#33384A,rx:8,ry:8
+classDef intranet fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef device fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef server fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef security fill:#FAE0DD,stroke:#E35144,color:#33384A,rx:8,ry:8
 %% 用法：节点 A:::internet 或 class A,B internet
+linkStyle default stroke-width:1.5px

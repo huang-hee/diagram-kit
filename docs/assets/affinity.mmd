@@ -1,7 +1,14 @@
 ---
+title: "用户反馈归类"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -20,22 +27,20 @@ config:
     noteBorderColor: "#A6A086"
     noteTextColor: "#33384A"
 ---
-flowchart LR
+flowchart TB
   subgraph G1[新用户找不到入口]
-    a1[按钮难找]:::g1
-    a2[首页信息太多]:::g1
+    a1["按钮难找<br><small>访谈提到 3 次</small>"]:::g1 ~~~ a2[首页信息太多]:::g1
   end
   subgraph G2[页面慢]
-    b1[首屏 3 秒]:::g2
-    b2[滚动卡顿]:::g2
+    b1["首屏 3 秒<br><small>低端机更慢</small>"]:::g2 ~~~ b2[滚动卡顿]:::g2
   end
   subgraph G3[支付体验差]
-    c1[跳转次数多]:::g3
-    c2[失败无提示]:::g3
+    c1[跳转次数多]:::g3 ~~~ c2[失败无提示]:::g3
   end
-classDef g1 fill:#EDEFF9,stroke:#D2D6F1,color:#33384A
-classDef g2 fill:#FDF1ED,stroke:#FBDBD1,color:#33384A
-classDef g3 fill:#E1EAE9,stroke:#D8F0ED,color:#33384A
-classDef g4 fill:#FBF2E2,stroke:#F6DEB6,color:#33384A
-classDef title fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
+classDef g1 fill:#EDEFF9,stroke:#D2D6F1,color:#33384A,rx:8,ry:8
+classDef g2 fill:#FDF1ED,stroke:#FBDBD1,color:#33384A,rx:8,ry:8
+classDef g3 fill:#E1EAE9,stroke:#D8F0ED,color:#33384A,rx:8,ry:8
+classDef g4 fill:#FBF2E2,stroke:#F6DEB6,color:#33384A,rx:8,ry:8
+classDef title fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
 %% 用法：节点 A:::g1 或 class A,B g1
+linkStyle default stroke-width:1.5px

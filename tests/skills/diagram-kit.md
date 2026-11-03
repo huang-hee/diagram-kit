@@ -2,6 +2,7 @@
 
 | 验证时间         | 验证详情                                                  | 验证资产                       | 场景数                                             | 结果概览                                        |
 | ---------------- | --------------------------------------------------------- | ------------------------------ | -------------------------------------------------- | ----------------------------------------------- |
+| 2026-11-03 17:23 | [看板](https://claude.ai/artifact/WXMC7rdBhYatAc62xcqkW5) | 全局 CLAUDE.md 画图一节（drawio 默认版）+ diagram-kit 工作区版本（42 张整图示例、`--curve`、drawio 默认）；只验证到选工具 / 判型 / 参考文件 / 版式行，不出图 | 20 个场景（6 行工具路由全覆盖 + BPMN 别名）× sonnet / opus / haiku 3 轮 × 用 / 不用两臂 | with 59/60（工具 60/60，自然触发 skill 59/60；唯一失败是 haiku 在点名 diagram-design 的场景没调 diagram-kit），without 2/60（工具 20/60） |
 | 2026-10-29 18:20 | [看板](https://claude.ai/artifact/BwzJv89R9kNUeXSzYgUaTu) | diagram-kit（b2be646 + 预检规则、图标缺失规则改后；CLAUDE.md 改为超过 12 节点直接 drawio） | 上轮未通过的 S23 ×3（期望改为 drawio 真执行）、N10 ×1、T01 ×1 | 5/5 |
 | 2026-10-29 17:50 | [看板](https://claude.ai/artifact/BwzJv89R9kNUeXSzYgUaTu) | diagram-kit（b2be646 + 预检规则改后） | 工具真执行：T01 drawio、T02 diagram-design、T03 文生图，各 sonnet / opus 一轮 | 5/6（T01 sonnet 因图库无 RDS 官方图标停下来问） |
 | 2026-10-29 17:30 | [看板](https://claude.ai/artifact/BwzJv89R9kNUeXSzYgUaTu) | diagram-kit（b2be646 + 预检规则改为"备选也没有才停"） | 回归：S12 / S13 / S15 各 3 轮、R02 / R03 各 3 轮、N04 / N10 各 1 次 | with 17/18，路由 6/6；此前 opus 的"停下来问"查明是临时目录的自动记忆串扰 |

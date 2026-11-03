@@ -4,12 +4,14 @@
 
 ## Mermaid
 
+- 何时用：调用者点名要源码展示（"用 mermaid""给代码块""不出图"）。默认出图走 drawio。
+
 ### 统一风格
 
 `palette.py mermaid` 的输出已经带上这几项，不要删：
 
 - 配置：`flowchart.curve: step`（正交折线、转角自带小圆角），`nodeSpacing: 50`，`rankSpacing: 60`，`padding: 12`。
-  - Mermaid 12.2 上实测，这一组对流程、状态、类、ER 图都生效；更早版本的渲染端未验证。
+  - `step` 只有 Mermaid 12 以上的渲染端画得对；Mermaid 11（GitHub、浏览器 Markdown 插件、VS Code 的旧 Markdown 扩展）会把它画成穿过节点框、从侧面进框的折线。渲染端低于 12 或调用者指定曲线时加 `--curve basis`，basis 在 11 和 12 下都正常。本机 mmdc 和 VS Code 的 Markdown Preview Enhanced 是 12。
   - swimlane-beta 不加这一组：它默认就是正交线，加了 `step` 后箭头会和节点错开。
 - 流程图类的 classDef 带 `rx:8,ry:8`，矩形节点圆角 8。
 - 正文以 `flowchart` / `graph` 开头时，末尾追加 `linkStyle default stroke-width:1.5px`，全图连线统一 1.5px。swimlane-beta 里 `linkStyle` 不生效。
@@ -54,12 +56,13 @@
 
 - 有 Mermaid 渲染 MCP 时用它校验并预览。
 - 本地命令行需要 `mmdc`（`@mermaid-js/mermaid-cli`）：`mmdc -i 图.mmd -o 图.png -s 2 -b '#FFFFFF'`（`-s 2` 出 @2x，`-b` 背景色用方案的页面背景，`-q` 静默）。没有 mmdc 就提示安装，不临时拉取。
+- 要指定长边像素：mmdc 12 起用 `--size 4000`（整图等比放大，长边最多这么大，偶尔少 1px；旧版的 `-w` / `-H` 已去掉）。甘特图、用户旅程图撑满视口宽度、字号固定，`--size` 只会把图拉宽，改用 `--size 1000 -s 4`。
 - 配置里的字体链是 `PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif`：macOS 落 PingFang，Windows 落微软雅黑，Linux 要装 Noto Sans CJK；一个都没有时中文会出方块。
 - frontmatter 不被支持时，用 `palette.py mermaid … --init` 输出 `%%{init: {...}}%%` 指令写法。
 
 ## drawio
 
-- 何时用：超过 12 个节点、需要真实产品图标、要交付编辑、正式架构图、UI 线框图 / 低保真原型、Mermaid 画不了的图（时间图、组合结构图、标准 UML / BPMN 符号、多泳道 × 多阶段）。
+- 何时用：默认工具，要出图的结构图都用它，不受节点数限制；另外需要真实产品图标、要交付编辑、UI 线框图 / 低保真原型、Mermaid 画不了的图（时间图、组合结构图、标准 UML / BPMN 符号、多泳道 × 多阶段）也只能用它。
 - 建图和改图按 draw.io 插件或 MCP 自己的工具说明来；MCP 能查官方图标（AWS / 阿里云 / K8s / Cisco 等）。
 - 配色：`palette.py drawio <type> [方案]` 输出每个角色、连线、容器、泳道、边界、标题、说明文字的 style 字符串，第一行是页面背景色。产品图标保持官方原色，不要用方案色覆盖。
 - 图库里没有对应的产品图标：找一个相似度最高的图标用上，在回复里说明换了哪个；相似的也找不到就忽略图标继续往下画，在回复里说明没有找到图标，请调用者提供图标文件。
@@ -97,27 +100,31 @@ d.save('app-arch.drawio'); d.export('app-arch.drawio', 'app-arch.png')
 | 组件                                                           | 用途                                                                                                                                                  |
 | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Diagram(标题, 副标题, scheme)`                                | 自动画标题区；副标题写这张图回答的问题                                                                                                                |
-| `box`                                                          | 节点：两级文字。`shape` 可选 rect、pill、diamond、cyl、para、circle、doc、hex、note。`role` 取角色色，待定用 `role='pending'`。深色底时传 `sub_color` |
+| `box`                                                          | 节点：两级文字。`shape` 可选 rect、pill、diamond、cyl、para、circle、doc、hex、note、square、cube（UML 设备）、component（UML 组件）、package（文件夹包）。`role` 取角色色，待定用 `role='pending'`。深色底时传 `sub_color`；`icon=` 在左侧放图标，深色底配 `icon_color` |
+| `icon`                                                         | 单独放一个图标：`'ios7:user'` 这类 draw.io 自带的线性图标（离线可用）、drawio MCP search_shapes 查到的完整样式串，或 emoji；产品图标保持官方原色 |
 | `band` / `vband` / `group` / `frame`                           | 分层带、右侧贯穿条、分组容器（`dashed=True` 为边界），以及交互概览的 ref / sd 框                                                                      |
 | `edge`                                                         | 正交连线。`src` / `dst` 指定端口（R、L、T、B 及 1/4 点）；`points` 是显式拐点；`dashed` 画虚线，`key` 画加粗；`label_offset` 把标签挪离拐角           |
 | `line`                                                         | 按坐标画线：坐标轴、生命线、鱼骨，`arrow='block'` 时带箭头                                                                                            |
-| `panel` / `legend` / `footer`                                  | 说明面板（高度自动算）、图例一行、读图行                                                                                                              |
-| `mindmap`                                                      | 脑图，也当横向树用（`sides='right'`）；`top=120` 贴在标题区下方；节点写成 `(标签, [], {'pending': True})` 为待定                                      |
-| `tree_down`                                                    | 自上而下的树 / 组织结构                                                                                                                               |
+| `panel` / `legend` / `footer`                                  | 说明面板（高度自动算）、图例一行（线样 edge / edge-dashed / edge-key 实心箭头，edge-open / edge-dashed-open 开放箭头，line / line-dashed 无箭头）、读图行（宽度按文字算）                                                                                                              |
+| `mindmap`                                                      | 脑图，也当横向树用（`sides='right'`）和放射图用（`sides='radial'`，只放一层）；`top=120` 贴在标题区下方；节点写成 `(标签, [], {'pending': True})` 为待定 |
+| `tree_down`                                                    | 自上而下的树 / 组织结构，返回根 id、总宽、总高和根的位置                                                                                                                               |
 | `fishbone`                                                     | 鱼骨图                                                                                                                                                |
 | `table`                                                        | ER 实体或类卡片：`'pk'` 主键、`'fk'` 外键、`'sep'` 分隔线                                                                                             |
 | `dot` / `bar`                                                  | 状态图的起止点；活动图的分叉 / 汇合粗横条                                                                                                             |
+| `actor` / `port` / `rel`                                       | UML 小人（用例图、通信图）；端口方块或接口棒棒糖（`shape='circle'`）；UML 关系线 `rel(a, b, kind)`：assoc 实线开放箭头、inherit 实线空心三角、implement 虚线空心三角、depend 虚线开放箭头、compose 起点实心菱形、aggregate 起点空心菱形、link 无箭头实线、extension 实线实心三角（Profile 的扩展） |
 | `seq(...)`                                                     | 时序图，返回的对象依次调 `msg` / `note` / `frag` / `els` / `end`，最后调 `finish`                                                                     |
 | `chevron` / `badge` / `sticky`                                 | 阶段箭头条、编号徽标、便签                                                                                                                            |
 | `path` / `polygon` / `ribbon` / `sector` / `rect` / `squarify` | 数据图的图元：任意路径、多边形、桑基丝带、饼或环扇区、柱、矩形树布局                                                                                  |
 
-- 坐标取 10 的倍数，主体从 y≈120 开始。每画完一张就看一眼导出的 PNG，按 design-rules.md 的检查清单改到没有共线、穿框、交叉，标签不压框。
+- 完整示例在 `examples/`：48 种图型里除第 7 节的 8 种数据图和 Git 图外的每一种都有一张（流程含超过 12 节点的，思维导图另有放射图和右展开逻辑树），共四十二张，脚本、`.drawio`、PNG 同名放在一起，README 列出每张用到的组件。写新图时挑结构最接近的脚本当骨架改。
+- 坐标取 10 的倍数，主体从 y≈120 开始；判断的分支要向上展开时主体从 y≈130 起再留一行。每画完一张就看一眼导出的 PNG，按 design-rules.md 的检查清单改到没有共线、穿框、交叉，标签不压框。
+- 导出倍数：`d.export(..., scale=d.scale_for(4000))` 按画布尺寸算出让长边不低于 4000px 的倍数；不传 scale 时是 2 倍。
 - 共用的布局规律（三列卡片、交替上下的标签）写成自己脚本里的循环，不要逐个硬写坐标。
 - 依赖：Python 3.9+、draw.io 桌面版命令行（导出用）。
 
 ## diagram-design
 
-- 何时用：发布级排版、要 HTML / SVG 输出、不超过 12 个节点。
+- 何时用：调用者点名才用；发布级排版、要 HTML / SVG 输出、不超过 12 个节点。
 - 结构和版式按 diagram-design 自己的规则。它的颜色模型是"纸 + 墨 + 一个强调色"的语义角色（`paper` / `ink` / `muted` / `soft` / `rule` / `accent` / `accent-tint` / `link` / `series-1…5`），不是四槽角色色，所以只能做到底色、正文、主色、系列色和 Mermaid 同源，节点填充风格仍是它自己的。
 - 接法：`palette.py css [方案]` 输出的第二组变量（`--dd-paper`、`--dd-ink` …）就是按它的角色名算好的，映射关系：
 
@@ -178,7 +185,7 @@ d.save('app-arch.drawio'); d.export('app-arch.drawio', 'app-arch.png')
 - 渲染：`echarts.init(null, null, { renderer: 'svg', ssr: true, width, height })`，然后 `chart.renderToSVGString()` 得到 SVG。
 - 必须设 `animation: false`，否则导出的是动画中间帧，图只画了一半。
 - 写完文件后调用 `chart.dispose()` 和 `process.exit(0)`，否则 Node 进程不会退出。
-- 要 PNG@2x：用 Playwright 打开 SVG，设 `deviceScaleFactor: 2` 截图，依赖全局安装的 playwright 和 Chromium（`npm install -g playwright && npx playwright install chromium`）；或者交给 Playwright MCP 截图。缺了提示安装。
+- 要 PNG：用 Playwright 打开 SVG，设 `deviceScaleFactor` 截图（`sankey_echarts.js --png` 默认 2 倍，`--scale 6` 出长边 4000px 以上），依赖全局安装的 playwright 和 Chromium（`npm install -g playwright && npx playwright install chromium`）；或者交给 Playwright MCP 截图。缺了提示安装。
 - 数据文件（CSV / JSON）和 SVG / PNG 一起交付，作为可编辑源文件。
 
 ## Figma

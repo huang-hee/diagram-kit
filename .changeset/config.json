@@ -27,6 +27,8 @@
     "!.scripts/**",
     "!.gitignore",
     "!.prettierignore",
-    "!tests/**"
+    "!tests/**",
+    "!.playwright-mcp/**",
+    "!examples/**"
   ]
 }

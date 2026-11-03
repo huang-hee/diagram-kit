@@ -1,7 +1,14 @@
 ---
+title: "实时数据链路"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -21,14 +28,15 @@ config:
     noteTextColor: "#33384A"
 ---
 flowchart LR
-  A[业务库 binlog]:::source --> B[Flink 实时计算]:::compute
+  A["业务库 binlog<br><small>Canal 采集</small>"]:::source --> B["Flink 实时计算<br><small>清洗 · 聚合</small>"]:::compute
   L[埋点日志]:::source --> B
-  B --> C[(数仓 ODS/DWD)]:::store
-  C --> D[(ADS 指标)]:::store
+  B --> C[("数仓<br><small>ODS / DWD</small>")]:::store
+  C --> D[("ADS 指标")]:::store
   D --> E[BI 报表]:::consume
-classDef source fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef compute fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef store fill:#D8F0ED,stroke:#97A8A6,color:#256058
-classDef consume fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef layer fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
+classDef source fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef compute fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef store fill:#D8F0ED,stroke:#97A8A6,color:#256058,rx:8,ry:8
+classDef consume fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef layer fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4,rx:8,ry:8
 %% 用法：节点 A:::source 或 class A,B source
+linkStyle default stroke-width:1.5px

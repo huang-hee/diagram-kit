@@ -1,7 +1,14 @@
 ---
+title: "订单服务部署图"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -22,16 +29,17 @@ config:
 ---
 flowchart LR
   subgraph DC[机房网络]
-    N1[应用服务器]:::device
-    E1[JVM]:::env
-    A1[order.jar]:::artifact
+    N1["应用服务器<br><small>«device»</small>"]:::device
+    E1["JVM<br><small>«executionEnvironment»</small>"]:::env
+    A1["order.jar<br><small>«artifact»</small>"]:::artifact
   end
-  N2[数据库服务器]:::device
+  N2["数据库服务器<br><small>«device»</small>"]:::device
   N1 --> E1 --> A1
   N1 -- JDBC --> N2
   class DC zone
-classDef device fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef env fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef artifact fill:#D8F0ED,stroke:#97A8A6,color:#256058
-classDef zone fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
+classDef device fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef env fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef artifact fill:#D8F0ED,stroke:#97A8A6,color:#256058,rx:8,ry:8
+classDef zone fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4,rx:8,ry:8
 %% 用法：节点 A:::device 或 class A,B device
+linkStyle default stroke-width:1.5px

@@ -1,7 +1,14 @@
 ---
+title: "Spring IoC 核心概念"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -21,13 +28,14 @@ config:
     noteTextColor: "#33384A"
 ---
 flowchart LR
-  IOC((IoC 容器)):::core -- 创建并管理 --> Bean[Bean]:::concept
+  IOC((IoC 容器)):::core -- 创建并管理 --> Bean["Bean<br><small>容器托管的对象</small>"]:::concept
   ANN[注解]:::concept -- 声明 --> Bean
   Bean -- 依赖注入 --> DEP[其他 Bean]:::sub
   AOP[AOP]:::concept -- 代理增强 --> Bean
   ANN -. 例如 .-> EX["@Service"]:::example
-classDef core fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
-classDef concept fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef sub fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
-classDef example fill:#D8F0ED,stroke:#97A8A6,color:#256058
+classDef core fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
+classDef concept fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef sub fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef example fill:#D8F0ED,stroke:#97A8A6,color:#256058,rx:8,ry:8
 %% 用法：节点 A:::core 或 class A,B core
+linkStyle default stroke-width:1.5px

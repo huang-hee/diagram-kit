@@ -10,11 +10,13 @@
   d.edge(a, b, '标签', src='R', dst='L')
   d.legend(120, 260, [('lav', '处理'), ('key', '焦点'), ('edge', '调用')])
   d.save('图.drawio'); d.export('图.drawio', '图.png')     # 2 倍、边距 24、PNG 内嵌可编辑 XML
+  # 要长边不低于 4000px：d.export('图.drawio', '图.png', scale=d.scale_for(4000))
 
 坐标约定：左上角为原点，单位 px，取 10 的倍数；标题区占 y 0–100，主体从 y≈120 开始。
 角色（role）：lav / peach / mint / apricot（四个槽位）、sage / slate（第 5、6 个系列色）、ext（外部系统）、
 key（强调色，一图 1–2 个）、ok / bad（状态）、note（说明）、white（白底描边）、soft（浅底）、pending（待定，配 dashed）。
 端口（src / dst）：R L T B，或 TR TL BR BL RT RB LT LB（边上 1/4、3/4 处），或 (x, y) 相对坐标。
+图标：box(..., icon='ios7:user') 在卡片左侧放 draw.io 自带的线性图标；icon() 单独放一个图标。
 """
 from __future__ import annotations
 
@@ -37,6 +39,11 @@ TOKENS = {
     'title_size': 22, 'subtitle_size': 13, 'band_size': 14, 'node_size': 13, 'sub_size': 11,
     'edge_label_size': 12, 'panel_size': 12, 'edge_width': 1.5, 'key_edge_width': 2.5,
     'stroke_width': 1, 'radius': 8, 'export_scale': 2, 'export_border': 24,
+}
+# 内置线性图标（draw.io 自带的 mxgraph.ios7.icons.*，离线可用）里不是正方形的几个：名字 -> (宽, 高)
+IOS7_ASPECT = {
+    'smartphone': (18, 30), 'document': (21, 30), 'documents': (23, 30), 'folder': (30, 20), 'locked': (24, 30),
+    'credit_card': (30, 15), 'bag': (21, 21), 'alarm_clock': (27, 30), 'stopwatch': (27, 28), 'back': (30, 26),
 }
 PORTS = {
     'R': (1, 0.5), 'L': (0, 0.5), 'T': (0.5, 0), 'B': (0.5, 1),
@@ -177,19 +184,24 @@ class Diagram:
         return self.vertex(v, st, x, y, w, h)
 
     def footer(self, x, y, s, w=1100):
-        """读图行：12 号次要色，只写图里能看到的东西。"""
-        return self.text(x, y, w, 20, s, size=12, color=self.t.muted)
+        """读图行：12 号次要色，只写图里能看到的东西。宽度按文字算（最多 w），不把画布撑宽。"""
+        return self.text(x, y, min(w, text_width(s, 12) + 24), 20, s, size=12, color=self.t.muted)
 
     # ---------- 节点 ----------
     def box(self, x, y, w, h, title, sub=None, role='lav', shape='rect', size=None, bold=True,
-            dashed=False, stroke_width=None, align='center', parent='1', cid=None, extra='', sub_color=None):
+            dashed=False, stroke_width=None, align='center', parent='1', cid=None, extra='', sub_color=None,
+            icon=None, icon_size=18, icon_color=None):
         """节点：主名加粗 + 说明小字。shape: rect pill diamond cyl para circle doc hex note square。
-        用 extra 改成深色底时，同时传 sub_color（如 d.t.bg），否则说明小字是默认字色。"""
+        用 extra 改成深色底时，同时传 sub_color（如 d.t.bg），否则说明小字是默认字色。
+        icon: 卡片左侧的小图标，写法见 icon()；有图标时文字左对齐、左边留出图标位，深色底时传 icon_color。"""
         t = self.t
         fill, stroke, font = t.roles[role]
         size = size or TOKENS['node_size']
         sub_color = sub_color or (font if role not in ('white', 'pending') else t.muted)
         value = _label_html(title, sub, TOKENS['sub_size'], sub_color, bold)
+        if icon:
+            align = 'left'
+            extra = f'spacingLeft={14 + icon_size + 8};' + extra
         shapes = {
             'rect': f'rounded=1;arcSize={TOKENS["radius"]};absoluteArcSize=1;',
             'pill': 'rounded=1;arcSize=50;',
@@ -201,13 +213,38 @@ class Diagram:
             'hex': 'shape=hexagon;perimeter=hexagonPerimeter2;fixedSize=1;size=14;',
             'note': 'shape=note;size=14;',
             'square': 'rounded=0;',
+            'cube': 'shape=cube;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=12;',
+            'component': 'shape=component;jettyWidth=12;jettyHeight=8;',
+            'package': 'shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;',
         }
         st = (shapes[shape] + f'whiteSpace=wrap;html=1;fillColor={fill};strokeColor={stroke};fontColor={font};'
               f'fontFamily={FONT};fontSize={size};align={align};verticalAlign=middle;'
               f'strokeWidth={stroke_width or TOKENS["stroke_width"]};spacing=6;')
         if dashed or role == 'pending':
             st += 'dashed=1;dashPattern=5 3;'
-        return self.vertex(value, st + extra, x, y, w, h, parent=parent, cid=cid)
+        cid = self.vertex(value, st + extra, x, y, w, h, parent=parent, cid=cid)
+        if icon:
+            self.icon(x + 14, y + (h - icon_size) / 2, icon_size, icon, color=icon_color or font, parent=parent)
+        return cid
+
+    def icon(self, x, y, size, icon, color=None, parent='1'):
+        """图标，占 size×size 的格子。icon 三种写法：
+        'ios7:user' 内置线性图标（mxgraph.ios7.icons.*，draw.io 自带、离线可用，常用：user、settings、box、bag、
+        clock、alarm_clock、document、documents、folder、locked、smartphone、pie_chart、credit_card、add）；
+        含 shape= 或 image= 的完整 drawio 样式串（drawio MCP search_shapes 查到的）：线性图标把样式里的 strokeColor 改成字色，
+        产品 logo（AWS / K8s / Cisco 等官方图标）保持官方原色不要改；其余当文字画（emoji 或单个字符，依赖本机字体）。"""
+        color = color or self.t.text
+        if icon.startswith('ios7:'):
+            name = icon[5:]
+            aw, ah = IOS7_ASPECT.get(name, (30, 30))
+            k = size / max(aw, ah)
+            w, h = aw * k, ah * k
+            st = f'shape=mxgraph.ios7.icons.{name};html=1;strokeColor={color};strokeWidth=1.5;fillColor=none;'
+            return self.vertex('', st, x + (size - w) / 2, y + (size - h) / 2, w, h, parent=parent)
+        if 'shape=' in icon or 'image=' in icon:
+            return self.vertex('', icon.rstrip(';') + ';html=1;', x, y, size, size, parent=parent)
+        return self.vertex(_esc(icon), f'text;html=1;align=center;verticalAlign=middle;fontSize={size};fontColor={color};spacing=0;',
+                           x - 4, y - 4, size + 8, size + 8, parent=parent)
 
     def dot(self, x, y, kind='start', size=22):
         """状态图起止：start 实心圆；end 外环 + 实心圆（连线接返回的外环 id）。"""
@@ -221,6 +258,44 @@ class Diagram:
     def bar(self, x, y, w, h=8):
         """活动图的分叉 / 汇合粗横条。"""
         return self.vertex('', f'rounded=1;arcSize=50;fillColor={self.t.text};strokeColor=none;', x, y, w, h)
+
+    def actor(self, x, y, label, sub=None, role='peach', size=36):
+        """UML 小人（用例图、通信图的参与者）：小人在上、名字在下，占 size 宽、size + 40 高。返回小人 id。"""
+        t = self.t
+        fill, _, font = t.roles[role]
+        aid = self.vertex('', f'shape=umlActor;html=1;outlineConnect=0;fillColor={fill};strokeColor={font};strokeWidth=1.5;',
+                          x + (size - 24) / 2, y, 24, size)
+        lw = max(size + 40, text_width(max((label + '\n' + (sub or '')).split('\n'), key=len), 13) + 24)  # 名字框按文字宽，不往左撑画布
+        self.vertex(_label_html(label, sub, 11, t.muted, True),
+                    f'text;html=1;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily={FONT};fontSize=13;fontColor={t.text};spacing=0;',
+                    x + size / 2 - lw / 2, y + size + 4, lw, 36)
+        return aid
+
+    def port(self, x, y, label=None, size=14, role='apricot', shape='square'):
+        """端口 / 接口小标记：square 是组合结构图边框上的端口方块，circle 是组件图的接口棒棒糖；label 写在右侧。"""
+        t = self.t
+        fill, stroke, _ = t.roles[role]
+        st = ('ellipse;aspect=fixed;' if shape == 'circle' else 'rounded=0;') + f'html=1;fillColor={fill};strokeColor={stroke};strokeWidth=1.5;'
+        pid = self.vertex('', st, x, y, size, size)
+        if label:
+            self.text(x + size + 6, y - 3, text_width(label, 12) + 12, size + 6, label, size=12)
+        return pid
+
+    def rel(self, s, t_, kind='assoc', label=None, src=None, dst=None, points=None, label_offset=None):
+        """UML 关系线。kind: assoc 关联（实线开放箭头，可导航方向）、inherit 继承（实线空心三角）、implement 实现（虚线空心三角）、
+        depend 依赖（虚线开放箭头）、compose 组合（起点实心菱形）、aggregate 聚合（起点空心菱形）、link 无箭头实线、
+        extension 扩展（Profile 图里构造型指向元类：实线实心三角）。"""
+        kinds = {
+            'assoc': dict(arrow='open'),
+            'extension': dict(arrow='block'),
+            'inherit': dict(arrow='block', extra='endFill=0;'),
+            'implement': dict(arrow='block', dashed=True, extra='endFill=0;'),
+            'depend': dict(arrow='open', dashed=True),
+            'compose': dict(arrow='none', start_arrow='diamondThin', extra='startFill=1;startSize=12;'),
+            'aggregate': dict(arrow='none', start_arrow='diamondThin', extra='startFill=0;startSize=12;'),
+            'link': dict(arrow='none'),
+        }
+        return self.edge(s, t_, label, src=src, dst=dst, points=points, label_offset=label_offset, **kinds[kind])
 
     def table(self, x, y, w, title, rows, role='lav', sub=None, row_h=22, head_h=36):
         """ER 实体 / 类卡片。rows: 字符串或 (文字, 'pk' | 'fk' | 'muted' | 'sep')。返回外框 id。"""
@@ -304,8 +379,10 @@ class Diagram:
         t = self.t
         cid = self.box(x, y, w, h, title, sub, role=role, dashed=dashed, extra='spacingTop=14;')
         tw = text_width(tag, 11) + 16
-        self.vertex(_esc(tag), f'rounded=1;arcSize=4;absoluteArcSize=1;html=1;fillColor={t.stroke(role)};strokeColor=none;'
-                               f'fontColor={t.bg};fontFamily={FONT};fontSize=11;fontStyle=1;align=center;verticalAlign=middle;spacing=0;',
+        fill, stroke, font = t.roles[role]
+        tag_bg, tag_fg = (t.bg, stroke) if font == t.bg else (stroke, t.bg)  # 深色实底（如 key）时标签反过来用白底主色字
+        self.vertex(_esc(tag), f'rounded=1;arcSize=4;absoluteArcSize=1;html=1;fillColor={tag_bg};strokeColor=none;'
+                               f'fontColor={tag_fg};fontFamily={FONT};fontSize=11;fontStyle=1;align=center;verticalAlign=middle;spacing=0;',
                     x + 8, y + 6, tw, 18)
         return cid
 
@@ -323,8 +400,9 @@ class Diagram:
         return y + h
 
     def legend(self, x, y, items, gap=28):
-        """图例一行。items 的第一项：role（pending 画虚线框）、'edge' / 'edge-dashed' / 'edge-key'（带箭头的线）、
-        'line' / 'line-dashed'（不带箭头的线）、('color', 填充) 或 ('color', 填充, 描边)（自定义色块）。返回结束 x。"""
+        """图例一行。items 的第一项：role（pending 画虚线框）、'edge' / 'edge-dashed' / 'edge-key'（实心箭头的线）、
+        'edge-open' / 'edge-dashed-open'（开放箭头的线，和图上 arrow='open' 的线配套）、'line' / 'line-dashed'（不带箭头的线）、
+        ('color', 填充) 或 ('color', 填充, 描边)（自定义色块）。返回结束 x。"""
         t = self.t
         cx = x
         for kind, lab in items:
@@ -336,7 +414,7 @@ class Diagram:
                 self.line(cx, y + 9, cx + 32, y + 9, dashed=kind == 'line-dashed')
                 sw = 32
             elif kind.startswith('edge'):
-                self.line(cx, y + 9, cx + 32, y + 9, dashed=kind == 'edge-dashed', arrow='block',
+                self.line(cx, y + 9, cx + 32, y + 9, dashed='dashed' in kind, arrow='open' if kind.endswith('-open') else 'block',
                           width=TOKENS['key_edge_width'] if kind == 'edge-key' else None)
                 sw = 32
             else:
@@ -400,10 +478,13 @@ class Diagram:
 
     # ---------- 脑图与树 ----------
     def mindmap(self, root, branches, cx, cy=None, top=None, sides='both', root_w=150, gap_x=40, leaf_h=30, gap_y=10):
-        """脑图，也用作横向树（sides='right'）。branches: [(一级标签, [子节点])]，子节点为字符串、(标签, [子节点])
-        或 (标签, [子节点], {'pending': True})（待定，灰色虚线）。给 top 时内容顶边贴齐 top（标题区下方用 top=120），
-        否则以 cy 为中线。一级分支按系列色全局轮换。"""
+        """脑图，也用作横向树（sides='right'）和放射图（sides='radial'）。branches: [(一级标签, [子节点])]，子节点为字符串、
+        (标签, [子节点]) 或 (标签, [子节点], {'pending': True})（待定，灰色虚线）。给 top 时内容顶边贴齐 top（标题区下方用
+        top=120），否则以 cy 为中线。一级分支按系列色全局轮换。
+        sides='radial' 只放一层：中心圆 + 一圈圆形节点，直线连到中心；标签里用 '\n' 换行，分支带子节点会报错。"""
         t = self.t
+        if sides == 'radial':
+            return self._mindmap_radial(root, branches, cx, cy, top, root_w, gap_x)
 
         def lab(n):
             return (n, []) if isinstance(n, str) else (n[0], n[1])
@@ -478,8 +559,50 @@ class Diagram:
                 place(it, 1, x_edge, cy - total / 2, direction, rid, None, widths)
         return rid
 
+    def _mindmap_radial(self, root, branches, cx, cy, top, root_w, gap, ring_ratio=0.8):
+        """放射变体：中心圆用强调色，一级项是按系列色轮换的深色实底圆，均匀排在一圈椭圆轨道上，
+        用分支色的直线连到中心。轨道半径按相邻圆不相碰算出；ring_ratio 是纵向压扁比例。"""
+        t = self.t
+        items = []
+        for n in branches:
+            if isinstance(n, str):
+                items.append((n, False))
+                continue
+            if n[1]:
+                raise ValueError("sides='radial' 只放一层：下级写进标签（'\\n' 换行）或改用 sides='both'")
+            items.append((n[0], len(n) > 2 and bool(n[2].get('pending'))))
+        n = len(items)
+        if n == 0:
+            raise ValueError('放射图至少要有一个分支')
+        dia = max(max(text_width(max(lab.split('\n'), key=len), 14) + 36 for lab, _ in items), 100)
+        dia += 16 * max(lab.count('\n') for lab, _ in items)
+        root_d = max(root_w, text_width(max(root.split('\n'), key=len), 18) + 44)
+        if n >= 3:
+            r = (dia + gap) / (2 * ring_ratio * math.sin(math.pi / n))
+        else:
+            r = 0
+        r = max(r, root_d / 2 + dia / 2 + 90)
+        if top is not None:
+            cy = top + ring_ratio * r + dia / 2
+        rid = self.box(cx - root_d / 2, cy - root_d / 2, root_d, root_d, root, role='key', shape='circle', size=18)
+        for i, (label, is_pending) in enumerate(items):
+            a = -math.pi / 2 + i * 2 * math.pi / n
+            x, y = cx + r * math.cos(a) - dia / 2, cy + ring_ratio * r * math.sin(a) - dia / 2
+            role = SERIES[i % len(SERIES)]
+            dk = t.deep(role)
+            if is_pending:
+                nid = self.box(x, y, dia, dia, label, size=14, bold=False, role='pending', shape='circle')
+                color, width = t.stroke('pending'), 1.2
+            else:
+                nid = self.box(x, y, dia, dia, label, size=14, role='white', shape='circle',
+                               extra=f'fillColor={dk};strokeColor={dk};fontColor={t.bg};')
+                color, width = dk, 1.5
+            self.edge(rid, nid, color=color, width=width, arrow='none', extra='edgeStyle=none;rounded=0;')
+        return rid
+
     def tree_down(self, root, children, x, y, gap_x=20, gap_y=56, node_h=40, leaf_h=34):
-        """自上而下的树。根用强调色，一级按系列色轮换，二级浅底，更深白底描边。返回 (根 id, 总宽, 总高)。"""
+        """自上而下的树。根用强调色，一级按系列色轮换，二级浅底，更深白底描边。
+        返回 (根 id, 总宽, 总高, 根的 (x, y, w, h))，根的位置用来在旁边挂助理这类节点。"""
         t = self.t
 
         def lab(n):
@@ -496,14 +619,16 @@ class Diagram:
             return max(own_w(label, level), sum(sub_w(k, level + 1) for k in kids) + gap_x * (len(kids) - 1))
 
         depth = [y]
+        root_box = []
 
         def place(n, level, left, top, color):
             label, kids = lab(n)
             w_sub, w = sub_w(n, level), own_w(label, level)
             h = node_h if level <= 1 else leaf_h + label.count('\n') * 16
-            nx = left + (w_sub - w) / 2
+            nx = round(left + (w_sub - w) / 2)  # 取整像素，避免 .5 坐标
             if level == 0:
                 nid = self.box(nx, top, w, h, label, role='key', size=15)
+                root_box.extend((nx, top, w, h))
             elif level == 1:
                 dk = t.deep(color)
                 nid = self.box(nx, top, w, h, label, size=14, role='white', extra=f'fillColor={dk};strokeColor={dk};fontColor={t.bg};')
@@ -521,7 +646,7 @@ class Diagram:
             return nid
 
         rid = place((root, children), 0, x, y, None)
-        return rid, sub_w((root, children), 0), depth[0] - y
+        return rid, sub_w((root, children), 0), depth[0] - y, tuple(root_box)
 
     # ---------- 鱼骨 ----------
     def fishbone(self, problem, cats, x, y, length=1100, bone_h=190, cause_w=210):
@@ -624,6 +749,12 @@ class Diagram:
         with open(path, 'w', encoding='utf-8') as f:
             f.write(self.xml())
         return path
+
+    def scale_for(self, min_side: int) -> int:
+        """让导出 PNG 的长边不低于 min_side 像素所需的倍数，不小于默认的 2 倍。"""
+        b = TOKENS['export_border'] * 2
+        w, h = self.bounds[2] - self.bounds[0] + b, self.bounds[3] - self.bounds[1] + b
+        return max(TOKENS['export_scale'], math.ceil(min_side / max(w, h, 1)))
 
     @staticmethod
     def export(drawio_path: str, png_path: str, scale: int | None = None, border: int | None = None, cli: str = 'drawio') -> str:

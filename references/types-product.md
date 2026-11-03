@@ -67,6 +67,9 @@ journey
 <!-- sample:requirement -->
 
 ```mermaid
+---
+title: 下单需求追踪
+---
 requirementDiagram
   requirement order_req {
     id: R1
@@ -105,12 +108,15 @@ requirementDiagram
 <!-- sample:ui_flow -->
 
 ```mermaid
+---
+title: 购买路径的页面流转
+---
 flowchart LR
-  IN([打开 App]):::entry --> P1[首页]:::page
-  P1 --> A1[/点击商品/]:::action --> P2[商品详情]:::page
+  IN([打开 App]):::entry --> P1["首页<br><small>推荐位</small>"]:::page
+  P1 --> A1[/点击商品/]:::action --> P2["商品详情<br><small>SKU · 价格</small>"]:::page
   P2 --> D{已登录?}:::decision
   D -- 否 --> P3[登录页]:::page --> P2
-  D -- 是 --> P4[确认订单]:::page --> OUT([支付完成]):::entry
+  D -- 是 --> P4["确认订单<br><small>地址 · 优惠</small>"]:::page --> OUT([支付完成]):::entry
   N[登录后回到原商品]:::annotation -.- P3
 ```
 
@@ -143,10 +149,13 @@ Mermaid 近似画法（正式出图用 drawio，样式取 `palette.py drawio`）
 <!-- sample:wireframe -->
 
 ```mermaid
+---
+title: 商品详情页线框
+---
 flowchart LR
   subgraph PAGE[商品详情页]
-    IMG[商品图片]:::block
-    INFO[标题 / 价格]:::component
+    IMG["商品图片<br><small>轮播占位</small>"]:::block
+    INFO["标题 / 价格<br><small>¥199 起</small>"]:::component
     BTN[立即购买]:::primaryBtn
   end
   M1((1)):::marker -.- BTN
@@ -180,11 +189,14 @@ flowchart LR
 <!-- sample:story_map -->
 
 ```mermaid
+---
+title: 首次购买的故事地图
+---
 flowchart LR
   A1[浏览]:::activity --> A2[下单]:::activity --> A3[支付]:::activity
-  A1 --> T1[搜索商品]:::task --> S1[按类目筛选]:::mvp
-  A2 --> T2[填写地址]:::task --> S2[地址簿]:::story
-  A3 --> T3[选择支付方式]:::task --> S3[分期付款]:::later
+  A1 --> T1[搜索商品]:::task --> S1["按类目筛选<br><small>MVP</small>"]:::mvp
+  A2 --> T2[填写地址]:::task --> S2["地址簿<br><small>下一版</small>"]:::story
+  A3 --> T3[选择支付方式]:::task --> S3["分期付款<br><small>以后</small>"]:::later
 ```
 
 <!-- palette:story_map -->

@@ -12,13 +12,14 @@
 
 - **用来**：围绕一个中心主题发散：知识整理、会议纪要、项目梳理、需求范围梳理。
 - **别用**：节点之间有交叉关系（→ 概念图）；有先后步骤（→ 流程图）。
-- **工具**：Mermaid `mindmap`；节点超过 40 个或要交付编辑 → drawio。
+- **工具**：drawio：`drawio_kit` 的 `mindmap()`（左右均分、正交肘线，示例 `examples/mindmap.py`）；放射版式用 `mindmap(..., sides='radial')`（示例 `examples/mindmap_radial.py`）。Mermaid `mindmap` 是放射布局、斜线、粗线，达不到统一风格，只在不出图、只给代码时用。
 - **写法**：
   - 缩进表示层级；根节点 `root((主题))` 画成圆形，`[ ]` 方形、`( )` 圆角。
   - 一级分支按出现顺序自动取 `cScale1..` 的颜色，二级以下继承分支色。
 - **要点**：
   - 一级分支 3–7 个，每个分支不超过 3 层。
   - 节点只写关键词，不写整句。
+  - 只有一层、项数 ≤ 12、项之间没有先后顺序时用放射版式；要展开下级就用左右均分。
 
 <!-- sample:mindmap -->
 
@@ -69,9 +70,12 @@ mindmap
 <!-- sample:org -->
 
 ```mermaid
+---
+title: 公司组织结构
+---
 flowchart TB
-  CEO[总经理]:::top --> CTO[技术中心]:::l2
-  CEO --> COO[运营中心]:::l2
+  CEO[总经理]:::top --> CTO["技术中心<br><small>研发 · 测试 · 运维</small>"]:::l2
+  CEO --> COO["运营中心<br><small>内容 · 活动</small>"]:::l2
   CEO -.-> AS[总经理助理]:::aux
   CTO --> FE[前端组]:::l3
   CTO --> BE[后端组]:::l3
@@ -144,8 +148,11 @@ ishikawa-beta
 <!-- sample:concept -->
 
 ```mermaid
+---
+title: Spring IoC 核心概念
+---
 flowchart LR
-  IOC((IoC 容器)):::core -- 创建并管理 --> Bean[Bean]:::concept
+  IOC((IoC 容器)):::core -- 创建并管理 --> Bean["Bean<br><small>容器托管的对象</small>"]:::concept
   ANN[注解]:::concept -- 声明 --> Bean
   Bean -- 依赖注入 --> DEP[其他 Bean]:::sub
   AOP[AOP]:::concept -- 代理增强 --> Bean
@@ -178,18 +185,18 @@ flowchart LR
 <!-- sample:affinity -->
 
 ```mermaid
-flowchart LR
+---
+title: 用户反馈归类
+---
+flowchart TB
   subgraph G1[新用户找不到入口]
-    a1[按钮难找]:::g1
-    a2[首页信息太多]:::g1
+    a1["按钮难找<br><small>访谈提到 3 次</small>"]:::g1 ~~~ a2[首页信息太多]:::g1
   end
   subgraph G2[页面慢]
-    b1[首屏 3 秒]:::g2
-    b2[滚动卡顿]:::g2
+    b1["首屏 3 秒<br><small>低端机更慢</small>"]:::g2 ~~~ b2[滚动卡顿]:::g2
   end
   subgraph G3[支付体验差]
-    c1[跳转次数多]:::g3
-    c2[失败无提示]:::g3
+    c1[跳转次数多]:::g3 ~~~ c2[失败无提示]:::g3
   end
 ```
 

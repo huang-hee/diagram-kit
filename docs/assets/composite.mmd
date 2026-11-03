@@ -1,7 +1,14 @@
 ---
+title: "Car 的内部结构"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -22,14 +29,15 @@ config:
 ---
 flowchart LR
   subgraph CAR[Car]
-    E[engine : Engine]:::part
-    W[wheels : Wheel 4]:::part
+    E["engine<br><small>: Engine</small>"]:::part
+    W["wheels<br><small>: Wheel [4]</small>"]:::part
     P1((p)):::port
   end
   E --- W
   P1 --- E
   class CAR frame
-classDef frame fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
-classDef part fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef port fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
+classDef frame fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4,rx:8,ry:8
+classDef part fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef port fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
 %% 用法：节点 A:::frame 或 class A,B frame
+linkStyle default stroke-width:1.5px

@@ -1,0 +1,79 @@
+<mxfile host="diagram-kit">
+  <diagram name="订单服务部署图" id="diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="v1" value="" style="rounded=1;arcSize=50;fillColor=#3B6FC2;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="36" width="6" height="50" />
+        </mxCell>
+        <mxCell id="v2" value="订单服务部署图" style="text;html=1;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=22;fontStyle=1;fontColor=#33384A;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="58" y="32" width="400" height="32" />
+        </mxCell>
+        <mxCell id="v3" value="订单服务的制品跑在哪台设备的哪个执行环境里，和数据库怎么通信" style="text;html=1;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;fontColor=#5C606E;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="58" y="64" width="430" height="24" />
+        </mxCell>
+        <mxCell id="v4" value="机房网络" style="rounded=1;arcSize=10;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor=#EBF1F9;strokeColor=none;fontColor=#33384A;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;fontStyle=1;align=left;verticalAlign=top;spacingLeft=14;spacingTop=8;dashed=1;dashPattern=6 4;strokeColor=#3B6FC2;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="120" y="120" width="420" height="340" />
+        </mxCell>
+        <mxCell id="v5" value="&lt;b&gt;应用服务器&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#1F2865;font-weight:normal&quot;&gt;«device»&lt;/span&gt;" style="shape=cube;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=12;whiteSpace=wrap;html=1;fillColor=#D2D6F1;strokeColor=#9396A9;fontColor=#1F2865;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;verticalAlign=top;spacingTop=14;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="160" y="170" width="340" height="250" />
+        </mxCell>
+        <mxCell id="v6" value="&lt;b&gt;JVM&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#712A14;font-weight:normal&quot;&gt;«executionEnvironment»&lt;/span&gt;" style="rounded=1;arcSize=8;absoluteArcSize=1;whiteSpace=wrap;html=1;fillColor=#FBDBD1;strokeColor=#B09992;fontColor=#712A14;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="200" y="240" width="260" height="150" />
+        </mxCell>
+        <mxCell id="v7" value="&lt;b&gt;order.jar&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#256058;font-weight:normal&quot;&gt;«artifact»&lt;/span&gt;" style="shape=document;boundedLbl=1;size=0.18;whiteSpace=wrap;html=1;fillColor=#D8F0ED;strokeColor=#97A8A6;fontColor=#256058;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="230" y="310" width="200" height="60" />
+        </mxCell>
+        <mxCell id="v8" value="&lt;b&gt;数据库服务器&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px;color:#1F2865;font-weight:normal&quot;&gt;«device» · MySQL 8&lt;/span&gt;" style="shape=cube;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=12;whiteSpace=wrap;html=1;fillColor=#D2D6F1;strokeColor=#9396A9;fontColor=#1F2865;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=13;align=center;verticalAlign=middle;strokeWidth=1;spacing=6;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="680" y="235" width="300" height="120" />
+        </mxCell>
+        <mxCell id="e9" value="JDBC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;arcSize=12;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3B6FC2;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;jumpStyle=arc;jumpSize=8;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#33384A;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="v5" target="v8">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="v10" value="" style="rounded=1;arcSize=8;absoluteArcSize=1;fillColor=#FFF6CE;strokeColor=#A6A086;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="120" y="500" width="560" height="88" />
+        </mxCell>
+        <mxCell id="v11" value="&lt;b style=&quot;font-size:13px&quot;&gt;约定&lt;/b&gt;&lt;div style=&quot;margin-top:6px&quot;&gt;一台设备一个立方体，里面从外到内是执行环境、制品&lt;/div&gt;&lt;div style=&quot;margin-top:6px&quot;&gt;设备之间的线写通信协议&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#33384A;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="136" y="514" width="528" height="64" />
+        </mxCell>
+        <mxCell id="v12" value="" style="rounded=1;arcSize=8;absoluteArcSize=1;fillColor=#EBF1F9;strokeColor=#3B6FC2;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="720" y="500" width="260" height="88" />
+        </mxCell>
+        <mxCell id="v13" value="&lt;b style=&quot;font-size:13px&quot;&gt;对照&lt;/b&gt;&lt;div style=&quot;margin-top:6px&quot;&gt;云上全景见部署架构图&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#33384A;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="736" y="514" width="228" height="64" />
+        </mxCell>
+        <mxCell id="v14" value="" style="rounded=1;arcSize=4;absoluteArcSize=1;fillColor=#D2D6F1;strokeColor=#9396A9;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="120" y="614" width="22" height="14" />
+        </mxCell>
+        <mxCell id="v15" value="设备" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="150" y="612" width="28" height="18" />
+        </mxCell>
+        <mxCell id="v16" value="" style="rounded=1;arcSize=4;absoluteArcSize=1;fillColor=#FBDBD1;strokeColor=#B09992;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="206" y="614" width="22" height="14" />
+        </mxCell>
+        <mxCell id="v17" value="执行环境" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="236" y="612" width="52" height="18" />
+        </mxCell>
+        <mxCell id="v18" value="" style="rounded=1;arcSize=4;absoluteArcSize=1;fillColor=#D8F0ED;strokeColor=#97A8A6;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="316" y="614" width="22" height="14" />
+        </mxCell>
+        <mxCell id="v19" value="制品" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="346" y="612" width="28" height="18" />
+        </mxCell>
+        <mxCell id="l20" value="" style="html=1;rounded=0;endArrow=block;endFill=1;endSize=7;strokeColor=#3B6FC2;strokeWidth=1.5;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="402" y="621" />
+            <mxPoint as="targetPoint" x="434" y="621" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="v21" value="通信" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="442" y="612" width="28" height="18" />
+        </mxCell>
+        <mxCell id="v22" value="读图：立方体是物理或虚拟设备，嵌套表示&amp;quot;跑在里面&amp;quot;；虚线框是网络边界。" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif;fontSize=12;fontColor=#5C606E;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="120" y="644" width="433" height="20" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

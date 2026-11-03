@@ -1,7 +1,14 @@
 ---
+title: "购买路径的页面流转"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -21,15 +28,16 @@ config:
     noteTextColor: "#33384A"
 ---
 flowchart LR
-  IN([打开 App]):::entry --> P1[首页]:::page
-  P1 --> A1[/点击商品/]:::action --> P2[商品详情]:::page
+  IN([打开 App]):::entry --> P1["首页<br><small>推荐位</small>"]:::page
+  P1 --> A1[/点击商品/]:::action --> P2["商品详情<br><small>SKU · 价格</small>"]:::page
   P2 --> D{已登录?}:::decision
   D -- 否 --> P3[登录页]:::page --> P2
-  D -- 是 --> P4[确认订单]:::page --> OUT([支付完成]):::entry
+  D -- 是 --> P4["确认订单<br><small>地址 · 优惠</small>"]:::page --> OUT([支付完成]):::entry
   N[登录后回到原商品]:::annotation -.- P3
-classDef page fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef action fill:#D8F0ED,stroke:#97A8A6,color:#256058
-classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef entry fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef annotation fill:#FFF6CE,stroke:#A6A086,color:#33384A
+classDef page fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef action fill:#D8F0ED,stroke:#97A8A6,color:#256058,rx:8,ry:8
+classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef entry fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef annotation fill:#FFF6CE,stroke:#A6A086,color:#33384A,rx:8,ry:8
 %% 用法：节点 A:::page 或 class A,B page
+linkStyle default stroke-width:1.5px

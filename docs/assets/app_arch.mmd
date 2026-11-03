@@ -1,7 +1,14 @@
 ---
+title: "商城应用架构"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -20,15 +27,15 @@ config:
     noteBorderColor: "#A6A086"
     noteTextColor: "#33384A"
 ---
-flowchart LR
+flowchart TB
   subgraph L1[前端层]
-    W[商城 Web]:::client
-    M[小程序]:::client
+    W["商城 Web<br><small>React</small>"]:::client
+    M["小程序<br><small>微信</small>"]:::client
   end
   subgraph L2[服务层]
-    G[API 网关]:::service
-    O[订单服务]:::service
-    P[商品服务]:::service
+    G["API 网关<br><small>鉴权 · 限流</small>"]:::service
+    O["订单服务<br><small>下单 · 支付回调</small>"]:::service
+    P["商品服务<br><small>类目 · 库存</small>"]:::service
   end
   subgraph L3[基础层]
     MQ[(RocketMQ)]:::infra
@@ -43,9 +50,10 @@ flowchart LR
   O --> DB
   O --> X
   class L1,L2,L3 layer
-classDef client fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef service fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef infra fill:#D8F0ED,stroke:#97A8A6,color:#256058
-classDef external fill:#EEEFF0,stroke:#8F929B,color:#33384A
-classDef layer fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4
+classDef client fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef service fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef infra fill:#D8F0ED,stroke:#97A8A6,color:#256058,rx:8,ry:8
+classDef external fill:#EEEFF0,stroke:#8F929B,color:#33384A,rx:8,ry:8
+classDef layer fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,stroke-dasharray:5 4,rx:8,ry:8
 %% 用法：节点 A:::client 或 class A,B client
+linkStyle default stroke-width:1.5px

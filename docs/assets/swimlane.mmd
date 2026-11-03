@@ -1,4 +1,5 @@
 ---
+title: "退款流程"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
@@ -27,19 +28,19 @@ swimlane-beta LR
   end
   subgraph S[客服]
     B{是否符合规则?}:::decision
-    C[人工审核]:::task
+    C["人工审核<br><small>48 小时内</small>"]:::task
   end
   subgraph P[财务]
-    D[原路退款]:::handoff
+    D["原路退款<br><small>T+1 到账</small>"]:::handoff
   end
   A --> B
   B -- 是 --> D
   B -- 否 --> C --> D
   D --> F
   class U,S,P lane
-classDef startend fill:#FBDBD1,stroke:#B09992,color:#712A14
-classDef task fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef handoff fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px
-classDef lane fill:#EBF1F9,stroke:#3B6FC2,color:#33384A
+classDef startend fill:#FBDBD1,stroke:#B09992,color:#712A14,rx:8,ry:8
+classDef task fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef handoff fill:#3B6FC2,stroke:#3B6FC2,color:#FFFFFF,stroke-width:2px,rx:8,ry:8
+classDef lane fill:#EBF1F9,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
 %% 用法：节点 A:::startend 或 class A,B startend

@@ -1,7 +1,14 @@
 ---
+title: "登录与下单的交互概览"
 config:
   theme: base
   fontFamily: "PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, sans-serif"
+  flowchart:
+    curve: "step"
+    nodeSpacing: 50
+    rankSpacing: 60
+    padding: 12
+    wrappingWidth: 300
   themeVariables:
     background: "#FFFFFF"
     primaryColor: "#FFFFFF"
@@ -21,13 +28,14 @@ config:
     noteTextColor: "#33384A"
 ---
 flowchart LR
-  S(( )):::bar --> R1[ref 登录]:::occurrence
+  S(( )):::bar --> R1["登录<br><small>ref · 引用已有交互</small>"]:::occurrence
   R1 --> D{已登录?}:::decision
-  D -- 是 --> R2[sd 下单]:::frame
+  D -- 是 --> R2["下单<br><small>sd · 内联片段</small>"]:::frame
   D -- 否 --> R1
   R2 --> E(( )):::bar
-classDef frame fill:#FFFFFF,stroke:#3B6FC2,color:#33384A
-classDef occurrence fill:#D2D6F1,stroke:#9396A9,color:#1F2865
-classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14
-classDef bar fill:#33384A,stroke:#33384A,color:#FFFFFF
+classDef frame fill:#FFFFFF,stroke:#3B6FC2,color:#33384A,rx:8,ry:8
+classDef occurrence fill:#D2D6F1,stroke:#9396A9,color:#1F2865,rx:8,ry:8
+classDef decision fill:#F6DEB6,stroke:#AC9B7F,color:#714E14,rx:8,ry:8
+classDef bar fill:#33384A,stroke:#33384A,color:#FFFFFF,rx:8,ry:8
 %% 用法：节点 A:::frame 或 class A,B frame
+linkStyle default stroke-width:1.5px

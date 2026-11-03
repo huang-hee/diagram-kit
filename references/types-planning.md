@@ -173,6 +173,9 @@ kanban
 <!-- sample:gitgraph -->
 
 ```mermaid
+---
+title: 分支策略
+---
 gitGraph
   commit
   branch develop

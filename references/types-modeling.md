@@ -29,6 +29,9 @@ UML 里 Mermaid 原生支持的只有类图、对象图（借用类图）、时�
 <!-- sample:class -->
 
 ```mermaid
+---
+title: 订单领域类图
+---
 classDiagram
   class Order {
     -Long id
@@ -89,6 +92,9 @@ classDiagram
 <!-- sample:er -->
 
 ```mermaid
+---
+title: 订单数据模型
+---
 erDiagram
   USERS:::entity ||--o{ ORDERS:::core : "下单"
   ORDERS ||--|{ ORDER_ITEM:::link : "包含"
@@ -172,6 +178,9 @@ usecase-beta
 <!-- sample:object -->
 
 ```mermaid
+---
+title: 一笔已支付订单的对象快照
+---
 classDiagram
   class order1["order1 : Order"] {
     id = 1001
@@ -214,10 +223,13 @@ classDiagram
 <!-- sample:component -->
 
 ```mermaid
+---
+title: 订单子系统组件
+---
 flowchart LR
   subgraph SUB[订单子系统]
-    C1[订单组件]:::comp
-    C2[支付组件]:::comp
+    C1["订单组件<br><small>下单 · 查询</small>"]:::comp
+    C2["支付组件<br><small>收银台 · 回调</small>"]:::comp
   end
   L[公共工具库]:::lib
   I((IPayment)):::iface
@@ -253,6 +265,9 @@ flowchart LR
 <!-- sample:package -->
 
 ```mermaid
+---
+title: 包依赖
+---
 flowchart TB
   subgraph APP[com.shop]
     subgraph ORDER[order]
@@ -292,13 +307,16 @@ flowchart TB
 <!-- sample:uml_deploy -->
 
 ```mermaid
+---
+title: 订单服务部署图
+---
 flowchart LR
   subgraph DC[机房网络]
-    N1[应用服务器]:::device
-    E1[JVM]:::env
-    A1[order.jar]:::artifact
+    N1["应用服务器<br><small>«device»</small>"]:::device
+    E1["JVM<br><small>«executionEnvironment»</small>"]:::env
+    A1["order.jar<br><small>«artifact»</small>"]:::artifact
   end
-  N2[数据库服务器]:::device
+  N2["数据库服务器<br><small>«device»</small>"]:::device
   N1 --> E1 --> A1
   N1 -- JDBC --> N2
   class DC zone
@@ -329,10 +347,13 @@ flowchart LR
 <!-- sample:composite -->
 
 ```mermaid
+---
+title: Car 的内部结构
+---
 flowchart LR
   subgraph CAR[Car]
-    E[engine : Engine]:::part
-    W[wheels : Wheel 4]:::part
+    E["engine<br><small>: Engine</small>"]:::part
+    W["wheels<br><small>: Wheel [4]</small>"]:::part
     P1((p)):::port
   end
   E --- W
@@ -364,6 +385,9 @@ flowchart LR
 <!-- sample:profile -->
 
 ```mermaid
+---
+title: Entity 构造型
+---
 classDiagram
   class Entity {
     <<stereotype>>
